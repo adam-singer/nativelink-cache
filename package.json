@@ -13,14 +13,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/cache.git"
+    "url": "git+https://github.com/chinchaun/nativelink-cache"
   },
   "keywords": [
     "actions",
     "node",
     "cache"
   ],
-  "author": "GitHub",
+  "author": "Jean Delannoy",
   "license": "MIT",
   "dependencies": {
     "@actions/cache": "^3.2.3",
