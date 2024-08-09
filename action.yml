@@ -1,6 +1,6 @@
-name: 'Cache'
-description: 'Cache artifacts like dependencies and build outputs to improve workflow execution time'
-author: 'GitHub'
+name: 'Cache Action with NativeLink Cloud'
+description: 'This action is a drop-in replacement of GitHub actions cache to use with NativeLink Cloud'
+author: 'Jean Delannoy'
 inputs:
   path:
     description: 'A list of files, directories, and wildcard patterns to cache and restore'
