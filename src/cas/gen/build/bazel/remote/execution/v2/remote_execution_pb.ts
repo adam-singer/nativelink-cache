@@ -17,10 +17,27 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
-import { Any, Duration, Message, proto3, protoInt64, Timestamp, UInt32Value } from "@bufbuild/protobuf";
-import { Status } from "../../../../../google/rpc/status_pb.js";
-import { SemVer } from "../../../semver/semver_pb.js";
+import type {
+    BinaryReadOptions,
+    FieldList,
+    JsonReadOptions,
+    JsonValue,
+    PartialMessage,
+    PlainMessage
+} from "@bufbuild/protobuf";
+import {
+    Any,
+    Duration,
+    Message,
+    proto3,
+    protoInt64,
+    Timestamp,
+    UInt32Value
+} from "@bufbuild/protobuf";
+// import { Status } from "src/cas/gen/google/rpc/status_pb"
+import { Status } from "../../../../../google/rpc/status_pb";
+// import { SemVer } from "src/cas/gen/build/bazel/semver/semver_pb";
+import { SemVer } from "../../../../../build/bazel/semver/semver_pb";
 
 /**
  * An `Action` captures all the information about an execution which is required
@@ -48,123 +65,140 @@ import { SemVer } from "../../../semver/semver_pb.js";
  * @generated from message build.bazel.remote.execution.v2.Action
  */
 export class Action extends Message<Action> {
-  /**
-   * The digest of the [Command][build.bazel.remote.execution.v2.Command]
-   * to run, which MUST be present in the
-   * [ContentAddressableStorage][build.bazel.remote.execution.v2.ContentAddressableStorage].
-   *
-   * @generated from field: build.bazel.remote.execution.v2.Digest command_digest = 1;
-   */
-  commandDigest?: Digest;
+    /**
+     * The digest of the [Command][build.bazel.remote.execution.v2.Command]
+     * to run, which MUST be present in the
+     * [ContentAddressableStorage][build.bazel.remote.execution.v2.ContentAddressableStorage].
+     *
+     * @generated from field: build.bazel.remote.execution.v2.Digest command_digest = 1;
+     */
+    commandDigest?: Digest;
 
-  /**
-   * The digest of the root
-   * [Directory][build.bazel.remote.execution.v2.Directory] for the input
-   * files. The files in the directory tree are available in the correct
-   * location on the build machine before the command is executed. The root
-   * directory, as well as every subdirectory and content blob referred to, MUST
-   * be in the
-   * [ContentAddressableStorage][build.bazel.remote.execution.v2.ContentAddressableStorage].
-   *
-   * @generated from field: build.bazel.remote.execution.v2.Digest input_root_digest = 2;
-   */
-  inputRootDigest?: Digest;
+    /**
+     * The digest of the root
+     * [Directory][build.bazel.remote.execution.v2.Directory] for the input
+     * files. The files in the directory tree are available in the correct
+     * location on the build machine before the command is executed. The root
+     * directory, as well as every subdirectory and content blob referred to, MUST
+     * be in the
+     * [ContentAddressableStorage][build.bazel.remote.execution.v2.ContentAddressableStorage].
+     *
+     * @generated from field: build.bazel.remote.execution.v2.Digest input_root_digest = 2;
+     */
+    inputRootDigest?: Digest;
 
-  /**
-   * A timeout after which the execution should be killed. If the timeout is
-   * absent, then the client is specifying that the execution should continue
-   * as long as the server will let it. The server SHOULD impose a timeout if
-   * the client does not specify one, however, if the client does specify a
-   * timeout that is longer than the server's maximum timeout, the server MUST
-   * reject the request.
-   *
-   * The timeout is only intended to cover the "execution" of the specified
-   * action and not time in queue nor any overheads before or after execution
-   * such as marshalling inputs/outputs. The server SHOULD avoid including time
-   * spent the client doesn't have control over, and MAY extend or reduce the
-   * timeout to account for delays or speedups that occur during execution
-   * itself (e.g., lazily loading data from the Content Addressable Storage,
-   * live migration of virtual machines, emulation overhead).
-   *
-   * The timeout is a part of the
-   * [Action][build.bazel.remote.execution.v2.Action] message, and
-   * therefore two `Actions` with different timeouts are different, even if they
-   * are otherwise identical. This is because, if they were not, running an
-   * `Action` with a lower timeout than is required might result in a cache hit
-   * from an execution run with a longer timeout, hiding the fact that the
-   * timeout is too short. By encoding it directly in the `Action`, a lower
-   * timeout will result in a cache miss and the execution timeout will fail
-   * immediately, rather than whenever the cache entry gets evicted.
-   *
-   * @generated from field: google.protobuf.Duration timeout = 6;
-   */
-  timeout?: Duration;
+    /**
+     * A timeout after which the execution should be killed. If the timeout is
+     * absent, then the client is specifying that the execution should continue
+     * as long as the server will let it. The server SHOULD impose a timeout if
+     * the client does not specify one, however, if the client does specify a
+     * timeout that is longer than the server's maximum timeout, the server MUST
+     * reject the request.
+     *
+     * The timeout is only intended to cover the "execution" of the specified
+     * action and not time in queue nor any overheads before or after execution
+     * such as marshalling inputs/outputs. The server SHOULD avoid including time
+     * spent the client doesn't have control over, and MAY extend or reduce the
+     * timeout to account for delays or speedups that occur during execution
+     * itself (e.g., lazily loading data from the Content Addressable Storage,
+     * live migration of virtual machines, emulation overhead).
+     *
+     * The timeout is a part of the
+     * [Action][build.bazel.remote.execution.v2.Action] message, and
+     * therefore two `Actions` with different timeouts are different, even if they
+     * are otherwise identical. This is because, if they were not, running an
+     * `Action` with a lower timeout than is required might result in a cache hit
+     * from an execution run with a longer timeout, hiding the fact that the
+     * timeout is too short. By encoding it directly in the `Action`, a lower
+     * timeout will result in a cache miss and the execution timeout will fail
+     * immediately, rather than whenever the cache entry gets evicted.
+     *
+     * @generated from field: google.protobuf.Duration timeout = 6;
+     */
+    timeout?: Duration;
 
-  /**
-   * If true, then the `Action`'s result cannot be cached, and in-flight
-   * requests for the same `Action` may not be merged.
-   *
-   * @generated from field: bool do_not_cache = 7;
-   */
-  doNotCache = false;
+    /**
+     * If true, then the `Action`'s result cannot be cached, and in-flight
+     * requests for the same `Action` may not be merged.
+     *
+     * @generated from field: bool do_not_cache = 7;
+     */
+    doNotCache = false;
 
-  /**
-   * An optional additional salt value used to place this `Action` into a
-   * separate cache namespace from other instances having the same field
-   * contents. This salt typically comes from operational configuration
-   * specific to sources such as repo and service configuration,
-   * and allows disowning an entire set of ActionResults that might have been
-   * poisoned by buggy software or tool failures.
-   *
-   * @generated from field: bytes salt = 9;
-   */
-  salt = new Uint8Array(0);
+    /**
+     * An optional additional salt value used to place this `Action` into a
+     * separate cache namespace from other instances having the same field
+     * contents. This salt typically comes from operational configuration
+     * specific to sources such as repo and service configuration,
+     * and allows disowning an entire set of ActionResults that might have been
+     * poisoned by buggy software or tool failures.
+     *
+     * @generated from field: bytes salt = 9;
+     */
+    salt = new Uint8Array(0);
 
-  /**
-   * The optional platform requirements for the execution environment. The
-   * server MAY choose to execute the action on any worker satisfying the
-   * requirements, so the client SHOULD ensure that running the action on any
-   * such worker will have the same result.  A detailed lexicon for this can be
-   * found in the accompanying platform.md.
-   * New in version 2.2: clients SHOULD set these platform properties as well
-   * as those in the [Command][build.bazel.remote.execution.v2.Command]. Servers
-   * SHOULD prefer those set here.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.Platform platform = 10;
-   */
-  platform?: Platform;
+    /**
+     * The optional platform requirements for the execution environment. The
+     * server MAY choose to execute the action on any worker satisfying the
+     * requirements, so the client SHOULD ensure that running the action on any
+     * such worker will have the same result.  A detailed lexicon for this can be
+     * found in the accompanying platform.md.
+     * New in version 2.2: clients SHOULD set these platform properties as well
+     * as those in the [Command][build.bazel.remote.execution.v2.Command]. Servers
+     * SHOULD prefer those set here.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.Platform platform = 10;
+     */
+    platform?: Platform;
 
-  constructor(data?: PartialMessage<Action>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<Action>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.Action";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "command_digest", kind: "message", T: Digest },
-    { no: 2, name: "input_root_digest", kind: "message", T: Digest },
-    { no: 6, name: "timeout", kind: "message", T: Duration },
-    { no: 7, name: "do_not_cache", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 9, name: "salt", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-    { no: 10, name: "platform", kind: "message", T: Platform },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName = "build.bazel.remote.execution.v2.Action";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        { no: 1, name: "command_digest", kind: "message", T: Digest },
+        { no: 2, name: "input_root_digest", kind: "message", T: Digest },
+        { no: 6, name: "timeout", kind: "message", T: Duration },
+        {
+            no: 7,
+            name: "do_not_cache",
+            kind: "scalar",
+            T: 8 /* ScalarType.BOOL */
+        },
+        { no: 9, name: "salt", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
+        { no: 10, name: "platform", kind: "message", T: Platform }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Action {
-    return new Action().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): Action {
+        return new Action().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Action {
-    return new Action().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): Action {
+        return new Action().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Action {
-    return new Action().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): Action {
+        return new Action().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: Action | PlainMessage<Action> | undefined, b: Action | PlainMessage<Action> | undefined): boolean {
-    return proto3.util.equals(Action, a, b);
-  }
+    static equals(
+        a: Action | PlainMessage<Action> | undefined,
+        b: Action | PlainMessage<Action> | undefined
+    ): boolean {
+        return proto3.util.equals(Action, a, b);
+    }
 }
 
 /**
@@ -179,218 +213,271 @@ export class Action extends Message<Action> {
  * @generated from message build.bazel.remote.execution.v2.Command
  */
 export class Command extends Message<Command> {
-  /**
-   * The arguments to the command.
-   *
-   * The first argument specifies the command to run, which may be either an
-   * absolute path, a path relative to the working directory, or an unqualified
-   * path (without path separators) which will be resolved using the operating
-   * system's equivalent of the PATH environment variable. Path separators
-   * native to the operating system running on the worker SHOULD be used. If the
-   * `environment_variables` list contains an entry for the PATH environment
-   * variable, it SHOULD be respected. If not, the resolution process is
-   * implementation-defined.
-   *
-   * Changed in v2.3. v2.2 and older require that no PATH lookups are performed,
-   * and that relative paths are resolved relative to the input root. This
-   * behavior can, however, not be relied upon, as most implementations already
-   * followed the rules described above.
-   *
-   * @generated from field: repeated string arguments = 1;
-   */
-  arguments: string[] = [];
+    /**
+     * The arguments to the command.
+     *
+     * The first argument specifies the command to run, which may be either an
+     * absolute path, a path relative to the working directory, or an unqualified
+     * path (without path separators) which will be resolved using the operating
+     * system's equivalent of the PATH environment variable. Path separators
+     * native to the operating system running on the worker SHOULD be used. If the
+     * `environment_variables` list contains an entry for the PATH environment
+     * variable, it SHOULD be respected. If not, the resolution process is
+     * implementation-defined.
+     *
+     * Changed in v2.3. v2.2 and older require that no PATH lookups are performed,
+     * and that relative paths are resolved relative to the input root. This
+     * behavior can, however, not be relied upon, as most implementations already
+     * followed the rules described above.
+     *
+     * @generated from field: repeated string arguments = 1;
+     */
+    arguments: string[] = [];
 
-  /**
-   * The environment variables to set when running the program. The worker may
-   * provide its own default environment variables; these defaults can be
-   * overridden using this field. Additional variables can also be specified.
-   *
-   * In order to ensure that equivalent
-   * [Command][build.bazel.remote.execution.v2.Command]s always hash to the same
-   * value, the environment variables MUST be lexicographically sorted by name.
-   * Sorting of strings is done by code point, equivalently, by the UTF-8 bytes.
-   *
-   * @generated from field: repeated build.bazel.remote.execution.v2.Command.EnvironmentVariable environment_variables = 2;
-   */
-  environmentVariables: Command_EnvironmentVariable[] = [];
+    /**
+     * The environment variables to set when running the program. The worker may
+     * provide its own default environment variables; these defaults can be
+     * overridden using this field. Additional variables can also be specified.
+     *
+     * In order to ensure that equivalent
+     * [Command][build.bazel.remote.execution.v2.Command]s always hash to the same
+     * value, the environment variables MUST be lexicographically sorted by name.
+     * Sorting of strings is done by code point, equivalently, by the UTF-8 bytes.
+     *
+     * @generated from field: repeated build.bazel.remote.execution.v2.Command.EnvironmentVariable environment_variables = 2;
+     */
+    environmentVariables: Command_EnvironmentVariable[] = [];
 
-  /**
-   * A list of the output files that the client expects to retrieve from the
-   * action. Only the listed files, as well as directories listed in
-   * `output_directories`, will be returned to the client as output.
-   * Other files or directories that may be created during command execution
-   * are discarded.
-   *
-   * The paths are relative to the working directory of the action execution.
-   * The paths are specified using a single forward slash (`/`) as a path
-   * separator, even if the execution platform natively uses a different
-   * separator. The path MUST NOT include a trailing slash, nor a leading slash,
-   * being a relative path.
-   *
-   * In order to ensure consistent hashing of the same Action, the output paths
-   * MUST be sorted lexicographically by code point (or, equivalently, by UTF-8
-   * bytes).
-   *
-   * An output file cannot be duplicated, be a parent of another output file, or
-   * have the same path as any of the listed output directories.
-   *
-   * Directories leading up to the output files are created by the worker prior
-   * to execution, even if they are not explicitly part of the input root.
-   *
-   * DEPRECATED since v2.1: Use `output_paths` instead.
-   *
-   * [ deprecated = true ];
-   *
-   * @generated from field: repeated string output_files = 3;
-   */
-  outputFiles: string[] = [];
+    /**
+     * A list of the output files that the client expects to retrieve from the
+     * action. Only the listed files, as well as directories listed in
+     * `output_directories`, will be returned to the client as output.
+     * Other files or directories that may be created during command execution
+     * are discarded.
+     *
+     * The paths are relative to the working directory of the action execution.
+     * The paths are specified using a single forward slash (`/`) as a path
+     * separator, even if the execution platform natively uses a different
+     * separator. The path MUST NOT include a trailing slash, nor a leading slash,
+     * being a relative path.
+     *
+     * In order to ensure consistent hashing of the same Action, the output paths
+     * MUST be sorted lexicographically by code point (or, equivalently, by UTF-8
+     * bytes).
+     *
+     * An output file cannot be duplicated, be a parent of another output file, or
+     * have the same path as any of the listed output directories.
+     *
+     * Directories leading up to the output files are created by the worker prior
+     * to execution, even if they are not explicitly part of the input root.
+     *
+     * DEPRECATED since v2.1: Use `output_paths` instead.
+     *
+     * [ deprecated = true ];
+     *
+     * @generated from field: repeated string output_files = 3;
+     */
+    outputFiles: string[] = [];
 
-  /**
-   * A list of the output directories that the client expects to retrieve from
-   * the action. Only the listed directories will be returned (an entire
-   * directory structure will be returned as a
-   * [Tree][build.bazel.remote.execution.v2.Tree] message digest, see
-   * [OutputDirectory][build.bazel.remote.execution.v2.OutputDirectory]), as
-   * well as files listed in `output_files`. Other files or directories that
-   * may be created during command execution are discarded.
-   *
-   * The paths are relative to the working directory of the action execution.
-   * The paths are specified using a single forward slash (`/`) as a path
-   * separator, even if the execution platform natively uses a different
-   * separator. The path MUST NOT include a trailing slash, nor a leading slash,
-   * being a relative path. The special value of empty string is allowed,
-   * although not recommended, and can be used to capture the entire working
-   * directory tree, including inputs.
-   *
-   * In order to ensure consistent hashing of the same Action, the output paths
-   * MUST be sorted lexicographically by code point (or, equivalently, by UTF-8
-   * bytes).
-   *
-   * An output directory cannot be duplicated or have the same path as any of
-   * the listed output files. An output directory is allowed to be a parent of
-   * another output directory.
-   *
-   * Directories leading up to the output directories (but not the output
-   * directories themselves) are created by the worker prior to execution, even
-   * if they are not explicitly part of the input root.
-   *
-   * DEPRECATED since 2.1: Use `output_paths` instead.
-   *
-   * [ deprecated = true ];
-   *
-   * @generated from field: repeated string output_directories = 4;
-   */
-  outputDirectories: string[] = [];
+    /**
+     * A list of the output directories that the client expects to retrieve from
+     * the action. Only the listed directories will be returned (an entire
+     * directory structure will be returned as a
+     * [Tree][build.bazel.remote.execution.v2.Tree] message digest, see
+     * [OutputDirectory][build.bazel.remote.execution.v2.OutputDirectory]), as
+     * well as files listed in `output_files`. Other files or directories that
+     * may be created during command execution are discarded.
+     *
+     * The paths are relative to the working directory of the action execution.
+     * The paths are specified using a single forward slash (`/`) as a path
+     * separator, even if the execution platform natively uses a different
+     * separator. The path MUST NOT include a trailing slash, nor a leading slash,
+     * being a relative path. The special value of empty string is allowed,
+     * although not recommended, and can be used to capture the entire working
+     * directory tree, including inputs.
+     *
+     * In order to ensure consistent hashing of the same Action, the output paths
+     * MUST be sorted lexicographically by code point (or, equivalently, by UTF-8
+     * bytes).
+     *
+     * An output directory cannot be duplicated or have the same path as any of
+     * the listed output files. An output directory is allowed to be a parent of
+     * another output directory.
+     *
+     * Directories leading up to the output directories (but not the output
+     * directories themselves) are created by the worker prior to execution, even
+     * if they are not explicitly part of the input root.
+     *
+     * DEPRECATED since 2.1: Use `output_paths` instead.
+     *
+     * [ deprecated = true ];
+     *
+     * @generated from field: repeated string output_directories = 4;
+     */
+    outputDirectories: string[] = [];
 
-  /**
-   * A list of the output paths that the client expects to retrieve from the
-   * action. Only the listed paths will be returned to the client as output.
-   * The type of the output (file or directory) is not specified, and will be
-   * determined by the server after action execution. If the resulting path is
-   * a file, it will be returned in an
-   * [OutputFile][build.bazel.remote.execution.v2.OutputFile] typed field.
-   * If the path is a directory, the entire directory structure will be returned
-   * as a [Tree][build.bazel.remote.execution.v2.Tree] message digest, see
-   * [OutputDirectory][build.bazel.remote.execution.v2.OutputDirectory]
-   * Other files or directories that may be created during command execution
-   * are discarded.
-   *
-   * The paths are relative to the working directory of the action execution.
-   * The paths are specified using a single forward slash (`/`) as a path
-   * separator, even if the execution platform natively uses a different
-   * separator. The path MUST NOT include a trailing slash, nor a leading slash,
-   * being a relative path.
-   *
-   * In order to ensure consistent hashing of the same Action, the output paths
-   * MUST be deduplicated and sorted lexicographically by code point (or,
-   * equivalently, by UTF-8 bytes).
-   *
-   * Directories leading up to the output paths are created by the worker prior
-   * to execution, even if they are not explicitly part of the input root.
-   *
-   * New in v2.1: this field supersedes the DEPRECATED `output_files` and
-   * `output_directories` fields. If `output_paths` is used, `output_files` and
-   * `output_directories` will be ignored!
-   *
-   * @generated from field: repeated string output_paths = 7;
-   */
-  outputPaths: string[] = [];
+    /**
+     * A list of the output paths that the client expects to retrieve from the
+     * action. Only the listed paths will be returned to the client as output.
+     * The type of the output (file or directory) is not specified, and will be
+     * determined by the server after action execution. If the resulting path is
+     * a file, it will be returned in an
+     * [OutputFile][build.bazel.remote.execution.v2.OutputFile] typed field.
+     * If the path is a directory, the entire directory structure will be returned
+     * as a [Tree][build.bazel.remote.execution.v2.Tree] message digest, see
+     * [OutputDirectory][build.bazel.remote.execution.v2.OutputDirectory]
+     * Other files or directories that may be created during command execution
+     * are discarded.
+     *
+     * The paths are relative to the working directory of the action execution.
+     * The paths are specified using a single forward slash (`/`) as a path
+     * separator, even if the execution platform natively uses a different
+     * separator. The path MUST NOT include a trailing slash, nor a leading slash,
+     * being a relative path.
+     *
+     * In order to ensure consistent hashing of the same Action, the output paths
+     * MUST be deduplicated and sorted lexicographically by code point (or,
+     * equivalently, by UTF-8 bytes).
+     *
+     * Directories leading up to the output paths are created by the worker prior
+     * to execution, even if they are not explicitly part of the input root.
+     *
+     * New in v2.1: this field supersedes the DEPRECATED `output_files` and
+     * `output_directories` fields. If `output_paths` is used, `output_files` and
+     * `output_directories` will be ignored!
+     *
+     * @generated from field: repeated string output_paths = 7;
+     */
+    outputPaths: string[] = [];
 
-  /**
-   * The platform requirements for the execution environment. The server MAY
-   * choose to execute the action on any worker satisfying the requirements, so
-   * the client SHOULD ensure that running the action on any such worker will
-   * have the same result.  A detailed lexicon for this can be found in the
-   * accompanying platform.md.
-   * DEPRECATED as of v2.2: platform properties are now specified directly in
-   * the action. See documentation note in the
-   * [Action][build.bazel.remote.execution.v2.Action] for migration.
-   *
-   * [ deprecated = true ];
-   *
-   * @generated from field: build.bazel.remote.execution.v2.Platform platform = 5;
-   */
-  platform?: Platform;
+    /**
+     * The platform requirements for the execution environment. The server MAY
+     * choose to execute the action on any worker satisfying the requirements, so
+     * the client SHOULD ensure that running the action on any such worker will
+     * have the same result.  A detailed lexicon for this can be found in the
+     * accompanying platform.md.
+     * DEPRECATED as of v2.2: platform properties are now specified directly in
+     * the action. See documentation note in the
+     * [Action][build.bazel.remote.execution.v2.Action] for migration.
+     *
+     * [ deprecated = true ];
+     *
+     * @generated from field: build.bazel.remote.execution.v2.Platform platform = 5;
+     */
+    platform?: Platform;
 
-  /**
-   * The working directory, relative to the input root, for the command to run
-   * in. It must be a directory which exists in the input tree. If it is left
-   * empty, then the action is run in the input root.
-   *
-   * @generated from field: string working_directory = 6;
-   */
-  workingDirectory = "";
+    /**
+     * The working directory, relative to the input root, for the command to run
+     * in. It must be a directory which exists in the input tree. If it is left
+     * empty, then the action is run in the input root.
+     *
+     * @generated from field: string working_directory = 6;
+     */
+    workingDirectory = "";
 
-  /**
-   * A list of keys for node properties the client expects to retrieve for
-   * output files and directories. Keys are either names of string-based
-   * [NodeProperty][build.bazel.remote.execution.v2.NodeProperty] or
-   * names of fields in [NodeProperties][build.bazel.remote.execution.v2.NodeProperties].
-   * In order to ensure that equivalent `Action`s always hash to the same
-   * value, the node properties MUST be lexicographically sorted by name.
-   * Sorting of strings is done by code point, equivalently, by the UTF-8 bytes.
-   *
-   * The interpretation of string-based properties is server-dependent. If a
-   * property is not recognized by the server, the server will return an
-   * `INVALID_ARGUMENT`.
-   *
-   * @generated from field: repeated string output_node_properties = 8;
-   */
-  outputNodeProperties: string[] = [];
+    /**
+     * A list of keys for node properties the client expects to retrieve for
+     * output files and directories. Keys are either names of string-based
+     * [NodeProperty][build.bazel.remote.execution.v2.NodeProperty] or
+     * names of fields in [NodeProperties][build.bazel.remote.execution.v2.NodeProperties].
+     * In order to ensure that equivalent `Action`s always hash to the same
+     * value, the node properties MUST be lexicographically sorted by name.
+     * Sorting of strings is done by code point, equivalently, by the UTF-8 bytes.
+     *
+     * The interpretation of string-based properties is server-dependent. If a
+     * property is not recognized by the server, the server will return an
+     * `INVALID_ARGUMENT`.
+     *
+     * @generated from field: repeated string output_node_properties = 8;
+     */
+    outputNodeProperties: string[] = [];
 
-  constructor(data?: PartialMessage<Command>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<Command>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.Command";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "arguments", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
-    { no: 2, name: "environment_variables", kind: "message", T: Command_EnvironmentVariable, repeated: true },
-    { no: 3, name: "output_files", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
-    { no: 4, name: "output_directories", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
-    { no: 7, name: "output_paths", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
-    { no: 5, name: "platform", kind: "message", T: Platform },
-    { no: 6, name: "working_directory", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 8, name: "output_node_properties", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName = "build.bazel.remote.execution.v2.Command";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        {
+            no: 1,
+            name: "arguments",
+            kind: "scalar",
+            T: 9 /* ScalarType.STRING */,
+            repeated: true
+        },
+        {
+            no: 2,
+            name: "environment_variables",
+            kind: "message",
+            T: Command_EnvironmentVariable,
+            repeated: true
+        },
+        {
+            no: 3,
+            name: "output_files",
+            kind: "scalar",
+            T: 9 /* ScalarType.STRING */,
+            repeated: true
+        },
+        {
+            no: 4,
+            name: "output_directories",
+            kind: "scalar",
+            T: 9 /* ScalarType.STRING */,
+            repeated: true
+        },
+        {
+            no: 7,
+            name: "output_paths",
+            kind: "scalar",
+            T: 9 /* ScalarType.STRING */,
+            repeated: true
+        },
+        { no: 5, name: "platform", kind: "message", T: Platform },
+        {
+            no: 6,
+            name: "working_directory",
+            kind: "scalar",
+            T: 9 /* ScalarType.STRING */
+        },
+        {
+            no: 8,
+            name: "output_node_properties",
+            kind: "scalar",
+            T: 9 /* ScalarType.STRING */,
+            repeated: true
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Command {
-    return new Command().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): Command {
+        return new Command().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Command {
-    return new Command().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): Command {
+        return new Command().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Command {
-    return new Command().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): Command {
+        return new Command().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: Command | PlainMessage<Command> | undefined, b: Command | PlainMessage<Command> | undefined): boolean {
-    return proto3.util.equals(Command, a, b);
-  }
+    static equals(
+        a: Command | PlainMessage<Command> | undefined,
+        b: Command | PlainMessage<Command> | undefined
+    ): boolean {
+        return proto3.util.equals(Command, a, b);
+    }
 }
 
 /**
@@ -400,47 +487,69 @@ export class Command extends Message<Command> {
  * @generated from message build.bazel.remote.execution.v2.Command.EnvironmentVariable
  */
 export class Command_EnvironmentVariable extends Message<Command_EnvironmentVariable> {
-  /**
-   * The variable name.
-   *
-   * @generated from field: string name = 1;
-   */
-  name = "";
+    /**
+     * The variable name.
+     *
+     * @generated from field: string name = 1;
+     */
+    name = "";
 
-  /**
-   * The variable value.
-   *
-   * @generated from field: string value = 2;
-   */
-  value = "";
+    /**
+     * The variable value.
+     *
+     * @generated from field: string value = 2;
+     */
+    value = "";
 
-  constructor(data?: PartialMessage<Command_EnvironmentVariable>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<Command_EnvironmentVariable>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.Command.EnvironmentVariable";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "value", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.Command.EnvironmentVariable";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        { no: 1, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+        { no: 2, name: "value", kind: "scalar", T: 9 /* ScalarType.STRING */ }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Command_EnvironmentVariable {
-    return new Command_EnvironmentVariable().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): Command_EnvironmentVariable {
+        return new Command_EnvironmentVariable().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Command_EnvironmentVariable {
-    return new Command_EnvironmentVariable().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): Command_EnvironmentVariable {
+        return new Command_EnvironmentVariable().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Command_EnvironmentVariable {
-    return new Command_EnvironmentVariable().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): Command_EnvironmentVariable {
+        return new Command_EnvironmentVariable().fromJsonString(
+            jsonString,
+            options
+        );
+    }
 
-  static equals(a: Command_EnvironmentVariable | PlainMessage<Command_EnvironmentVariable> | undefined, b: Command_EnvironmentVariable | PlainMessage<Command_EnvironmentVariable> | undefined): boolean {
-    return proto3.util.equals(Command_EnvironmentVariable, a, b);
-  }
+    static equals(
+        a:
+            | Command_EnvironmentVariable
+            | PlainMessage<Command_EnvironmentVariable>
+            | undefined,
+        b:
+            | Command_EnvironmentVariable
+            | PlainMessage<Command_EnvironmentVariable>
+            | undefined
+    ): boolean {
+        return proto3.util.equals(Command_EnvironmentVariable, a, b);
+    }
 }
 
 /**
@@ -453,42 +562,60 @@ export class Command_EnvironmentVariable extends Message<Command_EnvironmentVari
  * @generated from message build.bazel.remote.execution.v2.Platform
  */
 export class Platform extends Message<Platform> {
-  /**
-   * The properties that make up this platform. In order to ensure that
-   * equivalent `Platform`s always hash to the same value, the properties MUST
-   * be lexicographically sorted by name, and then by value. Sorting of strings
-   * is done by code point, equivalently, by the UTF-8 bytes.
-   *
-   * @generated from field: repeated build.bazel.remote.execution.v2.Platform.Property properties = 1;
-   */
-  properties: Platform_Property[] = [];
+    /**
+     * The properties that make up this platform. In order to ensure that
+     * equivalent `Platform`s always hash to the same value, the properties MUST
+     * be lexicographically sorted by name, and then by value. Sorting of strings
+     * is done by code point, equivalently, by the UTF-8 bytes.
+     *
+     * @generated from field: repeated build.bazel.remote.execution.v2.Platform.Property properties = 1;
+     */
+    properties: Platform_Property[] = [];
 
-  constructor(data?: PartialMessage<Platform>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<Platform>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.Platform";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "properties", kind: "message", T: Platform_Property, repeated: true },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName = "build.bazel.remote.execution.v2.Platform";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        {
+            no: 1,
+            name: "properties",
+            kind: "message",
+            T: Platform_Property,
+            repeated: true
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Platform {
-    return new Platform().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): Platform {
+        return new Platform().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Platform {
-    return new Platform().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): Platform {
+        return new Platform().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Platform {
-    return new Platform().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): Platform {
+        return new Platform().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: Platform | PlainMessage<Platform> | undefined, b: Platform | PlainMessage<Platform> | undefined): boolean {
-    return proto3.util.equals(Platform, a, b);
-  }
+    static equals(
+        a: Platform | PlainMessage<Platform> | undefined,
+        b: Platform | PlainMessage<Platform> | undefined
+    ): boolean {
+        return proto3.util.equals(Platform, a, b);
+    }
 }
 
 /**
@@ -518,47 +645,60 @@ export class Platform extends Message<Platform> {
  * @generated from message build.bazel.remote.execution.v2.Platform.Property
  */
 export class Platform_Property extends Message<Platform_Property> {
-  /**
-   * The property name.
-   *
-   * @generated from field: string name = 1;
-   */
-  name = "";
+    /**
+     * The property name.
+     *
+     * @generated from field: string name = 1;
+     */
+    name = "";
 
-  /**
-   * The property value.
-   *
-   * @generated from field: string value = 2;
-   */
-  value = "";
+    /**
+     * The property value.
+     *
+     * @generated from field: string value = 2;
+     */
+    value = "";
 
-  constructor(data?: PartialMessage<Platform_Property>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<Platform_Property>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.Platform.Property";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "value", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.Platform.Property";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        { no: 1, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+        { no: 2, name: "value", kind: "scalar", T: 9 /* ScalarType.STRING */ }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Platform_Property {
-    return new Platform_Property().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): Platform_Property {
+        return new Platform_Property().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Platform_Property {
-    return new Platform_Property().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): Platform_Property {
+        return new Platform_Property().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Platform_Property {
-    return new Platform_Property().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): Platform_Property {
+        return new Platform_Property().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: Platform_Property | PlainMessage<Platform_Property> | undefined, b: Platform_Property | PlainMessage<Platform_Property> | undefined): boolean {
-    return proto3.util.equals(Platform_Property, a, b);
-  }
+    static equals(
+        a: Platform_Property | PlainMessage<Platform_Property> | undefined,
+        b: Platform_Property | PlainMessage<Platform_Property> | undefined
+    ): boolean {
+        return proto3.util.equals(Platform_Property, a, b);
+    }
 }
 
 /**
@@ -642,61 +782,85 @@ export class Platform_Property extends Message<Platform_Property> {
  * @generated from message build.bazel.remote.execution.v2.Directory
  */
 export class Directory extends Message<Directory> {
-  /**
-   * The files in the directory.
-   *
-   * @generated from field: repeated build.bazel.remote.execution.v2.FileNode files = 1;
-   */
-  files: FileNode[] = [];
+    /**
+     * The files in the directory.
+     *
+     * @generated from field: repeated build.bazel.remote.execution.v2.FileNode files = 1;
+     */
+    files: FileNode[] = [];
 
-  /**
-   * The subdirectories in the directory.
-   *
-   * @generated from field: repeated build.bazel.remote.execution.v2.DirectoryNode directories = 2;
-   */
-  directories: DirectoryNode[] = [];
+    /**
+     * The subdirectories in the directory.
+     *
+     * @generated from field: repeated build.bazel.remote.execution.v2.DirectoryNode directories = 2;
+     */
+    directories: DirectoryNode[] = [];
 
-  /**
-   * The symlinks in the directory.
-   *
-   * @generated from field: repeated build.bazel.remote.execution.v2.SymlinkNode symlinks = 3;
-   */
-  symlinks: SymlinkNode[] = [];
+    /**
+     * The symlinks in the directory.
+     *
+     * @generated from field: repeated build.bazel.remote.execution.v2.SymlinkNode symlinks = 3;
+     */
+    symlinks: SymlinkNode[] = [];
 
-  /**
-   * @generated from field: build.bazel.remote.execution.v2.NodeProperties node_properties = 5;
-   */
-  nodeProperties?: NodeProperties;
+    /**
+     * @generated from field: build.bazel.remote.execution.v2.NodeProperties node_properties = 5;
+     */
+    nodeProperties?: NodeProperties;
 
-  constructor(data?: PartialMessage<Directory>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<Directory>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.Directory";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "files", kind: "message", T: FileNode, repeated: true },
-    { no: 2, name: "directories", kind: "message", T: DirectoryNode, repeated: true },
-    { no: 3, name: "symlinks", kind: "message", T: SymlinkNode, repeated: true },
-    { no: 5, name: "node_properties", kind: "message", T: NodeProperties },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName = "build.bazel.remote.execution.v2.Directory";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        { no: 1, name: "files", kind: "message", T: FileNode, repeated: true },
+        {
+            no: 2,
+            name: "directories",
+            kind: "message",
+            T: DirectoryNode,
+            repeated: true
+        },
+        {
+            no: 3,
+            name: "symlinks",
+            kind: "message",
+            T: SymlinkNode,
+            repeated: true
+        },
+        { no: 5, name: "node_properties", kind: "message", T: NodeProperties }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Directory {
-    return new Directory().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): Directory {
+        return new Directory().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Directory {
-    return new Directory().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): Directory {
+        return new Directory().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Directory {
-    return new Directory().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): Directory {
+        return new Directory().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: Directory | PlainMessage<Directory> | undefined, b: Directory | PlainMessage<Directory> | undefined): boolean {
-    return proto3.util.equals(Directory, a, b);
-  }
+    static equals(
+        a: Directory | PlainMessage<Directory> | undefined,
+        b: Directory | PlainMessage<Directory> | undefined
+    ): boolean {
+        return proto3.util.equals(Directory, a, b);
+    }
 }
 
 /**
@@ -709,47 +873,59 @@ export class Directory extends Message<Directory> {
  * @generated from message build.bazel.remote.execution.v2.NodeProperty
  */
 export class NodeProperty extends Message<NodeProperty> {
-  /**
-   * The property name.
-   *
-   * @generated from field: string name = 1;
-   */
-  name = "";
+    /**
+     * The property name.
+     *
+     * @generated from field: string name = 1;
+     */
+    name = "";
 
-  /**
-   * The property value.
-   *
-   * @generated from field: string value = 2;
-   */
-  value = "";
+    /**
+     * The property value.
+     *
+     * @generated from field: string value = 2;
+     */
+    value = "";
 
-  constructor(data?: PartialMessage<NodeProperty>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<NodeProperty>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.NodeProperty";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "value", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName = "build.bazel.remote.execution.v2.NodeProperty";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        { no: 1, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+        { no: 2, name: "value", kind: "scalar", T: 9 /* ScalarType.STRING */ }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): NodeProperty {
-    return new NodeProperty().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): NodeProperty {
+        return new NodeProperty().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): NodeProperty {
-    return new NodeProperty().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): NodeProperty {
+        return new NodeProperty().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): NodeProperty {
-    return new NodeProperty().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): NodeProperty {
+        return new NodeProperty().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: NodeProperty | PlainMessage<NodeProperty> | undefined, b: NodeProperty | PlainMessage<NodeProperty> | undefined): boolean {
-    return proto3.util.equals(NodeProperty, a, b);
-  }
+    static equals(
+        a: NodeProperty | PlainMessage<NodeProperty> | undefined,
+        b: NodeProperty | PlainMessage<NodeProperty> | undefined
+    ): boolean {
+        return proto3.util.equals(NodeProperty, a, b);
+    }
 }
 
 /**
@@ -762,56 +938,74 @@ export class NodeProperty extends Message<NodeProperty> {
  * @generated from message build.bazel.remote.execution.v2.NodeProperties
  */
 export class NodeProperties extends Message<NodeProperties> {
-  /**
-   * A list of string-based
-   * [NodeProperties][build.bazel.remote.execution.v2.NodeProperty].
-   *
-   * @generated from field: repeated build.bazel.remote.execution.v2.NodeProperty properties = 1;
-   */
-  properties: NodeProperty[] = [];
+    /**
+     * A list of string-based
+     * [NodeProperties][build.bazel.remote.execution.v2.NodeProperty].
+     *
+     * @generated from field: repeated build.bazel.remote.execution.v2.NodeProperty properties = 1;
+     */
+    properties: NodeProperty[] = [];
 
-  /**
-   * The file's last modification timestamp.
-   *
-   * @generated from field: google.protobuf.Timestamp mtime = 2;
-   */
-  mtime?: Timestamp;
+    /**
+     * The file's last modification timestamp.
+     *
+     * @generated from field: google.protobuf.Timestamp mtime = 2;
+     */
+    mtime?: Timestamp;
 
-  /**
-   * The UNIX file mode, e.g., 0755.
-   *
-   * @generated from field: google.protobuf.UInt32Value unix_mode = 3;
-   */
-  unixMode?: number;
+    /**
+     * The UNIX file mode, e.g., 0755.
+     *
+     * @generated from field: google.protobuf.UInt32Value unix_mode = 3;
+     */
+    unixMode?: number;
 
-  constructor(data?: PartialMessage<NodeProperties>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<NodeProperties>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.NodeProperties";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "properties", kind: "message", T: NodeProperty, repeated: true },
-    { no: 2, name: "mtime", kind: "message", T: Timestamp },
-    { no: 3, name: "unix_mode", kind: "message", T: UInt32Value },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName = "build.bazel.remote.execution.v2.NodeProperties";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        {
+            no: 1,
+            name: "properties",
+            kind: "message",
+            T: NodeProperty,
+            repeated: true
+        },
+        { no: 2, name: "mtime", kind: "message", T: Timestamp },
+        { no: 3, name: "unix_mode", kind: "message", T: UInt32Value }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): NodeProperties {
-    return new NodeProperties().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): NodeProperties {
+        return new NodeProperties().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): NodeProperties {
-    return new NodeProperties().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): NodeProperties {
+        return new NodeProperties().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): NodeProperties {
-    return new NodeProperties().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): NodeProperties {
+        return new NodeProperties().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: NodeProperties | PlainMessage<NodeProperties> | undefined, b: NodeProperties | PlainMessage<NodeProperties> | undefined): boolean {
-    return proto3.util.equals(NodeProperties, a, b);
-  }
+    static equals(
+        a: NodeProperties | PlainMessage<NodeProperties> | undefined,
+        b: NodeProperties | PlainMessage<NodeProperties> | undefined
+    ): boolean {
+        return proto3.util.equals(NodeProperties, a, b);
+    }
 }
 
 /**
@@ -820,61 +1014,78 @@ export class NodeProperties extends Message<NodeProperties> {
  * @generated from message build.bazel.remote.execution.v2.FileNode
  */
 export class FileNode extends Message<FileNode> {
-  /**
-   * The name of the file.
-   *
-   * @generated from field: string name = 1;
-   */
-  name = "";
+    /**
+     * The name of the file.
+     *
+     * @generated from field: string name = 1;
+     */
+    name = "";
 
-  /**
-   * The digest of the file's content.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.Digest digest = 2;
-   */
-  digest?: Digest;
+    /**
+     * The digest of the file's content.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.Digest digest = 2;
+     */
+    digest?: Digest;
 
-  /**
-   * True if file is executable, false otherwise.
-   *
-   * @generated from field: bool is_executable = 4;
-   */
-  isExecutable = false;
+    /**
+     * True if file is executable, false otherwise.
+     *
+     * @generated from field: bool is_executable = 4;
+     */
+    isExecutable = false;
 
-  /**
-   * @generated from field: build.bazel.remote.execution.v2.NodeProperties node_properties = 6;
-   */
-  nodeProperties?: NodeProperties;
+    /**
+     * @generated from field: build.bazel.remote.execution.v2.NodeProperties node_properties = 6;
+     */
+    nodeProperties?: NodeProperties;
 
-  constructor(data?: PartialMessage<FileNode>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<FileNode>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.FileNode";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "digest", kind: "message", T: Digest },
-    { no: 4, name: "is_executable", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 6, name: "node_properties", kind: "message", T: NodeProperties },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName = "build.bazel.remote.execution.v2.FileNode";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        { no: 1, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+        { no: 2, name: "digest", kind: "message", T: Digest },
+        {
+            no: 4,
+            name: "is_executable",
+            kind: "scalar",
+            T: 8 /* ScalarType.BOOL */
+        },
+        { no: 6, name: "node_properties", kind: "message", T: NodeProperties }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): FileNode {
-    return new FileNode().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): FileNode {
+        return new FileNode().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): FileNode {
-    return new FileNode().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): FileNode {
+        return new FileNode().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): FileNode {
-    return new FileNode().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): FileNode {
+        return new FileNode().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: FileNode | PlainMessage<FileNode> | undefined, b: FileNode | PlainMessage<FileNode> | undefined): boolean {
-    return proto3.util.equals(FileNode, a, b);
-  }
+    static equals(
+        a: FileNode | PlainMessage<FileNode> | undefined,
+        b: FileNode | PlainMessage<FileNode> | undefined
+    ): boolean {
+        return proto3.util.equals(FileNode, a, b);
+    }
 }
 
 /**
@@ -885,50 +1096,62 @@ export class FileNode extends Message<FileNode> {
  * @generated from message build.bazel.remote.execution.v2.DirectoryNode
  */
 export class DirectoryNode extends Message<DirectoryNode> {
-  /**
-   * The name of the directory.
-   *
-   * @generated from field: string name = 1;
-   */
-  name = "";
+    /**
+     * The name of the directory.
+     *
+     * @generated from field: string name = 1;
+     */
+    name = "";
 
-  /**
-   * The digest of the
-   * [Directory][build.bazel.remote.execution.v2.Directory] object
-   * represented. See [Digest][build.bazel.remote.execution.v2.Digest]
-   * for information about how to take the digest of a proto message.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.Digest digest = 2;
-   */
-  digest?: Digest;
+    /**
+     * The digest of the
+     * [Directory][build.bazel.remote.execution.v2.Directory] object
+     * represented. See [Digest][build.bazel.remote.execution.v2.Digest]
+     * for information about how to take the digest of a proto message.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.Digest digest = 2;
+     */
+    digest?: Digest;
 
-  constructor(data?: PartialMessage<DirectoryNode>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<DirectoryNode>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.DirectoryNode";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "digest", kind: "message", T: Digest },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName = "build.bazel.remote.execution.v2.DirectoryNode";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        { no: 1, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+        { no: 2, name: "digest", kind: "message", T: Digest }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DirectoryNode {
-    return new DirectoryNode().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): DirectoryNode {
+        return new DirectoryNode().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): DirectoryNode {
-    return new DirectoryNode().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): DirectoryNode {
+        return new DirectoryNode().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): DirectoryNode {
-    return new DirectoryNode().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): DirectoryNode {
+        return new DirectoryNode().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: DirectoryNode | PlainMessage<DirectoryNode> | undefined, b: DirectoryNode | PlainMessage<DirectoryNode> | undefined): boolean {
-    return proto3.util.equals(DirectoryNode, a, b);
-  }
+    static equals(
+        a: DirectoryNode | PlainMessage<DirectoryNode> | undefined,
+        b: DirectoryNode | PlainMessage<DirectoryNode> | undefined
+    ): boolean {
+        return proto3.util.equals(DirectoryNode, a, b);
+    }
 }
 
 /**
@@ -937,61 +1160,73 @@ export class DirectoryNode extends Message<DirectoryNode> {
  * @generated from message build.bazel.remote.execution.v2.SymlinkNode
  */
 export class SymlinkNode extends Message<SymlinkNode> {
-  /**
-   * The name of the symlink.
-   *
-   * @generated from field: string name = 1;
-   */
-  name = "";
+    /**
+     * The name of the symlink.
+     *
+     * @generated from field: string name = 1;
+     */
+    name = "";
 
-  /**
-   * The target path of the symlink. The path separator is a forward slash `/`.
-   * The target path can be relative to the parent directory of the symlink or
-   * it can be an absolute path starting with `/`. Support for absolute paths
-   * can be checked using the [Capabilities][build.bazel.remote.execution.v2.Capabilities]
-   * API. `..` components are allowed anywhere in the target path as logical
-   * canonicalization may lead to different behavior in the presence of
-   * directory symlinks (e.g. `foo/../bar` may not be the same as `bar`).
-   * To reduce potential cache misses, canonicalization is still recommended
-   * where this is possible without impacting correctness.
-   *
-   * @generated from field: string target = 2;
-   */
-  target = "";
+    /**
+     * The target path of the symlink. The path separator is a forward slash `/`.
+     * The target path can be relative to the parent directory of the symlink or
+     * it can be an absolute path starting with `/`. Support for absolute paths
+     * can be checked using the [Capabilities][build.bazel.remote.execution.v2.Capabilities]
+     * API. `..` components are allowed anywhere in the target path as logical
+     * canonicalization may lead to different behavior in the presence of
+     * directory symlinks (e.g. `foo/../bar` may not be the same as `bar`).
+     * To reduce potential cache misses, canonicalization is still recommended
+     * where this is possible without impacting correctness.
+     *
+     * @generated from field: string target = 2;
+     */
+    target = "";
 
-  /**
-   * @generated from field: build.bazel.remote.execution.v2.NodeProperties node_properties = 4;
-   */
-  nodeProperties?: NodeProperties;
+    /**
+     * @generated from field: build.bazel.remote.execution.v2.NodeProperties node_properties = 4;
+     */
+    nodeProperties?: NodeProperties;
 
-  constructor(data?: PartialMessage<SymlinkNode>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<SymlinkNode>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.SymlinkNode";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "target", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 4, name: "node_properties", kind: "message", T: NodeProperties },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName = "build.bazel.remote.execution.v2.SymlinkNode";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        { no: 1, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+        { no: 2, name: "target", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+        { no: 4, name: "node_properties", kind: "message", T: NodeProperties }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SymlinkNode {
-    return new SymlinkNode().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): SymlinkNode {
+        return new SymlinkNode().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SymlinkNode {
-    return new SymlinkNode().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): SymlinkNode {
+        return new SymlinkNode().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SymlinkNode {
-    return new SymlinkNode().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): SymlinkNode {
+        return new SymlinkNode().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: SymlinkNode | PlainMessage<SymlinkNode> | undefined, b: SymlinkNode | PlainMessage<SymlinkNode> | undefined): boolean {
-    return proto3.util.equals(SymlinkNode, a, b);
-  }
+    static equals(
+        a: SymlinkNode | PlainMessage<SymlinkNode> | undefined,
+        b: SymlinkNode | PlainMessage<SymlinkNode> | undefined
+    ): boolean {
+        return proto3.util.equals(SymlinkNode, a, b);
+    }
 }
 
 /**
@@ -1030,48 +1265,65 @@ export class SymlinkNode extends Message<SymlinkNode> {
  * @generated from message build.bazel.remote.execution.v2.Digest
  */
 export class Digest extends Message<Digest> {
-  /**
-   * The hash. In the case of SHA-256, it will always be a lowercase hex string
-   * exactly 64 characters long.
-   *
-   * @generated from field: string hash = 1;
-   */
-  hash = "";
+    /**
+     * The hash. In the case of SHA-256, it will always be a lowercase hex string
+     * exactly 64 characters long.
+     *
+     * @generated from field: string hash = 1;
+     */
+    hash = "";
 
-  /**
-   * The size of the blob, in bytes.
-   *
-   * @generated from field: int64 size_bytes = 2;
-   */
-  sizeBytes = protoInt64.zero;
+    /**
+     * The size of the blob, in bytes.
+     *
+     * @generated from field: int64 size_bytes = 2;
+     */
+    sizeBytes = protoInt64.zero;
 
-  constructor(data?: PartialMessage<Digest>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<Digest>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.Digest";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "hash", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "size_bytes", kind: "scalar", T: 3 /* ScalarType.INT64 */ },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName = "build.bazel.remote.execution.v2.Digest";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        { no: 1, name: "hash", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+        {
+            no: 2,
+            name: "size_bytes",
+            kind: "scalar",
+            T: 3 /* ScalarType.INT64 */
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Digest {
-    return new Digest().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): Digest {
+        return new Digest().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Digest {
-    return new Digest().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): Digest {
+        return new Digest().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Digest {
-    return new Digest().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): Digest {
+        return new Digest().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: Digest | PlainMessage<Digest> | undefined, b: Digest | PlainMessage<Digest> | undefined): boolean {
-    return proto3.util.equals(Digest, a, b);
-  }
+    static equals(
+        a: Digest | PlainMessage<Digest> | undefined,
+        b: Digest | PlainMessage<Digest> | undefined
+    ): boolean {
+        return proto3.util.equals(Digest, a, b);
+    }
 }
 
 /**
@@ -1080,145 +1332,215 @@ export class Digest extends Message<Digest> {
  * @generated from message build.bazel.remote.execution.v2.ExecutedActionMetadata
  */
 export class ExecutedActionMetadata extends Message<ExecutedActionMetadata> {
-  /**
-   * The name of the worker which ran the execution.
-   *
-   * @generated from field: string worker = 1;
-   */
-  worker = "";
+    /**
+     * The name of the worker which ran the execution.
+     *
+     * @generated from field: string worker = 1;
+     */
+    worker = "";
 
-  /**
-   * When was the action added to the queue.
-   *
-   * @generated from field: google.protobuf.Timestamp queued_timestamp = 2;
-   */
-  queuedTimestamp?: Timestamp;
+    /**
+     * When was the action added to the queue.
+     *
+     * @generated from field: google.protobuf.Timestamp queued_timestamp = 2;
+     */
+    queuedTimestamp?: Timestamp;
 
-  /**
-   * When the worker received the action.
-   *
-   * @generated from field: google.protobuf.Timestamp worker_start_timestamp = 3;
-   */
-  workerStartTimestamp?: Timestamp;
+    /**
+     * When the worker received the action.
+     *
+     * @generated from field: google.protobuf.Timestamp worker_start_timestamp = 3;
+     */
+    workerStartTimestamp?: Timestamp;
 
-  /**
-   * When the worker completed the action, including all stages.
-   *
-   * @generated from field: google.protobuf.Timestamp worker_completed_timestamp = 4;
-   */
-  workerCompletedTimestamp?: Timestamp;
+    /**
+     * When the worker completed the action, including all stages.
+     *
+     * @generated from field: google.protobuf.Timestamp worker_completed_timestamp = 4;
+     */
+    workerCompletedTimestamp?: Timestamp;
 
-  /**
-   * When the worker started fetching action inputs.
-   *
-   * @generated from field: google.protobuf.Timestamp input_fetch_start_timestamp = 5;
-   */
-  inputFetchStartTimestamp?: Timestamp;
+    /**
+     * When the worker started fetching action inputs.
+     *
+     * @generated from field: google.protobuf.Timestamp input_fetch_start_timestamp = 5;
+     */
+    inputFetchStartTimestamp?: Timestamp;
 
-  /**
-   * When the worker finished fetching action inputs.
-   *
-   * @generated from field: google.protobuf.Timestamp input_fetch_completed_timestamp = 6;
-   */
-  inputFetchCompletedTimestamp?: Timestamp;
+    /**
+     * When the worker finished fetching action inputs.
+     *
+     * @generated from field: google.protobuf.Timestamp input_fetch_completed_timestamp = 6;
+     */
+    inputFetchCompletedTimestamp?: Timestamp;
 
-  /**
-   * When the worker started executing the action command.
-   *
-   * @generated from field: google.protobuf.Timestamp execution_start_timestamp = 7;
-   */
-  executionStartTimestamp?: Timestamp;
+    /**
+     * When the worker started executing the action command.
+     *
+     * @generated from field: google.protobuf.Timestamp execution_start_timestamp = 7;
+     */
+    executionStartTimestamp?: Timestamp;
 
-  /**
-   * When the worker completed executing the action command.
-   *
-   * @generated from field: google.protobuf.Timestamp execution_completed_timestamp = 8;
-   */
-  executionCompletedTimestamp?: Timestamp;
+    /**
+     * When the worker completed executing the action command.
+     *
+     * @generated from field: google.protobuf.Timestamp execution_completed_timestamp = 8;
+     */
+    executionCompletedTimestamp?: Timestamp;
 
-  /**
-   * New in v2.3: the amount of time the worker spent executing the action
-   * command, potentially computed using a worker-specific virtual clock.
-   *
-   * The virtual execution duration is only intended to cover the "execution" of
-   * the specified action and not time in queue nor any overheads before or
-   * after execution such as marshalling inputs/outputs. The server SHOULD avoid
-   * including time spent the client doesn't have control over, and MAY extend
-   * or reduce the execution duration to account for delays or speedups that
-   * occur during execution itself (e.g., lazily loading data from the Content
-   * Addressable Storage, live migration of virtual machines, emulation
-   * overhead).
-   *
-   * The method of timekeeping used to compute the virtual execution duration
-   * MUST be consistent with what is used to enforce the
-   * [Action][[build.bazel.remote.execution.v2.Action]'s `timeout`. There is no
-   * relationship between the virtual execution duration and the values of
-   * `execution_start_timestamp` and `execution_completed_timestamp`.
-   *
-   * @generated from field: google.protobuf.Duration virtual_execution_duration = 12;
-   */
-  virtualExecutionDuration?: Duration;
+    /**
+     * New in v2.3: the amount of time the worker spent executing the action
+     * command, potentially computed using a worker-specific virtual clock.
+     *
+     * The virtual execution duration is only intended to cover the "execution" of
+     * the specified action and not time in queue nor any overheads before or
+     * after execution such as marshalling inputs/outputs. The server SHOULD avoid
+     * including time spent the client doesn't have control over, and MAY extend
+     * or reduce the execution duration to account for delays or speedups that
+     * occur during execution itself (e.g., lazily loading data from the Content
+     * Addressable Storage, live migration of virtual machines, emulation
+     * overhead).
+     *
+     * The method of timekeeping used to compute the virtual execution duration
+     * MUST be consistent with what is used to enforce the
+     * [Action][[build.bazel.remote.execution.v2.Action]'s `timeout`. There is no
+     * relationship between the virtual execution duration and the values of
+     * `execution_start_timestamp` and `execution_completed_timestamp`.
+     *
+     * @generated from field: google.protobuf.Duration virtual_execution_duration = 12;
+     */
+    virtualExecutionDuration?: Duration;
 
-  /**
-   * When the worker started uploading action outputs.
-   *
-   * @generated from field: google.protobuf.Timestamp output_upload_start_timestamp = 9;
-   */
-  outputUploadStartTimestamp?: Timestamp;
+    /**
+     * When the worker started uploading action outputs.
+     *
+     * @generated from field: google.protobuf.Timestamp output_upload_start_timestamp = 9;
+     */
+    outputUploadStartTimestamp?: Timestamp;
 
-  /**
-   * When the worker finished uploading action outputs.
-   *
-   * @generated from field: google.protobuf.Timestamp output_upload_completed_timestamp = 10;
-   */
-  outputUploadCompletedTimestamp?: Timestamp;
+    /**
+     * When the worker finished uploading action outputs.
+     *
+     * @generated from field: google.protobuf.Timestamp output_upload_completed_timestamp = 10;
+     */
+    outputUploadCompletedTimestamp?: Timestamp;
 
-  /**
-   * Details that are specific to the kind of worker used. For example,
-   * on POSIX-like systems this could contain a message with
-   * getrusage(2) statistics.
-   *
-   * @generated from field: repeated google.protobuf.Any auxiliary_metadata = 11;
-   */
-  auxiliaryMetadata: Any[] = [];
+    /**
+     * Details that are specific to the kind of worker used. For example,
+     * on POSIX-like systems this could contain a message with
+     * getrusage(2) statistics.
+     *
+     * @generated from field: repeated google.protobuf.Any auxiliary_metadata = 11;
+     */
+    auxiliaryMetadata: Any[] = [];
 
-  constructor(data?: PartialMessage<ExecutedActionMetadata>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<ExecutedActionMetadata>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.ExecutedActionMetadata";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "worker", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "queued_timestamp", kind: "message", T: Timestamp },
-    { no: 3, name: "worker_start_timestamp", kind: "message", T: Timestamp },
-    { no: 4, name: "worker_completed_timestamp", kind: "message", T: Timestamp },
-    { no: 5, name: "input_fetch_start_timestamp", kind: "message", T: Timestamp },
-    { no: 6, name: "input_fetch_completed_timestamp", kind: "message", T: Timestamp },
-    { no: 7, name: "execution_start_timestamp", kind: "message", T: Timestamp },
-    { no: 8, name: "execution_completed_timestamp", kind: "message", T: Timestamp },
-    { no: 12, name: "virtual_execution_duration", kind: "message", T: Duration },
-    { no: 9, name: "output_upload_start_timestamp", kind: "message", T: Timestamp },
-    { no: 10, name: "output_upload_completed_timestamp", kind: "message", T: Timestamp },
-    { no: 11, name: "auxiliary_metadata", kind: "message", T: Any, repeated: true },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.ExecutedActionMetadata";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        { no: 1, name: "worker", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+        { no: 2, name: "queued_timestamp", kind: "message", T: Timestamp },
+        {
+            no: 3,
+            name: "worker_start_timestamp",
+            kind: "message",
+            T: Timestamp
+        },
+        {
+            no: 4,
+            name: "worker_completed_timestamp",
+            kind: "message",
+            T: Timestamp
+        },
+        {
+            no: 5,
+            name: "input_fetch_start_timestamp",
+            kind: "message",
+            T: Timestamp
+        },
+        {
+            no: 6,
+            name: "input_fetch_completed_timestamp",
+            kind: "message",
+            T: Timestamp
+        },
+        {
+            no: 7,
+            name: "execution_start_timestamp",
+            kind: "message",
+            T: Timestamp
+        },
+        {
+            no: 8,
+            name: "execution_completed_timestamp",
+            kind: "message",
+            T: Timestamp
+        },
+        {
+            no: 12,
+            name: "virtual_execution_duration",
+            kind: "message",
+            T: Duration
+        },
+        {
+            no: 9,
+            name: "output_upload_start_timestamp",
+            kind: "message",
+            T: Timestamp
+        },
+        {
+            no: 10,
+            name: "output_upload_completed_timestamp",
+            kind: "message",
+            T: Timestamp
+        },
+        {
+            no: 11,
+            name: "auxiliary_metadata",
+            kind: "message",
+            T: Any,
+            repeated: true
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ExecutedActionMetadata {
-    return new ExecutedActionMetadata().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): ExecutedActionMetadata {
+        return new ExecutedActionMetadata().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ExecutedActionMetadata {
-    return new ExecutedActionMetadata().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): ExecutedActionMetadata {
+        return new ExecutedActionMetadata().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ExecutedActionMetadata {
-    return new ExecutedActionMetadata().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): ExecutedActionMetadata {
+        return new ExecutedActionMetadata().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: ExecutedActionMetadata | PlainMessage<ExecutedActionMetadata> | undefined, b: ExecutedActionMetadata | PlainMessage<ExecutedActionMetadata> | undefined): boolean {
-    return proto3.util.equals(ExecutedActionMetadata, a, b);
-  }
+    static equals(
+        a:
+            | ExecutedActionMetadata
+            | PlainMessage<ExecutedActionMetadata>
+            | undefined,
+        b:
+            | ExecutedActionMetadata
+            | PlainMessage<ExecutedActionMetadata>
+            | undefined
+    ): boolean {
+        return proto3.util.equals(ExecutedActionMetadata, a, b);
+    }
 }
 
 /**
@@ -1233,255 +1555,317 @@ export class ExecutedActionMetadata extends Message<ExecutedActionMetadata> {
  * @generated from message build.bazel.remote.execution.v2.ActionResult
  */
 export class ActionResult extends Message<ActionResult> {
-  /**
-   * The output files of the action. For each output file requested in the
-   * `output_files` or `output_paths` field of the Action, if the corresponding
-   * file existed after the action completed, a single entry will be present
-   * either in this field, or the `output_file_symlinks` field if the file was
-   * a symbolic link to another file (`output_symlinks` field after v2.1).
-   *
-   * If an output listed in `output_files` was found, but was a directory rather
-   * than a regular file, the server will return a FAILED_PRECONDITION.
-   * If the action does not produce the requested output, then that output
-   * will be omitted from the list. The server is free to arrange the output
-   * list as desired; clients MUST NOT assume that the output list is sorted.
-   *
-   * @generated from field: repeated build.bazel.remote.execution.v2.OutputFile output_files = 2;
-   */
-  outputFiles: OutputFile[] = [];
+    /**
+     * The output files of the action. For each output file requested in the
+     * `output_files` or `output_paths` field of the Action, if the corresponding
+     * file existed after the action completed, a single entry will be present
+     * either in this field, or the `output_file_symlinks` field if the file was
+     * a symbolic link to another file (`output_symlinks` field after v2.1).
+     *
+     * If an output listed in `output_files` was found, but was a directory rather
+     * than a regular file, the server will return a FAILED_PRECONDITION.
+     * If the action does not produce the requested output, then that output
+     * will be omitted from the list. The server is free to arrange the output
+     * list as desired; clients MUST NOT assume that the output list is sorted.
+     *
+     * @generated from field: repeated build.bazel.remote.execution.v2.OutputFile output_files = 2;
+     */
+    outputFiles: OutputFile[] = [];
 
-  /**
-   * The output files of the action that are symbolic links to other files. Those
-   * may be links to other output files, or input files, or even absolute paths
-   * outside of the working directory, if the server supports
-   * [SymlinkAbsolutePathStrategy.ALLOWED][build.bazel.remote.execution.v2.CacheCapabilities.SymlinkAbsolutePathStrategy].
-   * For each output file requested in the `output_files` or `output_paths`
-   * field of the Action, if the corresponding file existed after
-   * the action completed, a single entry will be present either in this field,
-   * or in the `output_files` field, if the file was not a symbolic link.
-   *
-   * If an output symbolic link of the same name as listed in `output_files` of
-   * the Command was found, but its target type was not a regular file, the
-   * server will return a FAILED_PRECONDITION.
-   * If the action does not produce the requested output, then that output
-   * will be omitted from the list. The server is free to arrange the output
-   * list as desired; clients MUST NOT assume that the output list is sorted.
-   *
-   * DEPRECATED as of v2.1. Servers that wish to be compatible with v2.0 API
-   * should still populate this field in addition to `output_symlinks`.
-   *
-   * [ deprecated = true ];
-   *
-   * @generated from field: repeated build.bazel.remote.execution.v2.OutputSymlink output_file_symlinks = 10;
-   */
-  outputFileSymlinks: OutputSymlink[] = [];
+    /**
+     * The output files of the action that are symbolic links to other files. Those
+     * may be links to other output files, or input files, or even absolute paths
+     * outside of the working directory, if the server supports
+     * [SymlinkAbsolutePathStrategy.ALLOWED][build.bazel.remote.execution.v2.CacheCapabilities.SymlinkAbsolutePathStrategy].
+     * For each output file requested in the `output_files` or `output_paths`
+     * field of the Action, if the corresponding file existed after
+     * the action completed, a single entry will be present either in this field,
+     * or in the `output_files` field, if the file was not a symbolic link.
+     *
+     * If an output symbolic link of the same name as listed in `output_files` of
+     * the Command was found, but its target type was not a regular file, the
+     * server will return a FAILED_PRECONDITION.
+     * If the action does not produce the requested output, then that output
+     * will be omitted from the list. The server is free to arrange the output
+     * list as desired; clients MUST NOT assume that the output list is sorted.
+     *
+     * DEPRECATED as of v2.1. Servers that wish to be compatible with v2.0 API
+     * should still populate this field in addition to `output_symlinks`.
+     *
+     * [ deprecated = true ];
+     *
+     * @generated from field: repeated build.bazel.remote.execution.v2.OutputSymlink output_file_symlinks = 10;
+     */
+    outputFileSymlinks: OutputSymlink[] = [];
 
-  /**
-   * New in v2.1: this field will only be populated if the command
-   * `output_paths` field was used, and not the pre v2.1 `output_files` or
-   * `output_directories` fields.
-   * The output paths of the action that are symbolic links to other paths. Those
-   * may be links to other outputs, or inputs, or even absolute paths
-   * outside of the working directory, if the server supports
-   * [SymlinkAbsolutePathStrategy.ALLOWED][build.bazel.remote.execution.v2.CacheCapabilities.SymlinkAbsolutePathStrategy].
-   * A single entry for each output requested in `output_paths`
-   * field of the Action, if the corresponding path existed after
-   * the action completed and was a symbolic link.
-   *
-   * If the action does not produce a requested output, then that output
-   * will be omitted from the list. The server is free to arrange the output
-   * list as desired; clients MUST NOT assume that the output list is sorted.
-   *
-   * @generated from field: repeated build.bazel.remote.execution.v2.OutputSymlink output_symlinks = 12;
-   */
-  outputSymlinks: OutputSymlink[] = [];
+    /**
+     * New in v2.1: this field will only be populated if the command
+     * `output_paths` field was used, and not the pre v2.1 `output_files` or
+     * `output_directories` fields.
+     * The output paths of the action that are symbolic links to other paths. Those
+     * may be links to other outputs, or inputs, or even absolute paths
+     * outside of the working directory, if the server supports
+     * [SymlinkAbsolutePathStrategy.ALLOWED][build.bazel.remote.execution.v2.CacheCapabilities.SymlinkAbsolutePathStrategy].
+     * A single entry for each output requested in `output_paths`
+     * field of the Action, if the corresponding path existed after
+     * the action completed and was a symbolic link.
+     *
+     * If the action does not produce a requested output, then that output
+     * will be omitted from the list. The server is free to arrange the output
+     * list as desired; clients MUST NOT assume that the output list is sorted.
+     *
+     * @generated from field: repeated build.bazel.remote.execution.v2.OutputSymlink output_symlinks = 12;
+     */
+    outputSymlinks: OutputSymlink[] = [];
 
-  /**
-   * The output directories of the action. For each output directory requested
-   * in the `output_directories` or `output_paths` field of the Action, if the
-   * corresponding directory existed after the action completed, a single entry
-   * will be present in the output list, which will contain the digest of a
-   * [Tree][build.bazel.remote.execution.v2.Tree] message containing the
-   * directory tree, and the path equal exactly to the corresponding Action
-   * output_directories member.
-   *
-   * As an example, suppose the Action had an output directory `a/b/dir` and the
-   * execution produced the following contents in `a/b/dir`: a file named `bar`
-   * and a directory named `foo` with an executable file named `baz`. Then,
-   * output_directory will contain (hashes shortened for readability):
-   *
-   * ```json
-   * // OutputDirectory proto:
-   * {
-   *   path: "a/b/dir"
-   *   tree_digest: {
-   *     hash: "4a73bc9d03...",
-   *     size: 55
-   *   }
-   * }
-   * // Tree proto with hash "4a73bc9d03..." and size 55:
-   * {
-   *   root: {
-   *     files: [
-   *       {
-   *         name: "bar",
-   *         digest: {
-   *           hash: "4a73bc9d03...",
-   *           size: 65534
-   *         }
-   *       }
-   *     ],
-   *     directories: [
-   *       {
-   *         name: "foo",
-   *         digest: {
-   *           hash: "4cf2eda940...",
-   *           size: 43
-   *         }
-   *       }
-   *     ]
-   *   }
-   *   children : {
-   *     // (Directory proto with hash "4cf2eda940..." and size 43)
-   *     files: [
-   *       {
-   *         name: "baz",
-   *         digest: {
-   *           hash: "b2c941073e...",
-   *           size: 1294,
-   *         },
-   *         is_executable: true
-   *       }
-   *     ]
-   *   }
-   * }
-   * ```
-   * If an output of the same name as listed in `output_files` of
-   * the Command was found in `output_directories`, but was not a directory, the
-   * server will return a FAILED_PRECONDITION.
-   *
-   * @generated from field: repeated build.bazel.remote.execution.v2.OutputDirectory output_directories = 3;
-   */
-  outputDirectories: OutputDirectory[] = [];
+    /**
+     * The output directories of the action. For each output directory requested
+     * in the `output_directories` or `output_paths` field of the Action, if the
+     * corresponding directory existed after the action completed, a single entry
+     * will be present in the output list, which will contain the digest of a
+     * [Tree][build.bazel.remote.execution.v2.Tree] message containing the
+     * directory tree, and the path equal exactly to the corresponding Action
+     * output_directories member.
+     *
+     * As an example, suppose the Action had an output directory `a/b/dir` and the
+     * execution produced the following contents in `a/b/dir`: a file named `bar`
+     * and a directory named `foo` with an executable file named `baz`. Then,
+     * output_directory will contain (hashes shortened for readability):
+     *
+     * ```json
+     * // OutputDirectory proto:
+     * {
+     *   path: "a/b/dir"
+     *   tree_digest: {
+     *     hash: "4a73bc9d03...",
+     *     size: 55
+     *   }
+     * }
+     * // Tree proto with hash "4a73bc9d03..." and size 55:
+     * {
+     *   root: {
+     *     files: [
+     *       {
+     *         name: "bar",
+     *         digest: {
+     *           hash: "4a73bc9d03...",
+     *           size: 65534
+     *         }
+     *       }
+     *     ],
+     *     directories: [
+     *       {
+     *         name: "foo",
+     *         digest: {
+     *           hash: "4cf2eda940...",
+     *           size: 43
+     *         }
+     *       }
+     *     ]
+     *   }
+     *   children : {
+     *     // (Directory proto with hash "4cf2eda940..." and size 43)
+     *     files: [
+     *       {
+     *         name: "baz",
+     *         digest: {
+     *           hash: "b2c941073e...",
+     *           size: 1294,
+     *         },
+     *         is_executable: true
+     *       }
+     *     ]
+     *   }
+     * }
+     * ```
+     * If an output of the same name as listed in `output_files` of
+     * the Command was found in `output_directories`, but was not a directory, the
+     * server will return a FAILED_PRECONDITION.
+     *
+     * @generated from field: repeated build.bazel.remote.execution.v2.OutputDirectory output_directories = 3;
+     */
+    outputDirectories: OutputDirectory[] = [];
 
-  /**
-   * The output directories of the action that are symbolic links to other
-   * directories. Those may be links to other output directories, or input
-   * directories, or even absolute paths outside of the working directory,
-   * if the server supports
-   * [SymlinkAbsolutePathStrategy.ALLOWED][build.bazel.remote.execution.v2.CacheCapabilities.SymlinkAbsolutePathStrategy].
-   * For each output directory requested in the `output_directories` field of
-   * the Action, if the directory existed after the action completed, a
-   * single entry will be present either in this field, or in the
-   * `output_directories` field, if the directory was not a symbolic link.
-   *
-   * If an output of the same name was found, but was a symbolic link to a file
-   * instead of a directory, the server will return a FAILED_PRECONDITION.
-   * If the action does not produce the requested output, then that output
-   * will be omitted from the list. The server is free to arrange the output
-   * list as desired; clients MUST NOT assume that the output list is sorted.
-   *
-   * DEPRECATED as of v2.1. Servers that wish to be compatible with v2.0 API
-   * should still populate this field in addition to `output_symlinks`.
-   *
-   * [ deprecated = true ];
-   *
-   * @generated from field: repeated build.bazel.remote.execution.v2.OutputSymlink output_directory_symlinks = 11;
-   */
-  outputDirectorySymlinks: OutputSymlink[] = [];
+    /**
+     * The output directories of the action that are symbolic links to other
+     * directories. Those may be links to other output directories, or input
+     * directories, or even absolute paths outside of the working directory,
+     * if the server supports
+     * [SymlinkAbsolutePathStrategy.ALLOWED][build.bazel.remote.execution.v2.CacheCapabilities.SymlinkAbsolutePathStrategy].
+     * For each output directory requested in the `output_directories` field of
+     * the Action, if the directory existed after the action completed, a
+     * single entry will be present either in this field, or in the
+     * `output_directories` field, if the directory was not a symbolic link.
+     *
+     * If an output of the same name was found, but was a symbolic link to a file
+     * instead of a directory, the server will return a FAILED_PRECONDITION.
+     * If the action does not produce the requested output, then that output
+     * will be omitted from the list. The server is free to arrange the output
+     * list as desired; clients MUST NOT assume that the output list is sorted.
+     *
+     * DEPRECATED as of v2.1. Servers that wish to be compatible with v2.0 API
+     * should still populate this field in addition to `output_symlinks`.
+     *
+     * [ deprecated = true ];
+     *
+     * @generated from field: repeated build.bazel.remote.execution.v2.OutputSymlink output_directory_symlinks = 11;
+     */
+    outputDirectorySymlinks: OutputSymlink[] = [];
 
-  /**
-   * The exit code of the command.
-   *
-   * @generated from field: int32 exit_code = 4;
-   */
-  exitCode = 0;
+    /**
+     * The exit code of the command.
+     *
+     * @generated from field: int32 exit_code = 4;
+     */
+    exitCode = 0;
 
-  /**
-   * The standard output buffer of the action. The server SHOULD NOT inline
-   * stdout unless requested by the client in the
-   * [GetActionResultRequest][build.bazel.remote.execution.v2.GetActionResultRequest]
-   * message. The server MAY omit inlining, even if requested, and MUST do so if inlining
-   * would cause the response to exceed message size limits.
-   * Clients SHOULD NOT populate this field when uploading to the cache.
-   *
-   * @generated from field: bytes stdout_raw = 5;
-   */
-  stdoutRaw = new Uint8Array(0);
+    /**
+     * The standard output buffer of the action. The server SHOULD NOT inline
+     * stdout unless requested by the client in the
+     * [GetActionResultRequest][build.bazel.remote.execution.v2.GetActionResultRequest]
+     * message. The server MAY omit inlining, even if requested, and MUST do so if inlining
+     * would cause the response to exceed message size limits.
+     * Clients SHOULD NOT populate this field when uploading to the cache.
+     *
+     * @generated from field: bytes stdout_raw = 5;
+     */
+    stdoutRaw = new Uint8Array(0);
 
-  /**
-   * The digest for a blob containing the standard output of the action, which
-   * can be retrieved from the
-   * [ContentAddressableStorage][build.bazel.remote.execution.v2.ContentAddressableStorage].
-   *
-   * @generated from field: build.bazel.remote.execution.v2.Digest stdout_digest = 6;
-   */
-  stdoutDigest?: Digest;
+    /**
+     * The digest for a blob containing the standard output of the action, which
+     * can be retrieved from the
+     * [ContentAddressableStorage][build.bazel.remote.execution.v2.ContentAddressableStorage].
+     *
+     * @generated from field: build.bazel.remote.execution.v2.Digest stdout_digest = 6;
+     */
+    stdoutDigest?: Digest;
 
-  /**
-   * The standard error buffer of the action. The server SHOULD NOT inline
-   * stderr unless requested by the client in the
-   * [GetActionResultRequest][build.bazel.remote.execution.v2.GetActionResultRequest]
-   * message. The server MAY omit inlining, even if requested, and MUST do so if inlining
-   * would cause the response to exceed message size limits.
-   * Clients SHOULD NOT populate this field when uploading to the cache.
-   *
-   * @generated from field: bytes stderr_raw = 7;
-   */
-  stderrRaw = new Uint8Array(0);
+    /**
+     * The standard error buffer of the action. The server SHOULD NOT inline
+     * stderr unless requested by the client in the
+     * [GetActionResultRequest][build.bazel.remote.execution.v2.GetActionResultRequest]
+     * message. The server MAY omit inlining, even if requested, and MUST do so if inlining
+     * would cause the response to exceed message size limits.
+     * Clients SHOULD NOT populate this field when uploading to the cache.
+     *
+     * @generated from field: bytes stderr_raw = 7;
+     */
+    stderrRaw = new Uint8Array(0);
 
-  /**
-   * The digest for a blob containing the standard error of the action, which
-   * can be retrieved from the
-   * [ContentAddressableStorage][build.bazel.remote.execution.v2.ContentAddressableStorage].
-   *
-   * @generated from field: build.bazel.remote.execution.v2.Digest stderr_digest = 8;
-   */
-  stderrDigest?: Digest;
+    /**
+     * The digest for a blob containing the standard error of the action, which
+     * can be retrieved from the
+     * [ContentAddressableStorage][build.bazel.remote.execution.v2.ContentAddressableStorage].
+     *
+     * @generated from field: build.bazel.remote.execution.v2.Digest stderr_digest = 8;
+     */
+    stderrDigest?: Digest;
 
-  /**
-   * The details of the execution that originally produced this result.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.ExecutedActionMetadata execution_metadata = 9;
-   */
-  executionMetadata?: ExecutedActionMetadata;
+    /**
+     * The details of the execution that originally produced this result.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.ExecutedActionMetadata execution_metadata = 9;
+     */
+    executionMetadata?: ExecutedActionMetadata;
 
-  constructor(data?: PartialMessage<ActionResult>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<ActionResult>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.ActionResult";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 2, name: "output_files", kind: "message", T: OutputFile, repeated: true },
-    { no: 10, name: "output_file_symlinks", kind: "message", T: OutputSymlink, repeated: true },
-    { no: 12, name: "output_symlinks", kind: "message", T: OutputSymlink, repeated: true },
-    { no: 3, name: "output_directories", kind: "message", T: OutputDirectory, repeated: true },
-    { no: 11, name: "output_directory_symlinks", kind: "message", T: OutputSymlink, repeated: true },
-    { no: 4, name: "exit_code", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
-    { no: 5, name: "stdout_raw", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-    { no: 6, name: "stdout_digest", kind: "message", T: Digest },
-    { no: 7, name: "stderr_raw", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-    { no: 8, name: "stderr_digest", kind: "message", T: Digest },
-    { no: 9, name: "execution_metadata", kind: "message", T: ExecutedActionMetadata },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName = "build.bazel.remote.execution.v2.ActionResult";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        {
+            no: 2,
+            name: "output_files",
+            kind: "message",
+            T: OutputFile,
+            repeated: true
+        },
+        {
+            no: 10,
+            name: "output_file_symlinks",
+            kind: "message",
+            T: OutputSymlink,
+            repeated: true
+        },
+        {
+            no: 12,
+            name: "output_symlinks",
+            kind: "message",
+            T: OutputSymlink,
+            repeated: true
+        },
+        {
+            no: 3,
+            name: "output_directories",
+            kind: "message",
+            T: OutputDirectory,
+            repeated: true
+        },
+        {
+            no: 11,
+            name: "output_directory_symlinks",
+            kind: "message",
+            T: OutputSymlink,
+            repeated: true
+        },
+        {
+            no: 4,
+            name: "exit_code",
+            kind: "scalar",
+            T: 5 /* ScalarType.INT32 */
+        },
+        {
+            no: 5,
+            name: "stdout_raw",
+            kind: "scalar",
+            T: 12 /* ScalarType.BYTES */
+        },
+        { no: 6, name: "stdout_digest", kind: "message", T: Digest },
+        {
+            no: 7,
+            name: "stderr_raw",
+            kind: "scalar",
+            T: 12 /* ScalarType.BYTES */
+        },
+        { no: 8, name: "stderr_digest", kind: "message", T: Digest },
+        {
+            no: 9,
+            name: "execution_metadata",
+            kind: "message",
+            T: ExecutedActionMetadata
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ActionResult {
-    return new ActionResult().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): ActionResult {
+        return new ActionResult().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ActionResult {
-    return new ActionResult().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): ActionResult {
+        return new ActionResult().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ActionResult {
-    return new ActionResult().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): ActionResult {
+        return new ActionResult().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: ActionResult | PlainMessage<ActionResult> | undefined, b: ActionResult | PlainMessage<ActionResult> | undefined): boolean {
-    return proto3.util.equals(ActionResult, a, b);
-  }
+    static equals(
+        a: ActionResult | PlainMessage<ActionResult> | undefined,
+        b: ActionResult | PlainMessage<ActionResult> | undefined
+    ): boolean {
+        return proto3.util.equals(ActionResult, a, b);
+    }
 }
 
 /**
@@ -1493,76 +1877,98 @@ export class ActionResult extends Message<ActionResult> {
  * @generated from message build.bazel.remote.execution.v2.OutputFile
  */
 export class OutputFile extends Message<OutputFile> {
-  /**
-   * The full path of the file relative to the working directory, including the
-   * filename. The path separator is a forward slash `/`. Since this is a
-   * relative path, it MUST NOT begin with a leading forward slash.
-   *
-   * @generated from field: string path = 1;
-   */
-  path = "";
+    /**
+     * The full path of the file relative to the working directory, including the
+     * filename. The path separator is a forward slash `/`. Since this is a
+     * relative path, it MUST NOT begin with a leading forward slash.
+     *
+     * @generated from field: string path = 1;
+     */
+    path = "";
 
-  /**
-   * The digest of the file's content.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.Digest digest = 2;
-   */
-  digest?: Digest;
+    /**
+     * The digest of the file's content.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.Digest digest = 2;
+     */
+    digest?: Digest;
 
-  /**
-   * True if file is executable, false otherwise.
-   *
-   * @generated from field: bool is_executable = 4;
-   */
-  isExecutable = false;
+    /**
+     * True if file is executable, false otherwise.
+     *
+     * @generated from field: bool is_executable = 4;
+     */
+    isExecutable = false;
 
-  /**
-   * The contents of the file if inlining was requested. The server SHOULD NOT inline
-   * file contents unless requested by the client in the
-   * [GetActionResultRequest][build.bazel.remote.execution.v2.GetActionResultRequest]
-   * message. The server MAY omit inlining, even if requested, and MUST do so if inlining
-   * would cause the response to exceed message size limits.
-   * Clients SHOULD NOT populate this field when uploading to the cache.
-   *
-   * @generated from field: bytes contents = 5;
-   */
-  contents = new Uint8Array(0);
+    /**
+     * The contents of the file if inlining was requested. The server SHOULD NOT inline
+     * file contents unless requested by the client in the
+     * [GetActionResultRequest][build.bazel.remote.execution.v2.GetActionResultRequest]
+     * message. The server MAY omit inlining, even if requested, and MUST do so if inlining
+     * would cause the response to exceed message size limits.
+     * Clients SHOULD NOT populate this field when uploading to the cache.
+     *
+     * @generated from field: bytes contents = 5;
+     */
+    contents = new Uint8Array(0);
 
-  /**
-   * @generated from field: build.bazel.remote.execution.v2.NodeProperties node_properties = 7;
-   */
-  nodeProperties?: NodeProperties;
+    /**
+     * @generated from field: build.bazel.remote.execution.v2.NodeProperties node_properties = 7;
+     */
+    nodeProperties?: NodeProperties;
 
-  constructor(data?: PartialMessage<OutputFile>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<OutputFile>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.OutputFile";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "path", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "digest", kind: "message", T: Digest },
-    { no: 4, name: "is_executable", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 5, name: "contents", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-    { no: 7, name: "node_properties", kind: "message", T: NodeProperties },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName = "build.bazel.remote.execution.v2.OutputFile";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        { no: 1, name: "path", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+        { no: 2, name: "digest", kind: "message", T: Digest },
+        {
+            no: 4,
+            name: "is_executable",
+            kind: "scalar",
+            T: 8 /* ScalarType.BOOL */
+        },
+        {
+            no: 5,
+            name: "contents",
+            kind: "scalar",
+            T: 12 /* ScalarType.BYTES */
+        },
+        { no: 7, name: "node_properties", kind: "message", T: NodeProperties }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): OutputFile {
-    return new OutputFile().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): OutputFile {
+        return new OutputFile().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): OutputFile {
-    return new OutputFile().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): OutputFile {
+        return new OutputFile().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): OutputFile {
-    return new OutputFile().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): OutputFile {
+        return new OutputFile().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: OutputFile | PlainMessage<OutputFile> | undefined, b: OutputFile | PlainMessage<OutputFile> | undefined): boolean {
-    return proto3.util.equals(OutputFile, a, b);
-  }
+    static equals(
+        a: OutputFile | PlainMessage<OutputFile> | undefined,
+        b: OutputFile | PlainMessage<OutputFile> | undefined
+    ): boolean {
+        return proto3.util.equals(OutputFile, a, b);
+    }
 }
 
 /**
@@ -1573,53 +1979,71 @@ export class OutputFile extends Message<OutputFile> {
  * @generated from message build.bazel.remote.execution.v2.Tree
  */
 export class Tree extends Message<Tree> {
-  /**
-   * The root directory in the tree.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.Directory root = 1;
-   */
-  root?: Directory;
+    /**
+     * The root directory in the tree.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.Directory root = 1;
+     */
+    root?: Directory;
 
-  /**
-   * All the child directories: the directories referred to by the root and,
-   * recursively, all its children. In order to reconstruct the directory tree,
-   * the client must take the digests of each of the child directories and then
-   * build up a tree starting from the `root`.
-   * Servers SHOULD ensure that these are ordered consistently such that two
-   * actions producing equivalent output directories on the same server
-   * implementation also produce Tree messages with matching digests.
-   *
-   * @generated from field: repeated build.bazel.remote.execution.v2.Directory children = 2;
-   */
-  children: Directory[] = [];
+    /**
+     * All the child directories: the directories referred to by the root and,
+     * recursively, all its children. In order to reconstruct the directory tree,
+     * the client must take the digests of each of the child directories and then
+     * build up a tree starting from the `root`.
+     * Servers SHOULD ensure that these are ordered consistently such that two
+     * actions producing equivalent output directories on the same server
+     * implementation also produce Tree messages with matching digests.
+     *
+     * @generated from field: repeated build.bazel.remote.execution.v2.Directory children = 2;
+     */
+    children: Directory[] = [];
 
-  constructor(data?: PartialMessage<Tree>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<Tree>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.Tree";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "root", kind: "message", T: Directory },
-    { no: 2, name: "children", kind: "message", T: Directory, repeated: true },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName = "build.bazel.remote.execution.v2.Tree";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        { no: 1, name: "root", kind: "message", T: Directory },
+        {
+            no: 2,
+            name: "children",
+            kind: "message",
+            T: Directory,
+            repeated: true
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Tree {
-    return new Tree().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): Tree {
+        return new Tree().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Tree {
-    return new Tree().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): Tree {
+        return new Tree().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Tree {
-    return new Tree().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): Tree {
+        return new Tree().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: Tree | PlainMessage<Tree> | undefined, b: Tree | PlainMessage<Tree> | undefined): boolean {
-    return proto3.util.equals(Tree, a, b);
-  }
+    static equals(
+        a: Tree | PlainMessage<Tree> | undefined,
+        b: Tree | PlainMessage<Tree> | undefined
+    ): boolean {
+        return proto3.util.equals(Tree, a, b);
+    }
 }
 
 /**
@@ -1629,94 +2053,112 @@ export class Tree extends Message<Tree> {
  * @generated from message build.bazel.remote.execution.v2.OutputDirectory
  */
 export class OutputDirectory extends Message<OutputDirectory> {
-  /**
-   * The full path of the directory relative to the working directory. The path
-   * separator is a forward slash `/`. Since this is a relative path, it MUST
-   * NOT begin with a leading forward slash. The empty string value is allowed,
-   * and it denotes the entire working directory.
-   *
-   * @generated from field: string path = 1;
-   */
-  path = "";
+    /**
+     * The full path of the directory relative to the working directory. The path
+     * separator is a forward slash `/`. Since this is a relative path, it MUST
+     * NOT begin with a leading forward slash. The empty string value is allowed,
+     * and it denotes the entire working directory.
+     *
+     * @generated from field: string path = 1;
+     */
+    path = "";
 
-  /**
-   * The digest of the encoded
-   * [Tree][build.bazel.remote.execution.v2.Tree] proto containing the
-   * directory's contents.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.Digest tree_digest = 3;
-   */
-  treeDigest?: Digest;
+    /**
+     * The digest of the encoded
+     * [Tree][build.bazel.remote.execution.v2.Tree] proto containing the
+     * directory's contents.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.Digest tree_digest = 3;
+     */
+    treeDigest?: Digest;
 
-  /**
-   * If set, consumers MAY make the following assumptions about the
-   * directories contained in the the Tree, so that it may be
-   * instantiated on a local file system by scanning through it
-   * sequentially:
-   *
-   * - All directories with the same binary representation are stored
-   *   exactly once.
-   * - All directories, apart from the root directory, are referenced by
-   *   at least one parent directory.
-   * - Directories are stored in topological order, with parents being
-   *   stored before the child. The root directory is thus the first to
-   *   be stored.
-   *
-   * Additionally, the Tree MUST be encoded as a stream of records,
-   * where each record has the following format:
-   *
-   * - A tag byte, having one of the following two values:
-   *   - (1 << 3) | 2 == 0x0a: First record (the root directory).
-   *   - (2 << 3) | 2 == 0x12: Any subsequent records (child directories).
-   * - The size of the directory, encoded as a base 128 varint.
-   * - The contents of the directory, encoded as a binary serialized
-   *   Protobuf message.
-   *
-   * This encoding is a subset of the Protobuf wire format of the Tree
-   * message. As it is only permitted to store data associated with
-   * field numbers 1 and 2, the tag MUST be encoded as a single byte.
-   * More details on the Protobuf wire format can be found here:
-   * https://developers.google.com/protocol-buffers/docs/encoding
-   *
-   * It is recommended that implementations using this feature construct
-   * Tree objects manually using the specification given above, as
-   * opposed to using a Protobuf library to marshal a full Tree message.
-   * As individual Directory messages already need to be marshaled to
-   * compute their digests, constructing the Tree object manually avoids
-   * redundant marshaling.
-   *
-   * @generated from field: bool is_topologically_sorted = 4;
-   */
-  isTopologicallySorted = false;
+    /**
+     * If set, consumers MAY make the following assumptions about the
+     * directories contained in the the Tree, so that it may be
+     * instantiated on a local file system by scanning through it
+     * sequentially:
+     *
+     * - All directories with the same binary representation are stored
+     *   exactly once.
+     * - All directories, apart from the root directory, are referenced by
+     *   at least one parent directory.
+     * - Directories are stored in topological order, with parents being
+     *   stored before the child. The root directory is thus the first to
+     *   be stored.
+     *
+     * Additionally, the Tree MUST be encoded as a stream of records,
+     * where each record has the following format:
+     *
+     * - A tag byte, having one of the following two values:
+     *   - (1 << 3) | 2 == 0x0a: First record (the root directory).
+     *   - (2 << 3) | 2 == 0x12: Any subsequent records (child directories).
+     * - The size of the directory, encoded as a base 128 varint.
+     * - The contents of the directory, encoded as a binary serialized
+     *   Protobuf message.
+     *
+     * This encoding is a subset of the Protobuf wire format of the Tree
+     * message. As it is only permitted to store data associated with
+     * field numbers 1 and 2, the tag MUST be encoded as a single byte.
+     * More details on the Protobuf wire format can be found here:
+     * https://developers.google.com/protocol-buffers/docs/encoding
+     *
+     * It is recommended that implementations using this feature construct
+     * Tree objects manually using the specification given above, as
+     * opposed to using a Protobuf library to marshal a full Tree message.
+     * As individual Directory messages already need to be marshaled to
+     * compute their digests, constructing the Tree object manually avoids
+     * redundant marshaling.
+     *
+     * @generated from field: bool is_topologically_sorted = 4;
+     */
+    isTopologicallySorted = false;
 
-  constructor(data?: PartialMessage<OutputDirectory>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<OutputDirectory>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.OutputDirectory";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "path", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 3, name: "tree_digest", kind: "message", T: Digest },
-    { no: 4, name: "is_topologically_sorted", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.OutputDirectory";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        { no: 1, name: "path", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+        { no: 3, name: "tree_digest", kind: "message", T: Digest },
+        {
+            no: 4,
+            name: "is_topologically_sorted",
+            kind: "scalar",
+            T: 8 /* ScalarType.BOOL */
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): OutputDirectory {
-    return new OutputDirectory().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): OutputDirectory {
+        return new OutputDirectory().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): OutputDirectory {
-    return new OutputDirectory().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): OutputDirectory {
+        return new OutputDirectory().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): OutputDirectory {
-    return new OutputDirectory().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): OutputDirectory {
+        return new OutputDirectory().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: OutputDirectory | PlainMessage<OutputDirectory> | undefined, b: OutputDirectory | PlainMessage<OutputDirectory> | undefined): boolean {
-    return proto3.util.equals(OutputDirectory, a, b);
-  }
+    static equals(
+        a: OutputDirectory | PlainMessage<OutputDirectory> | undefined,
+        b: OutputDirectory | PlainMessage<OutputDirectory> | undefined
+    ): boolean {
+        return proto3.util.equals(OutputDirectory, a, b);
+    }
 }
 
 /**
@@ -1729,59 +2171,71 @@ export class OutputDirectory extends Message<OutputDirectory> {
  * @generated from message build.bazel.remote.execution.v2.OutputSymlink
  */
 export class OutputSymlink extends Message<OutputSymlink> {
-  /**
-   * The full path of the symlink relative to the working directory, including the
-   * filename. The path separator is a forward slash `/`. Since this is a
-   * relative path, it MUST NOT begin with a leading forward slash.
-   *
-   * @generated from field: string path = 1;
-   */
-  path = "";
+    /**
+     * The full path of the symlink relative to the working directory, including the
+     * filename. The path separator is a forward slash `/`. Since this is a
+     * relative path, it MUST NOT begin with a leading forward slash.
+     *
+     * @generated from field: string path = 1;
+     */
+    path = "";
 
-  /**
-   * The target path of the symlink. The path separator is a forward slash `/`.
-   * The target path can be relative to the parent directory of the symlink or
-   * it can be an absolute path starting with `/`. Support for absolute paths
-   * can be checked using the [Capabilities][build.bazel.remote.execution.v2.Capabilities]
-   * API. `..` components are allowed anywhere in the target path.
-   *
-   * @generated from field: string target = 2;
-   */
-  target = "";
+    /**
+     * The target path of the symlink. The path separator is a forward slash `/`.
+     * The target path can be relative to the parent directory of the symlink or
+     * it can be an absolute path starting with `/`. Support for absolute paths
+     * can be checked using the [Capabilities][build.bazel.remote.execution.v2.Capabilities]
+     * API. `..` components are allowed anywhere in the target path.
+     *
+     * @generated from field: string target = 2;
+     */
+    target = "";
 
-  /**
-   * @generated from field: build.bazel.remote.execution.v2.NodeProperties node_properties = 4;
-   */
-  nodeProperties?: NodeProperties;
+    /**
+     * @generated from field: build.bazel.remote.execution.v2.NodeProperties node_properties = 4;
+     */
+    nodeProperties?: NodeProperties;
 
-  constructor(data?: PartialMessage<OutputSymlink>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<OutputSymlink>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.OutputSymlink";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "path", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "target", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 4, name: "node_properties", kind: "message", T: NodeProperties },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName = "build.bazel.remote.execution.v2.OutputSymlink";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        { no: 1, name: "path", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+        { no: 2, name: "target", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+        { no: 4, name: "node_properties", kind: "message", T: NodeProperties }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): OutputSymlink {
-    return new OutputSymlink().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): OutputSymlink {
+        return new OutputSymlink().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): OutputSymlink {
-    return new OutputSymlink().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): OutputSymlink {
+        return new OutputSymlink().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): OutputSymlink {
-    return new OutputSymlink().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): OutputSymlink {
+        return new OutputSymlink().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: OutputSymlink | PlainMessage<OutputSymlink> | undefined, b: OutputSymlink | PlainMessage<OutputSymlink> | undefined): boolean {
-    return proto3.util.equals(OutputSymlink, a, b);
-  }
+    static equals(
+        a: OutputSymlink | PlainMessage<OutputSymlink> | undefined,
+        b: OutputSymlink | PlainMessage<OutputSymlink> | undefined
+    ): boolean {
+        return proto3.util.equals(OutputSymlink, a, b);
+    }
 }
 
 /**
@@ -1790,47 +2244,60 @@ export class OutputSymlink extends Message<OutputSymlink> {
  * @generated from message build.bazel.remote.execution.v2.ExecutionPolicy
  */
 export class ExecutionPolicy extends Message<ExecutionPolicy> {
-  /**
-   * The priority (relative importance) of this action. Generally, a lower value
-   * means that the action should be run sooner than actions having a greater
-   * priority value, but the interpretation of a given value is server-
-   * dependent. A priority of 0 means the *default* priority. Priorities may be
-   * positive or negative, and such actions should run later or sooner than
-   * actions having the default priority, respectively. The particular semantics
-   * of this field is up to the server. In particular, every server will have
-   * their own supported range of priorities, and will decide how these map into
-   * scheduling policy.
-   *
-   * @generated from field: int32 priority = 1;
-   */
-  priority = 0;
+    /**
+     * The priority (relative importance) of this action. Generally, a lower value
+     * means that the action should be run sooner than actions having a greater
+     * priority value, but the interpretation of a given value is server-
+     * dependent. A priority of 0 means the *default* priority. Priorities may be
+     * positive or negative, and such actions should run later or sooner than
+     * actions having the default priority, respectively. The particular semantics
+     * of this field is up to the server. In particular, every server will have
+     * their own supported range of priorities, and will decide how these map into
+     * scheduling policy.
+     *
+     * @generated from field: int32 priority = 1;
+     */
+    priority = 0;
 
-  constructor(data?: PartialMessage<ExecutionPolicy>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<ExecutionPolicy>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.ExecutionPolicy";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "priority", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.ExecutionPolicy";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        { no: 1, name: "priority", kind: "scalar", T: 5 /* ScalarType.INT32 */ }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ExecutionPolicy {
-    return new ExecutionPolicy().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): ExecutionPolicy {
+        return new ExecutionPolicy().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ExecutionPolicy {
-    return new ExecutionPolicy().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): ExecutionPolicy {
+        return new ExecutionPolicy().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ExecutionPolicy {
-    return new ExecutionPolicy().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): ExecutionPolicy {
+        return new ExecutionPolicy().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: ExecutionPolicy | PlainMessage<ExecutionPolicy> | undefined, b: ExecutionPolicy | PlainMessage<ExecutionPolicy> | undefined): boolean {
-    return proto3.util.equals(ExecutionPolicy, a, b);
-  }
+    static equals(
+        a: ExecutionPolicy | PlainMessage<ExecutionPolicy> | undefined,
+        b: ExecutionPolicy | PlainMessage<ExecutionPolicy> | undefined
+    ): boolean {
+        return proto3.util.equals(ExecutionPolicy, a, b);
+    }
 }
 
 /**
@@ -1840,46 +2307,59 @@ export class ExecutionPolicy extends Message<ExecutionPolicy> {
  * @generated from message build.bazel.remote.execution.v2.ResultsCachePolicy
  */
 export class ResultsCachePolicy extends Message<ResultsCachePolicy> {
-  /**
-   * The priority (relative importance) of this content in the overall cache.
-   * Generally, a lower value means a longer retention time or other advantage,
-   * but the interpretation of a given value is server-dependent. A priority of
-   * 0 means a *default* value, decided by the server.
-   *
-   * The particular semantics of this field is up to the server. In particular,
-   * every server will have their own supported range of priorities, and will
-   * decide how these map into retention/eviction policy.
-   *
-   * @generated from field: int32 priority = 1;
-   */
-  priority = 0;
+    /**
+     * The priority (relative importance) of this content in the overall cache.
+     * Generally, a lower value means a longer retention time or other advantage,
+     * but the interpretation of a given value is server-dependent. A priority of
+     * 0 means a *default* value, decided by the server.
+     *
+     * The particular semantics of this field is up to the server. In particular,
+     * every server will have their own supported range of priorities, and will
+     * decide how these map into retention/eviction policy.
+     *
+     * @generated from field: int32 priority = 1;
+     */
+    priority = 0;
 
-  constructor(data?: PartialMessage<ResultsCachePolicy>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<ResultsCachePolicy>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.ResultsCachePolicy";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "priority", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.ResultsCachePolicy";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        { no: 1, name: "priority", kind: "scalar", T: 5 /* ScalarType.INT32 */ }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ResultsCachePolicy {
-    return new ResultsCachePolicy().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): ResultsCachePolicy {
+        return new ResultsCachePolicy().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ResultsCachePolicy {
-    return new ResultsCachePolicy().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): ResultsCachePolicy {
+        return new ResultsCachePolicy().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ResultsCachePolicy {
-    return new ResultsCachePolicy().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): ResultsCachePolicy {
+        return new ResultsCachePolicy().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: ResultsCachePolicy | PlainMessage<ResultsCachePolicy> | undefined, b: ResultsCachePolicy | PlainMessage<ResultsCachePolicy> | undefined): boolean {
-    return proto3.util.equals(ResultsCachePolicy, a, b);
-  }
+    static equals(
+        a: ResultsCachePolicy | PlainMessage<ResultsCachePolicy> | undefined,
+        b: ResultsCachePolicy | PlainMessage<ResultsCachePolicy> | undefined
+    ): boolean {
+        return proto3.util.equals(ResultsCachePolicy, a, b);
+    }
 }
 
 /**
@@ -1889,105 +2369,142 @@ export class ResultsCachePolicy extends Message<ResultsCachePolicy> {
  * @generated from message build.bazel.remote.execution.v2.ExecuteRequest
  */
 export class ExecuteRequest extends Message<ExecuteRequest> {
-  /**
-   * The instance of the execution system to operate against. A server may
-   * support multiple instances of the execution system (with their own workers,
-   * storage, caches, etc.). The server MAY require use of this field to select
-   * between them in an implementation-defined fashion, otherwise it can be
-   * omitted.
-   *
-   * @generated from field: string instance_name = 1;
-   */
-  instanceName = "";
+    /**
+     * The instance of the execution system to operate against. A server may
+     * support multiple instances of the execution system (with their own workers,
+     * storage, caches, etc.). The server MAY require use of this field to select
+     * between them in an implementation-defined fashion, otherwise it can be
+     * omitted.
+     *
+     * @generated from field: string instance_name = 1;
+     */
+    instanceName = "";
 
-  /**
-   * If true, the action will be executed even if its result is already
-   * present in the [ActionCache][build.bazel.remote.execution.v2.ActionCache].
-   * The execution is still allowed to be merged with other in-flight executions
-   * of the same action, however - semantically, the service MUST only guarantee
-   * that the results of an execution with this field set were not visible
-   * before the corresponding execution request was sent.
-   * Note that actions from execution requests setting this field set are still
-   * eligible to be entered into the action cache upon completion, and services
-   * SHOULD overwrite any existing entries that may exist. This allows
-   * skip_cache_lookup requests to be used as a mechanism for replacing action
-   * cache entries that reference outputs no longer available or that are
-   * poisoned in any way.
-   * If false, the result may be served from the action cache.
-   *
-   * @generated from field: bool skip_cache_lookup = 3;
-   */
-  skipCacheLookup = false;
+    /**
+     * If true, the action will be executed even if its result is already
+     * present in the [ActionCache][build.bazel.remote.execution.v2.ActionCache].
+     * The execution is still allowed to be merged with other in-flight executions
+     * of the same action, however - semantically, the service MUST only guarantee
+     * that the results of an execution with this field set were not visible
+     * before the corresponding execution request was sent.
+     * Note that actions from execution requests setting this field set are still
+     * eligible to be entered into the action cache upon completion, and services
+     * SHOULD overwrite any existing entries that may exist. This allows
+     * skip_cache_lookup requests to be used as a mechanism for replacing action
+     * cache entries that reference outputs no longer available or that are
+     * poisoned in any way.
+     * If false, the result may be served from the action cache.
+     *
+     * @generated from field: bool skip_cache_lookup = 3;
+     */
+    skipCacheLookup = false;
 
-  /**
-   * The digest of the [Action][build.bazel.remote.execution.v2.Action] to
-   * execute.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.Digest action_digest = 6;
-   */
-  actionDigest?: Digest;
+    /**
+     * The digest of the [Action][build.bazel.remote.execution.v2.Action] to
+     * execute.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.Digest action_digest = 6;
+     */
+    actionDigest?: Digest;
 
-  /**
-   * An optional policy for execution of the action.
-   * The server will have a default policy if this is not provided.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.ExecutionPolicy execution_policy = 7;
-   */
-  executionPolicy?: ExecutionPolicy;
+    /**
+     * An optional policy for execution of the action.
+     * The server will have a default policy if this is not provided.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.ExecutionPolicy execution_policy = 7;
+     */
+    executionPolicy?: ExecutionPolicy;
 
-  /**
-   * An optional policy for the results of this execution in the remote cache.
-   * The server will have a default policy if this is not provided.
-   * This may be applied to both the ActionResult and the associated blobs.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.ResultsCachePolicy results_cache_policy = 8;
-   */
-  resultsCachePolicy?: ResultsCachePolicy;
+    /**
+     * An optional policy for the results of this execution in the remote cache.
+     * The server will have a default policy if this is not provided.
+     * This may be applied to both the ActionResult and the associated blobs.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.ResultsCachePolicy results_cache_policy = 8;
+     */
+    resultsCachePolicy?: ResultsCachePolicy;
 
-  /**
-   * The digest function that was used to compute the action digest.
-   *
-   * If the digest function used is one of MD5, MURMUR3, SHA1, SHA256,
-   * SHA384, SHA512, or VSO, the client MAY leave this field unset. In
-   * that case the server SHOULD infer the digest function using the
-   * length of the action digest hash and the digest functions announced
-   * in the server's capabilities.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.DigestFunction.Value digest_function = 9;
-   */
-  digestFunction = DigestFunction_Value.UNKNOWN;
+    /**
+     * The digest function that was used to compute the action digest.
+     *
+     * If the digest function used is one of MD5, MURMUR3, SHA1, SHA256,
+     * SHA384, SHA512, or VSO, the client MAY leave this field unset. In
+     * that case the server SHOULD infer the digest function using the
+     * length of the action digest hash and the digest functions announced
+     * in the server's capabilities.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.DigestFunction.Value digest_function = 9;
+     */
+    digestFunction = DigestFunction_Value.UNKNOWN;
 
-  constructor(data?: PartialMessage<ExecuteRequest>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<ExecuteRequest>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.ExecuteRequest";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "instance_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 3, name: "skip_cache_lookup", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 6, name: "action_digest", kind: "message", T: Digest },
-    { no: 7, name: "execution_policy", kind: "message", T: ExecutionPolicy },
-    { no: 8, name: "results_cache_policy", kind: "message", T: ResultsCachePolicy },
-    { no: 9, name: "digest_function", kind: "enum", T: proto3.getEnumType(DigestFunction_Value) },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName = "build.bazel.remote.execution.v2.ExecuteRequest";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        {
+            no: 1,
+            name: "instance_name",
+            kind: "scalar",
+            T: 9 /* ScalarType.STRING */
+        },
+        {
+            no: 3,
+            name: "skip_cache_lookup",
+            kind: "scalar",
+            T: 8 /* ScalarType.BOOL */
+        },
+        { no: 6, name: "action_digest", kind: "message", T: Digest },
+        {
+            no: 7,
+            name: "execution_policy",
+            kind: "message",
+            T: ExecutionPolicy
+        },
+        {
+            no: 8,
+            name: "results_cache_policy",
+            kind: "message",
+            T: ResultsCachePolicy
+        },
+        {
+            no: 9,
+            name: "digest_function",
+            kind: "enum",
+            T: proto3.getEnumType(DigestFunction_Value)
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ExecuteRequest {
-    return new ExecuteRequest().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): ExecuteRequest {
+        return new ExecuteRequest().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ExecuteRequest {
-    return new ExecuteRequest().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): ExecuteRequest {
+        return new ExecuteRequest().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ExecuteRequest {
-    return new ExecuteRequest().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): ExecuteRequest {
+        return new ExecuteRequest().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: ExecuteRequest | PlainMessage<ExecuteRequest> | undefined, b: ExecuteRequest | PlainMessage<ExecuteRequest> | undefined): boolean {
-    return proto3.util.equals(ExecuteRequest, a, b);
-  }
+    static equals(
+        a: ExecuteRequest | PlainMessage<ExecuteRequest> | undefined,
+        b: ExecuteRequest | PlainMessage<ExecuteRequest> | undefined
+    ): boolean {
+        return proto3.util.equals(ExecuteRequest, a, b);
+    }
 }
 
 /**
@@ -1996,51 +2513,68 @@ export class ExecuteRequest extends Message<ExecuteRequest> {
  * @generated from message build.bazel.remote.execution.v2.LogFile
  */
 export class LogFile extends Message<LogFile> {
-  /**
-   * The digest of the log contents.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.Digest digest = 1;
-   */
-  digest?: Digest;
+    /**
+     * The digest of the log contents.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.Digest digest = 1;
+     */
+    digest?: Digest;
 
-  /**
-   * This is a hint as to the purpose of the log, and is set to true if the log
-   * is human-readable text that can be usefully displayed to a user, and false
-   * otherwise. For instance, if a command-line client wishes to print the
-   * server logs to the terminal for a failed action, this allows it to avoid
-   * displaying a binary file.
-   *
-   * @generated from field: bool human_readable = 2;
-   */
-  humanReadable = false;
+    /**
+     * This is a hint as to the purpose of the log, and is set to true if the log
+     * is human-readable text that can be usefully displayed to a user, and false
+     * otherwise. For instance, if a command-line client wishes to print the
+     * server logs to the terminal for a failed action, this allows it to avoid
+     * displaying a binary file.
+     *
+     * @generated from field: bool human_readable = 2;
+     */
+    humanReadable = false;
 
-  constructor(data?: PartialMessage<LogFile>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<LogFile>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.LogFile";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "digest", kind: "message", T: Digest },
-    { no: 2, name: "human_readable", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName = "build.bazel.remote.execution.v2.LogFile";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        { no: 1, name: "digest", kind: "message", T: Digest },
+        {
+            no: 2,
+            name: "human_readable",
+            kind: "scalar",
+            T: 8 /* ScalarType.BOOL */
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): LogFile {
-    return new LogFile().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): LogFile {
+        return new LogFile().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): LogFile {
-    return new LogFile().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): LogFile {
+        return new LogFile().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): LogFile {
-    return new LogFile().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): LogFile {
+        return new LogFile().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: LogFile | PlainMessage<LogFile> | undefined, b: LogFile | PlainMessage<LogFile> | undefined): boolean {
-    return proto3.util.equals(LogFile, a, b);
-  }
+    static equals(
+        a: LogFile | PlainMessage<LogFile> | undefined,
+        b: LogFile | PlainMessage<LogFile> | undefined
+    ): boolean {
+        return proto3.util.equals(LogFile, a, b);
+    }
 }
 
 /**
@@ -2053,87 +2587,111 @@ export class LogFile extends Message<LogFile> {
  * @generated from message build.bazel.remote.execution.v2.ExecuteResponse
  */
 export class ExecuteResponse extends Message<ExecuteResponse> {
-  /**
-   * The result of the action.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.ActionResult result = 1;
-   */
-  result?: ActionResult;
+    /**
+     * The result of the action.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.ActionResult result = 1;
+     */
+    result?: ActionResult;
 
-  /**
-   * True if the result was served from cache, false if it was executed.
-   *
-   * @generated from field: bool cached_result = 2;
-   */
-  cachedResult = false;
+    /**
+     * True if the result was served from cache, false if it was executed.
+     *
+     * @generated from field: bool cached_result = 2;
+     */
+    cachedResult = false;
 
-  /**
-   * If the status has a code other than `OK`, it indicates that the action did
-   * not finish execution. For example, if the operation times out during
-   * execution, the status will have a `DEADLINE_EXCEEDED` code. Servers MUST
-   * use this field for errors in execution, rather than the error field on the
-   * `Operation` object.
-   *
-   * If the status code is other than `OK`, then the result MUST NOT be cached.
-   * For an error status, the `result` field is optional; the server may
-   * populate the output-, stdout-, and stderr-related fields if it has any
-   * information available, such as the stdout and stderr of a timed-out action.
-   *
-   * @generated from field: google.rpc.Status status = 3;
-   */
-  status?: Status;
+    /**
+     * If the status has a code other than `OK`, it indicates that the action did
+     * not finish execution. For example, if the operation times out during
+     * execution, the status will have a `DEADLINE_EXCEEDED` code. Servers MUST
+     * use this field for errors in execution, rather than the error field on the
+     * `Operation` object.
+     *
+     * If the status code is other than `OK`, then the result MUST NOT be cached.
+     * For an error status, the `result` field is optional; the server may
+     * populate the output-, stdout-, and stderr-related fields if it has any
+     * information available, such as the stdout and stderr of a timed-out action.
+     *
+     * @generated from field: google.rpc.Status status = 3;
+     */
+    status?: Status;
 
-  /**
-   * An optional list of additional log outputs the server wishes to provide. A
-   * server can use this to return execution-specific logs however it wishes.
-   * This is intended primarily to make it easier for users to debug issues that
-   * may be outside of the actual job execution, such as by identifying the
-   * worker executing the action or by providing logs from the worker's setup
-   * phase. The keys SHOULD be human readable so that a client can display them
-   * to a user.
-   *
-   * @generated from field: map<string, build.bazel.remote.execution.v2.LogFile> server_logs = 4;
-   */
-  serverLogs: { [key: string]: LogFile } = {};
+    /**
+     * An optional list of additional log outputs the server wishes to provide. A
+     * server can use this to return execution-specific logs however it wishes.
+     * This is intended primarily to make it easier for users to debug issues that
+     * may be outside of the actual job execution, such as by identifying the
+     * worker executing the action or by providing logs from the worker's setup
+     * phase. The keys SHOULD be human readable so that a client can display them
+     * to a user.
+     *
+     * @generated from field: map<string, build.bazel.remote.execution.v2.LogFile> server_logs = 4;
+     */
+    serverLogs: { [key: string]: LogFile } = {};
 
-  /**
-   * Freeform informational message with details on the execution of the action
-   * that may be displayed to the user upon failure or when requested explicitly.
-   *
-   * @generated from field: string message = 5;
-   */
-  message = "";
+    /**
+     * Freeform informational message with details on the execution of the action
+     * that may be displayed to the user upon failure or when requested explicitly.
+     *
+     * @generated from field: string message = 5;
+     */
+    message = "";
 
-  constructor(data?: PartialMessage<ExecuteResponse>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<ExecuteResponse>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.ExecuteResponse";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "result", kind: "message", T: ActionResult },
-    { no: 2, name: "cached_result", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 3, name: "status", kind: "message", T: Status },
-    { no: 4, name: "server_logs", kind: "map", K: 9 /* ScalarType.STRING */, V: {kind: "message", T: LogFile} },
-    { no: 5, name: "message", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.ExecuteResponse";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        { no: 1, name: "result", kind: "message", T: ActionResult },
+        {
+            no: 2,
+            name: "cached_result",
+            kind: "scalar",
+            T: 8 /* ScalarType.BOOL */
+        },
+        { no: 3, name: "status", kind: "message", T: Status },
+        {
+            no: 4,
+            name: "server_logs",
+            kind: "map",
+            K: 9 /* ScalarType.STRING */,
+            V: { kind: "message", T: LogFile }
+        },
+        { no: 5, name: "message", kind: "scalar", T: 9 /* ScalarType.STRING */ }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ExecuteResponse {
-    return new ExecuteResponse().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): ExecuteResponse {
+        return new ExecuteResponse().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ExecuteResponse {
-    return new ExecuteResponse().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): ExecuteResponse {
+        return new ExecuteResponse().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ExecuteResponse {
-    return new ExecuteResponse().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): ExecuteResponse {
+        return new ExecuteResponse().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: ExecuteResponse | PlainMessage<ExecuteResponse> | undefined, b: ExecuteResponse | PlainMessage<ExecuteResponse> | undefined): boolean {
-    return proto3.util.equals(ExecuteResponse, a, b);
-  }
+    static equals(
+        a: ExecuteResponse | PlainMessage<ExecuteResponse> | undefined,
+        b: ExecuteResponse | PlainMessage<ExecuteResponse> | undefined
+    ): boolean {
+        return proto3.util.equals(ExecuteResponse, a, b);
+    }
 }
 
 /**
@@ -2153,80 +2711,95 @@ export class ExecuteResponse extends Message<ExecuteResponse> {
  * @generated from message build.bazel.remote.execution.v2.ExecutionStage
  */
 export class ExecutionStage extends Message<ExecutionStage> {
-  constructor(data?: PartialMessage<ExecutionStage>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<ExecutionStage>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.ExecutionStage";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName = "build.bazel.remote.execution.v2.ExecutionStage";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => []);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ExecutionStage {
-    return new ExecutionStage().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): ExecutionStage {
+        return new ExecutionStage().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ExecutionStage {
-    return new ExecutionStage().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): ExecutionStage {
+        return new ExecutionStage().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ExecutionStage {
-    return new ExecutionStage().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): ExecutionStage {
+        return new ExecutionStage().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: ExecutionStage | PlainMessage<ExecutionStage> | undefined, b: ExecutionStage | PlainMessage<ExecutionStage> | undefined): boolean {
-    return proto3.util.equals(ExecutionStage, a, b);
-  }
+    static equals(
+        a: ExecutionStage | PlainMessage<ExecutionStage> | undefined,
+        b: ExecutionStage | PlainMessage<ExecutionStage> | undefined
+    ): boolean {
+        return proto3.util.equals(ExecutionStage, a, b);
+    }
 }
 
 /**
  * @generated from enum build.bazel.remote.execution.v2.ExecutionStage.Value
  */
 export enum ExecutionStage_Value {
-  /**
-   * Invalid value.
-   *
-   * @generated from enum value: UNKNOWN = 0;
-   */
-  UNKNOWN = 0,
+    /**
+     * Invalid value.
+     *
+     * @generated from enum value: UNKNOWN = 0;
+     */
+    UNKNOWN = 0,
 
-  /**
-   * Checking the result against the cache.
-   *
-   * @generated from enum value: CACHE_CHECK = 1;
-   */
-  CACHE_CHECK = 1,
+    /**
+     * Checking the result against the cache.
+     *
+     * @generated from enum value: CACHE_CHECK = 1;
+     */
+    CACHE_CHECK = 1,
 
-  /**
-   * Currently idle, awaiting a free machine to execute.
-   *
-   * @generated from enum value: QUEUED = 2;
-   */
-  QUEUED = 2,
+    /**
+     * Currently idle, awaiting a free machine to execute.
+     *
+     * @generated from enum value: QUEUED = 2;
+     */
+    QUEUED = 2,
 
-  /**
-   * Currently being executed by a worker.
-   *
-   * @generated from enum value: EXECUTING = 3;
-   */
-  EXECUTING = 3,
+    /**
+     * Currently being executed by a worker.
+     *
+     * @generated from enum value: EXECUTING = 3;
+     */
+    EXECUTING = 3,
 
-  /**
-   * Finished execution.
-   *
-   * @generated from enum value: COMPLETED = 4;
-   */
-  COMPLETED = 4,
+    /**
+     * Finished execution.
+     *
+     * @generated from enum value: COMPLETED = 4;
+     */
+    COMPLETED = 4
 }
 // Retrieve enum metadata with: proto3.getEnumType(ExecutionStage_Value)
-proto3.util.setEnumType(ExecutionStage_Value, "build.bazel.remote.execution.v2.ExecutionStage.Value", [
-  { no: 0, name: "UNKNOWN" },
-  { no: 1, name: "CACHE_CHECK" },
-  { no: 2, name: "QUEUED" },
-  { no: 3, name: "EXECUTING" },
-  { no: 4, name: "COMPLETED" },
-]);
+proto3.util.setEnumType(
+    ExecutionStage_Value,
+    "build.bazel.remote.execution.v2.ExecutionStage.Value",
+    [
+        { no: 0, name: "UNKNOWN" },
+        { no: 1, name: "CACHE_CHECK" },
+        { no: 2, name: "QUEUED" },
+        { no: 3, name: "EXECUTING" },
+        { no: 4, name: "COMPLETED" }
+    ]
+);
 
 /**
  * Metadata about an ongoing
@@ -2238,77 +2811,119 @@ proto3.util.setEnumType(ExecutionStage_Value, "build.bazel.remote.execution.v2.E
  * @generated from message build.bazel.remote.execution.v2.ExecuteOperationMetadata
  */
 export class ExecuteOperationMetadata extends Message<ExecuteOperationMetadata> {
-  /**
-   * The current stage of execution.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.ExecutionStage.Value stage = 1;
-   */
-  stage = ExecutionStage_Value.UNKNOWN;
+    /**
+     * The current stage of execution.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.ExecutionStage.Value stage = 1;
+     */
+    stage = ExecutionStage_Value.UNKNOWN;
 
-  /**
-   * The digest of the [Action][build.bazel.remote.execution.v2.Action]
-   * being executed.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.Digest action_digest = 2;
-   */
-  actionDigest?: Digest;
+    /**
+     * The digest of the [Action][build.bazel.remote.execution.v2.Action]
+     * being executed.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.Digest action_digest = 2;
+     */
+    actionDigest?: Digest;
 
-  /**
-   * If set, the client can use this resource name with
-   * [ByteStream.Read][google.bytestream.ByteStream.Read] to stream the
-   * standard output from the endpoint hosting streamed responses.
-   *
-   * @generated from field: string stdout_stream_name = 3;
-   */
-  stdoutStreamName = "";
+    /**
+     * If set, the client can use this resource name with
+     * [ByteStream.Read][google.bytestream.ByteStream.Read] to stream the
+     * standard output from the endpoint hosting streamed responses.
+     *
+     * @generated from field: string stdout_stream_name = 3;
+     */
+    stdoutStreamName = "";
 
-  /**
-   * If set, the client can use this resource name with
-   * [ByteStream.Read][google.bytestream.ByteStream.Read] to stream the
-   * standard error from the endpoint hosting streamed responses.
-   *
-   * @generated from field: string stderr_stream_name = 4;
-   */
-  stderrStreamName = "";
+    /**
+     * If set, the client can use this resource name with
+     * [ByteStream.Read][google.bytestream.ByteStream.Read] to stream the
+     * standard error from the endpoint hosting streamed responses.
+     *
+     * @generated from field: string stderr_stream_name = 4;
+     */
+    stderrStreamName = "";
 
-  /**
-   * The client can read this field to view details about the ongoing
-   * execution.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.ExecutedActionMetadata partial_execution_metadata = 5;
-   */
-  partialExecutionMetadata?: ExecutedActionMetadata;
+    /**
+     * The client can read this field to view details about the ongoing
+     * execution.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.ExecutedActionMetadata partial_execution_metadata = 5;
+     */
+    partialExecutionMetadata?: ExecutedActionMetadata;
 
-  constructor(data?: PartialMessage<ExecuteOperationMetadata>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<ExecuteOperationMetadata>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.ExecuteOperationMetadata";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "stage", kind: "enum", T: proto3.getEnumType(ExecutionStage_Value) },
-    { no: 2, name: "action_digest", kind: "message", T: Digest },
-    { no: 3, name: "stdout_stream_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 4, name: "stderr_stream_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 5, name: "partial_execution_metadata", kind: "message", T: ExecutedActionMetadata },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.ExecuteOperationMetadata";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        {
+            no: 1,
+            name: "stage",
+            kind: "enum",
+            T: proto3.getEnumType(ExecutionStage_Value)
+        },
+        { no: 2, name: "action_digest", kind: "message", T: Digest },
+        {
+            no: 3,
+            name: "stdout_stream_name",
+            kind: "scalar",
+            T: 9 /* ScalarType.STRING */
+        },
+        {
+            no: 4,
+            name: "stderr_stream_name",
+            kind: "scalar",
+            T: 9 /* ScalarType.STRING */
+        },
+        {
+            no: 5,
+            name: "partial_execution_metadata",
+            kind: "message",
+            T: ExecutedActionMetadata
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ExecuteOperationMetadata {
-    return new ExecuteOperationMetadata().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): ExecuteOperationMetadata {
+        return new ExecuteOperationMetadata().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ExecuteOperationMetadata {
-    return new ExecuteOperationMetadata().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): ExecuteOperationMetadata {
+        return new ExecuteOperationMetadata().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ExecuteOperationMetadata {
-    return new ExecuteOperationMetadata().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): ExecuteOperationMetadata {
+        return new ExecuteOperationMetadata().fromJsonString(
+            jsonString,
+            options
+        );
+    }
 
-  static equals(a: ExecuteOperationMetadata | PlainMessage<ExecuteOperationMetadata> | undefined, b: ExecuteOperationMetadata | PlainMessage<ExecuteOperationMetadata> | undefined): boolean {
-    return proto3.util.equals(ExecuteOperationMetadata, a, b);
-  }
+    static equals(
+        a:
+            | ExecuteOperationMetadata
+            | PlainMessage<ExecuteOperationMetadata>
+            | undefined,
+        b:
+            | ExecuteOperationMetadata
+            | PlainMessage<ExecuteOperationMetadata>
+            | undefined
+    ): boolean {
+        return proto3.util.equals(ExecuteOperationMetadata, a, b);
+    }
 }
 
 /**
@@ -2318,40 +2933,56 @@ export class ExecuteOperationMetadata extends Message<ExecuteOperationMetadata> 
  * @generated from message build.bazel.remote.execution.v2.WaitExecutionRequest
  */
 export class WaitExecutionRequest extends Message<WaitExecutionRequest> {
-  /**
-   * The name of the [Operation][google.longrunning.Operation]
-   * returned by [Execute][build.bazel.remote.execution.v2.Execution.Execute].
-   *
-   * @generated from field: string name = 1;
-   */
-  name = "";
+    /**
+     * The name of the [Operation][google.longrunning.Operation]
+     * returned by [Execute][build.bazel.remote.execution.v2.Execution.Execute].
+     *
+     * @generated from field: string name = 1;
+     */
+    name = "";
 
-  constructor(data?: PartialMessage<WaitExecutionRequest>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<WaitExecutionRequest>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.WaitExecutionRequest";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.WaitExecutionRequest";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        { no: 1, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): WaitExecutionRequest {
-    return new WaitExecutionRequest().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): WaitExecutionRequest {
+        return new WaitExecutionRequest().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): WaitExecutionRequest {
-    return new WaitExecutionRequest().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): WaitExecutionRequest {
+        return new WaitExecutionRequest().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): WaitExecutionRequest {
-    return new WaitExecutionRequest().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): WaitExecutionRequest {
+        return new WaitExecutionRequest().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: WaitExecutionRequest | PlainMessage<WaitExecutionRequest> | undefined, b: WaitExecutionRequest | PlainMessage<WaitExecutionRequest> | undefined): boolean {
-    return proto3.util.equals(WaitExecutionRequest, a, b);
-  }
+    static equals(
+        a:
+            | WaitExecutionRequest
+            | PlainMessage<WaitExecutionRequest>
+            | undefined,
+        b: WaitExecutionRequest | PlainMessage<WaitExecutionRequest> | undefined
+    ): boolean {
+        return proto3.util.equals(WaitExecutionRequest, a, b);
+    }
 }
 
 /**
@@ -2361,95 +2992,140 @@ export class WaitExecutionRequest extends Message<WaitExecutionRequest> {
  * @generated from message build.bazel.remote.execution.v2.GetActionResultRequest
  */
 export class GetActionResultRequest extends Message<GetActionResultRequest> {
-  /**
-   * The instance of the execution system to operate against. A server may
-   * support multiple instances of the execution system (with their own workers,
-   * storage, caches, etc.). The server MAY require use of this field to select
-   * between them in an implementation-defined fashion, otherwise it can be
-   * omitted.
-   *
-   * @generated from field: string instance_name = 1;
-   */
-  instanceName = "";
+    /**
+     * The instance of the execution system to operate against. A server may
+     * support multiple instances of the execution system (with their own workers,
+     * storage, caches, etc.). The server MAY require use of this field to select
+     * between them in an implementation-defined fashion, otherwise it can be
+     * omitted.
+     *
+     * @generated from field: string instance_name = 1;
+     */
+    instanceName = "";
 
-  /**
-   * The digest of the [Action][build.bazel.remote.execution.v2.Action]
-   * whose result is requested.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.Digest action_digest = 2;
-   */
-  actionDigest?: Digest;
+    /**
+     * The digest of the [Action][build.bazel.remote.execution.v2.Action]
+     * whose result is requested.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.Digest action_digest = 2;
+     */
+    actionDigest?: Digest;
 
-  /**
-   * A hint to the server to request inlining stdout in the
-   * [ActionResult][build.bazel.remote.execution.v2.ActionResult] message.
-   *
-   * @generated from field: bool inline_stdout = 3;
-   */
-  inlineStdout = false;
+    /**
+     * A hint to the server to request inlining stdout in the
+     * [ActionResult][build.bazel.remote.execution.v2.ActionResult] message.
+     *
+     * @generated from field: bool inline_stdout = 3;
+     */
+    inlineStdout = false;
 
-  /**
-   * A hint to the server to request inlining stderr in the
-   * [ActionResult][build.bazel.remote.execution.v2.ActionResult] message.
-   *
-   * @generated from field: bool inline_stderr = 4;
-   */
-  inlineStderr = false;
+    /**
+     * A hint to the server to request inlining stderr in the
+     * [ActionResult][build.bazel.remote.execution.v2.ActionResult] message.
+     *
+     * @generated from field: bool inline_stderr = 4;
+     */
+    inlineStderr = false;
 
-  /**
-   * A hint to the server to inline the contents of the listed output files.
-   * Each path needs to exactly match one file path in either `output_paths` or
-   * `output_files` (DEPRECATED since v2.1) in the
-   * [Command][build.bazel.remote.execution.v2.Command] message.
-   *
-   * @generated from field: repeated string inline_output_files = 5;
-   */
-  inlineOutputFiles: string[] = [];
+    /**
+     * A hint to the server to inline the contents of the listed output files.
+     * Each path needs to exactly match one file path in either `output_paths` or
+     * `output_files` (DEPRECATED since v2.1) in the
+     * [Command][build.bazel.remote.execution.v2.Command] message.
+     *
+     * @generated from field: repeated string inline_output_files = 5;
+     */
+    inlineOutputFiles: string[] = [];
 
-  /**
-   * The digest function that was used to compute the action digest.
-   *
-   * If the digest function used is one of MD5, MURMUR3, SHA1, SHA256,
-   * SHA384, SHA512, or VSO, the client MAY leave this field unset. In
-   * that case the server SHOULD infer the digest function using the
-   * length of the action digest hash and the digest functions announced
-   * in the server's capabilities.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.DigestFunction.Value digest_function = 6;
-   */
-  digestFunction = DigestFunction_Value.UNKNOWN;
+    /**
+     * The digest function that was used to compute the action digest.
+     *
+     * If the digest function used is one of MD5, MURMUR3, SHA1, SHA256,
+     * SHA384, SHA512, or VSO, the client MAY leave this field unset. In
+     * that case the server SHOULD infer the digest function using the
+     * length of the action digest hash and the digest functions announced
+     * in the server's capabilities.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.DigestFunction.Value digest_function = 6;
+     */
+    digestFunction = DigestFunction_Value.UNKNOWN;
 
-  constructor(data?: PartialMessage<GetActionResultRequest>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<GetActionResultRequest>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.GetActionResultRequest";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "instance_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "action_digest", kind: "message", T: Digest },
-    { no: 3, name: "inline_stdout", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 4, name: "inline_stderr", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 5, name: "inline_output_files", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
-    { no: 6, name: "digest_function", kind: "enum", T: proto3.getEnumType(DigestFunction_Value) },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.GetActionResultRequest";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        {
+            no: 1,
+            name: "instance_name",
+            kind: "scalar",
+            T: 9 /* ScalarType.STRING */
+        },
+        { no: 2, name: "action_digest", kind: "message", T: Digest },
+        {
+            no: 3,
+            name: "inline_stdout",
+            kind: "scalar",
+            T: 8 /* ScalarType.BOOL */
+        },
+        {
+            no: 4,
+            name: "inline_stderr",
+            kind: "scalar",
+            T: 8 /* ScalarType.BOOL */
+        },
+        {
+            no: 5,
+            name: "inline_output_files",
+            kind: "scalar",
+            T: 9 /* ScalarType.STRING */,
+            repeated: true
+        },
+        {
+            no: 6,
+            name: "digest_function",
+            kind: "enum",
+            T: proto3.getEnumType(DigestFunction_Value)
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetActionResultRequest {
-    return new GetActionResultRequest().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): GetActionResultRequest {
+        return new GetActionResultRequest().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetActionResultRequest {
-    return new GetActionResultRequest().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): GetActionResultRequest {
+        return new GetActionResultRequest().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetActionResultRequest {
-    return new GetActionResultRequest().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): GetActionResultRequest {
+        return new GetActionResultRequest().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: GetActionResultRequest | PlainMessage<GetActionResultRequest> | undefined, b: GetActionResultRequest | PlainMessage<GetActionResultRequest> | undefined): boolean {
-    return proto3.util.equals(GetActionResultRequest, a, b);
-  }
+    static equals(
+        a:
+            | GetActionResultRequest
+            | PlainMessage<GetActionResultRequest>
+            | undefined,
+        b:
+            | GetActionResultRequest
+            | PlainMessage<GetActionResultRequest>
+            | undefined
+    ): boolean {
+        return proto3.util.equals(GetActionResultRequest, a, b);
+    }
 }
 
 /**
@@ -2459,85 +3135,122 @@ export class GetActionResultRequest extends Message<GetActionResultRequest> {
  * @generated from message build.bazel.remote.execution.v2.UpdateActionResultRequest
  */
 export class UpdateActionResultRequest extends Message<UpdateActionResultRequest> {
-  /**
-   * The instance of the execution system to operate against. A server may
-   * support multiple instances of the execution system (with their own workers,
-   * storage, caches, etc.). The server MAY require use of this field to select
-   * between them in an implementation-defined fashion, otherwise it can be
-   * omitted.
-   *
-   * @generated from field: string instance_name = 1;
-   */
-  instanceName = "";
+    /**
+     * The instance of the execution system to operate against. A server may
+     * support multiple instances of the execution system (with their own workers,
+     * storage, caches, etc.). The server MAY require use of this field to select
+     * between them in an implementation-defined fashion, otherwise it can be
+     * omitted.
+     *
+     * @generated from field: string instance_name = 1;
+     */
+    instanceName = "";
 
-  /**
-   * The digest of the [Action][build.bazel.remote.execution.v2.Action]
-   * whose result is being uploaded.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.Digest action_digest = 2;
-   */
-  actionDigest?: Digest;
+    /**
+     * The digest of the [Action][build.bazel.remote.execution.v2.Action]
+     * whose result is being uploaded.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.Digest action_digest = 2;
+     */
+    actionDigest?: Digest;
 
-  /**
-   * The [ActionResult][build.bazel.remote.execution.v2.ActionResult]
-   * to store in the cache.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.ActionResult action_result = 3;
-   */
-  actionResult?: ActionResult;
+    /**
+     * The [ActionResult][build.bazel.remote.execution.v2.ActionResult]
+     * to store in the cache.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.ActionResult action_result = 3;
+     */
+    actionResult?: ActionResult;
 
-  /**
-   * An optional policy for the results of this execution in the remote cache.
-   * The server will have a default policy if this is not provided.
-   * This may be applied to both the ActionResult and the associated blobs.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.ResultsCachePolicy results_cache_policy = 4;
-   */
-  resultsCachePolicy?: ResultsCachePolicy;
+    /**
+     * An optional policy for the results of this execution in the remote cache.
+     * The server will have a default policy if this is not provided.
+     * This may be applied to both the ActionResult and the associated blobs.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.ResultsCachePolicy results_cache_policy = 4;
+     */
+    resultsCachePolicy?: ResultsCachePolicy;
 
-  /**
-   * The digest function that was used to compute the action digest.
-   *
-   * If the digest function used is one of MD5, MURMUR3, SHA1, SHA256,
-   * SHA384, SHA512, or VSO, the client MAY leave this field unset. In
-   * that case the server SHOULD infer the digest function using the
-   * length of the action digest hash and the digest functions announced
-   * in the server's capabilities.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.DigestFunction.Value digest_function = 5;
-   */
-  digestFunction = DigestFunction_Value.UNKNOWN;
+    /**
+     * The digest function that was used to compute the action digest.
+     *
+     * If the digest function used is one of MD5, MURMUR3, SHA1, SHA256,
+     * SHA384, SHA512, or VSO, the client MAY leave this field unset. In
+     * that case the server SHOULD infer the digest function using the
+     * length of the action digest hash and the digest functions announced
+     * in the server's capabilities.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.DigestFunction.Value digest_function = 5;
+     */
+    digestFunction = DigestFunction_Value.UNKNOWN;
 
-  constructor(data?: PartialMessage<UpdateActionResultRequest>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<UpdateActionResultRequest>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.UpdateActionResultRequest";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "instance_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "action_digest", kind: "message", T: Digest },
-    { no: 3, name: "action_result", kind: "message", T: ActionResult },
-    { no: 4, name: "results_cache_policy", kind: "message", T: ResultsCachePolicy },
-    { no: 5, name: "digest_function", kind: "enum", T: proto3.getEnumType(DigestFunction_Value) },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.UpdateActionResultRequest";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        {
+            no: 1,
+            name: "instance_name",
+            kind: "scalar",
+            T: 9 /* ScalarType.STRING */
+        },
+        { no: 2, name: "action_digest", kind: "message", T: Digest },
+        { no: 3, name: "action_result", kind: "message", T: ActionResult },
+        {
+            no: 4,
+            name: "results_cache_policy",
+            kind: "message",
+            T: ResultsCachePolicy
+        },
+        {
+            no: 5,
+            name: "digest_function",
+            kind: "enum",
+            T: proto3.getEnumType(DigestFunction_Value)
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): UpdateActionResultRequest {
-    return new UpdateActionResultRequest().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): UpdateActionResultRequest {
+        return new UpdateActionResultRequest().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): UpdateActionResultRequest {
-    return new UpdateActionResultRequest().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): UpdateActionResultRequest {
+        return new UpdateActionResultRequest().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): UpdateActionResultRequest {
-    return new UpdateActionResultRequest().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): UpdateActionResultRequest {
+        return new UpdateActionResultRequest().fromJsonString(
+            jsonString,
+            options
+        );
+    }
 
-  static equals(a: UpdateActionResultRequest | PlainMessage<UpdateActionResultRequest> | undefined, b: UpdateActionResultRequest | PlainMessage<UpdateActionResultRequest> | undefined): boolean {
-    return proto3.util.equals(UpdateActionResultRequest, a, b);
-  }
+    static equals(
+        a:
+            | UpdateActionResultRequest
+            | PlainMessage<UpdateActionResultRequest>
+            | undefined,
+        b:
+            | UpdateActionResultRequest
+            | PlainMessage<UpdateActionResultRequest>
+            | undefined
+    ): boolean {
+        return proto3.util.equals(UpdateActionResultRequest, a, b);
+    }
 }
 
 /**
@@ -2547,66 +3260,104 @@ export class UpdateActionResultRequest extends Message<UpdateActionResultRequest
  * @generated from message build.bazel.remote.execution.v2.FindMissingBlobsRequest
  */
 export class FindMissingBlobsRequest extends Message<FindMissingBlobsRequest> {
-  /**
-   * The instance of the execution system to operate against. A server may
-   * support multiple instances of the execution system (with their own workers,
-   * storage, caches, etc.). The server MAY require use of this field to select
-   * between them in an implementation-defined fashion, otherwise it can be
-   * omitted.
-   *
-   * @generated from field: string instance_name = 1;
-   */
-  instanceName = "";
+    /**
+     * The instance of the execution system to operate against. A server may
+     * support multiple instances of the execution system (with their own workers,
+     * storage, caches, etc.). The server MAY require use of this field to select
+     * between them in an implementation-defined fashion, otherwise it can be
+     * omitted.
+     *
+     * @generated from field: string instance_name = 1;
+     */
+    instanceName = "";
 
-  /**
-   * A list of the blobs to check. All digests MUST use the same digest
-   * function.
-   *
-   * @generated from field: repeated build.bazel.remote.execution.v2.Digest blob_digests = 2;
-   */
-  blobDigests: Digest[] = [];
+    /**
+     * A list of the blobs to check. All digests MUST use the same digest
+     * function.
+     *
+     * @generated from field: repeated build.bazel.remote.execution.v2.Digest blob_digests = 2;
+     */
+    blobDigests: Digest[] = [];
 
-  /**
-   * The digest function of the blobs whose existence is checked.
-   *
-   * If the digest function used is one of MD5, MURMUR3, SHA1, SHA256,
-   * SHA384, SHA512, or VSO, the client MAY leave this field unset. In
-   * that case the server SHOULD infer the digest function using the
-   * length of the blob digest hashes and the digest functions announced
-   * in the server's capabilities.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.DigestFunction.Value digest_function = 3;
-   */
-  digestFunction = DigestFunction_Value.UNKNOWN;
+    /**
+     * The digest function of the blobs whose existence is checked.
+     *
+     * If the digest function used is one of MD5, MURMUR3, SHA1, SHA256,
+     * SHA384, SHA512, or VSO, the client MAY leave this field unset. In
+     * that case the server SHOULD infer the digest function using the
+     * length of the blob digest hashes and the digest functions announced
+     * in the server's capabilities.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.DigestFunction.Value digest_function = 3;
+     */
+    digestFunction = DigestFunction_Value.UNKNOWN;
 
-  constructor(data?: PartialMessage<FindMissingBlobsRequest>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<FindMissingBlobsRequest>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.FindMissingBlobsRequest";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "instance_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "blob_digests", kind: "message", T: Digest, repeated: true },
-    { no: 3, name: "digest_function", kind: "enum", T: proto3.getEnumType(DigestFunction_Value) },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.FindMissingBlobsRequest";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        {
+            no: 1,
+            name: "instance_name",
+            kind: "scalar",
+            T: 9 /* ScalarType.STRING */
+        },
+        {
+            no: 2,
+            name: "blob_digests",
+            kind: "message",
+            T: Digest,
+            repeated: true
+        },
+        {
+            no: 3,
+            name: "digest_function",
+            kind: "enum",
+            T: proto3.getEnumType(DigestFunction_Value)
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): FindMissingBlobsRequest {
-    return new FindMissingBlobsRequest().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): FindMissingBlobsRequest {
+        return new FindMissingBlobsRequest().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): FindMissingBlobsRequest {
-    return new FindMissingBlobsRequest().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): FindMissingBlobsRequest {
+        return new FindMissingBlobsRequest().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): FindMissingBlobsRequest {
-    return new FindMissingBlobsRequest().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): FindMissingBlobsRequest {
+        return new FindMissingBlobsRequest().fromJsonString(
+            jsonString,
+            options
+        );
+    }
 
-  static equals(a: FindMissingBlobsRequest | PlainMessage<FindMissingBlobsRequest> | undefined, b: FindMissingBlobsRequest | PlainMessage<FindMissingBlobsRequest> | undefined): boolean {
-    return proto3.util.equals(FindMissingBlobsRequest, a, b);
-  }
+    static equals(
+        a:
+            | FindMissingBlobsRequest
+            | PlainMessage<FindMissingBlobsRequest>
+            | undefined,
+        b:
+            | FindMissingBlobsRequest
+            | PlainMessage<FindMissingBlobsRequest>
+            | undefined
+    ): boolean {
+        return proto3.util.equals(FindMissingBlobsRequest, a, b);
+    }
 }
 
 /**
@@ -2616,39 +3367,67 @@ export class FindMissingBlobsRequest extends Message<FindMissingBlobsRequest> {
  * @generated from message build.bazel.remote.execution.v2.FindMissingBlobsResponse
  */
 export class FindMissingBlobsResponse extends Message<FindMissingBlobsResponse> {
-  /**
-   * A list of the blobs requested *not* present in the storage.
-   *
-   * @generated from field: repeated build.bazel.remote.execution.v2.Digest missing_blob_digests = 2;
-   */
-  missingBlobDigests: Digest[] = [];
+    /**
+     * A list of the blobs requested *not* present in the storage.
+     *
+     * @generated from field: repeated build.bazel.remote.execution.v2.Digest missing_blob_digests = 2;
+     */
+    missingBlobDigests: Digest[] = [];
 
-  constructor(data?: PartialMessage<FindMissingBlobsResponse>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<FindMissingBlobsResponse>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.FindMissingBlobsResponse";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 2, name: "missing_blob_digests", kind: "message", T: Digest, repeated: true },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.FindMissingBlobsResponse";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        {
+            no: 2,
+            name: "missing_blob_digests",
+            kind: "message",
+            T: Digest,
+            repeated: true
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): FindMissingBlobsResponse {
-    return new FindMissingBlobsResponse().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): FindMissingBlobsResponse {
+        return new FindMissingBlobsResponse().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): FindMissingBlobsResponse {
-    return new FindMissingBlobsResponse().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): FindMissingBlobsResponse {
+        return new FindMissingBlobsResponse().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): FindMissingBlobsResponse {
-    return new FindMissingBlobsResponse().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): FindMissingBlobsResponse {
+        return new FindMissingBlobsResponse().fromJsonString(
+            jsonString,
+            options
+        );
+    }
 
-  static equals(a: FindMissingBlobsResponse | PlainMessage<FindMissingBlobsResponse> | undefined, b: FindMissingBlobsResponse | PlainMessage<FindMissingBlobsResponse> | undefined): boolean {
-    return proto3.util.equals(FindMissingBlobsResponse, a, b);
-  }
+    static equals(
+        a:
+            | FindMissingBlobsResponse
+            | PlainMessage<FindMissingBlobsResponse>
+            | undefined,
+        b:
+            | FindMissingBlobsResponse
+            | PlainMessage<FindMissingBlobsResponse>
+            | undefined
+    ): boolean {
+        return proto3.util.equals(FindMissingBlobsResponse, a, b);
+    }
 }
 
 /**
@@ -2658,66 +3437,104 @@ export class FindMissingBlobsResponse extends Message<FindMissingBlobsResponse> 
  * @generated from message build.bazel.remote.execution.v2.BatchUpdateBlobsRequest
  */
 export class BatchUpdateBlobsRequest extends Message<BatchUpdateBlobsRequest> {
-  /**
-   * The instance of the execution system to operate against. A server may
-   * support multiple instances of the execution system (with their own workers,
-   * storage, caches, etc.). The server MAY require use of this field to select
-   * between them in an implementation-defined fashion, otherwise it can be
-   * omitted.
-   *
-   * @generated from field: string instance_name = 1;
-   */
-  instanceName = "";
+    /**
+     * The instance of the execution system to operate against. A server may
+     * support multiple instances of the execution system (with their own workers,
+     * storage, caches, etc.). The server MAY require use of this field to select
+     * between them in an implementation-defined fashion, otherwise it can be
+     * omitted.
+     *
+     * @generated from field: string instance_name = 1;
+     */
+    instanceName = "";
 
-  /**
-   * The individual upload requests.
-   *
-   * @generated from field: repeated build.bazel.remote.execution.v2.BatchUpdateBlobsRequest.Request requests = 2;
-   */
-  requests: BatchUpdateBlobsRequest_Request[] = [];
+    /**
+     * The individual upload requests.
+     *
+     * @generated from field: repeated build.bazel.remote.execution.v2.BatchUpdateBlobsRequest.Request requests = 2;
+     */
+    requests: BatchUpdateBlobsRequest_Request[] = [];
 
-  /**
-   * The digest function that was used to compute the digests of the
-   * blobs being uploaded.
-   *
-   * If the digest function used is one of MD5, MURMUR3, SHA1, SHA256,
-   * SHA384, SHA512, or VSO, the client MAY leave this field unset. In
-   * that case the server SHOULD infer the digest function using the
-   * length of the blob digest hashes and the digest functions announced
-   * in the server's capabilities.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.DigestFunction.Value digest_function = 5;
-   */
-  digestFunction = DigestFunction_Value.UNKNOWN;
+    /**
+     * The digest function that was used to compute the digests of the
+     * blobs being uploaded.
+     *
+     * If the digest function used is one of MD5, MURMUR3, SHA1, SHA256,
+     * SHA384, SHA512, or VSO, the client MAY leave this field unset. In
+     * that case the server SHOULD infer the digest function using the
+     * length of the blob digest hashes and the digest functions announced
+     * in the server's capabilities.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.DigestFunction.Value digest_function = 5;
+     */
+    digestFunction = DigestFunction_Value.UNKNOWN;
 
-  constructor(data?: PartialMessage<BatchUpdateBlobsRequest>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<BatchUpdateBlobsRequest>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.BatchUpdateBlobsRequest";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "instance_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "requests", kind: "message", T: BatchUpdateBlobsRequest_Request, repeated: true },
-    { no: 5, name: "digest_function", kind: "enum", T: proto3.getEnumType(DigestFunction_Value) },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.BatchUpdateBlobsRequest";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        {
+            no: 1,
+            name: "instance_name",
+            kind: "scalar",
+            T: 9 /* ScalarType.STRING */
+        },
+        {
+            no: 2,
+            name: "requests",
+            kind: "message",
+            T: BatchUpdateBlobsRequest_Request,
+            repeated: true
+        },
+        {
+            no: 5,
+            name: "digest_function",
+            kind: "enum",
+            T: proto3.getEnumType(DigestFunction_Value)
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): BatchUpdateBlobsRequest {
-    return new BatchUpdateBlobsRequest().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): BatchUpdateBlobsRequest {
+        return new BatchUpdateBlobsRequest().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): BatchUpdateBlobsRequest {
-    return new BatchUpdateBlobsRequest().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): BatchUpdateBlobsRequest {
+        return new BatchUpdateBlobsRequest().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): BatchUpdateBlobsRequest {
-    return new BatchUpdateBlobsRequest().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): BatchUpdateBlobsRequest {
+        return new BatchUpdateBlobsRequest().fromJsonString(
+            jsonString,
+            options
+        );
+    }
 
-  static equals(a: BatchUpdateBlobsRequest | PlainMessage<BatchUpdateBlobsRequest> | undefined, b: BatchUpdateBlobsRequest | PlainMessage<BatchUpdateBlobsRequest> | undefined): boolean {
-    return proto3.util.equals(BatchUpdateBlobsRequest, a, b);
-  }
+    static equals(
+        a:
+            | BatchUpdateBlobsRequest
+            | PlainMessage<BatchUpdateBlobsRequest>
+            | undefined,
+        b:
+            | BatchUpdateBlobsRequest
+            | PlainMessage<BatchUpdateBlobsRequest>
+            | undefined
+    ): boolean {
+        return proto3.util.equals(BatchUpdateBlobsRequest, a, b);
+    }
 }
 
 /**
@@ -2726,59 +3543,89 @@ export class BatchUpdateBlobsRequest extends Message<BatchUpdateBlobsRequest> {
  * @generated from message build.bazel.remote.execution.v2.BatchUpdateBlobsRequest.Request
  */
 export class BatchUpdateBlobsRequest_Request extends Message<BatchUpdateBlobsRequest_Request> {
-  /**
-   * The digest of the blob. This MUST be the digest of `data`. All
-   * digests MUST use the same digest function.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.Digest digest = 1;
-   */
-  digest?: Digest;
+    /**
+     * The digest of the blob. This MUST be the digest of `data`. All
+     * digests MUST use the same digest function.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.Digest digest = 1;
+     */
+    digest?: Digest;
 
-  /**
-   * The raw binary data.
-   *
-   * @generated from field: bytes data = 2;
-   */
-  data = new Uint8Array(0);
+    /**
+     * The raw binary data.
+     *
+     * @generated from field: bytes data = 2;
+     */
+    data = new Uint8Array(0);
 
-  /**
-   * The format of `data`. Must be `IDENTITY`/unspecified, or one of the
-   * compressors advertised by the
-   * [CacheCapabilities.supported_batch_compressors][build.bazel.remote.execution.v2.CacheCapabilities.supported_batch_compressors]
-   * field.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.Compressor.Value compressor = 3;
-   */
-  compressor = Compressor_Value.IDENTITY;
+    /**
+     * The format of `data`. Must be `IDENTITY`/unspecified, or one of the
+     * compressors advertised by the
+     * [CacheCapabilities.supported_batch_compressors][build.bazel.remote.execution.v2.CacheCapabilities.supported_batch_compressors]
+     * field.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.Compressor.Value compressor = 3;
+     */
+    compressor = Compressor_Value.IDENTITY;
 
-  constructor(data?: PartialMessage<BatchUpdateBlobsRequest_Request>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<BatchUpdateBlobsRequest_Request>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.BatchUpdateBlobsRequest.Request";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "digest", kind: "message", T: Digest },
-    { no: 2, name: "data", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-    { no: 3, name: "compressor", kind: "enum", T: proto3.getEnumType(Compressor_Value) },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.BatchUpdateBlobsRequest.Request";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        { no: 1, name: "digest", kind: "message", T: Digest },
+        { no: 2, name: "data", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
+        {
+            no: 3,
+            name: "compressor",
+            kind: "enum",
+            T: proto3.getEnumType(Compressor_Value)
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): BatchUpdateBlobsRequest_Request {
-    return new BatchUpdateBlobsRequest_Request().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): BatchUpdateBlobsRequest_Request {
+        return new BatchUpdateBlobsRequest_Request().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): BatchUpdateBlobsRequest_Request {
-    return new BatchUpdateBlobsRequest_Request().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): BatchUpdateBlobsRequest_Request {
+        return new BatchUpdateBlobsRequest_Request().fromJson(
+            jsonValue,
+            options
+        );
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): BatchUpdateBlobsRequest_Request {
-    return new BatchUpdateBlobsRequest_Request().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): BatchUpdateBlobsRequest_Request {
+        return new BatchUpdateBlobsRequest_Request().fromJsonString(
+            jsonString,
+            options
+        );
+    }
 
-  static equals(a: BatchUpdateBlobsRequest_Request | PlainMessage<BatchUpdateBlobsRequest_Request> | undefined, b: BatchUpdateBlobsRequest_Request | PlainMessage<BatchUpdateBlobsRequest_Request> | undefined): boolean {
-    return proto3.util.equals(BatchUpdateBlobsRequest_Request, a, b);
-  }
+    static equals(
+        a:
+            | BatchUpdateBlobsRequest_Request
+            | PlainMessage<BatchUpdateBlobsRequest_Request>
+            | undefined,
+        b:
+            | BatchUpdateBlobsRequest_Request
+            | PlainMessage<BatchUpdateBlobsRequest_Request>
+            | undefined
+    ): boolean {
+        return proto3.util.equals(BatchUpdateBlobsRequest_Request, a, b);
+    }
 }
 
 /**
@@ -2788,39 +3635,67 @@ export class BatchUpdateBlobsRequest_Request extends Message<BatchUpdateBlobsReq
  * @generated from message build.bazel.remote.execution.v2.BatchUpdateBlobsResponse
  */
 export class BatchUpdateBlobsResponse extends Message<BatchUpdateBlobsResponse> {
-  /**
-   * The responses to the requests.
-   *
-   * @generated from field: repeated build.bazel.remote.execution.v2.BatchUpdateBlobsResponse.Response responses = 1;
-   */
-  responses: BatchUpdateBlobsResponse_Response[] = [];
+    /**
+     * The responses to the requests.
+     *
+     * @generated from field: repeated build.bazel.remote.execution.v2.BatchUpdateBlobsResponse.Response responses = 1;
+     */
+    responses: BatchUpdateBlobsResponse_Response[] = [];
 
-  constructor(data?: PartialMessage<BatchUpdateBlobsResponse>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<BatchUpdateBlobsResponse>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.BatchUpdateBlobsResponse";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "responses", kind: "message", T: BatchUpdateBlobsResponse_Response, repeated: true },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.BatchUpdateBlobsResponse";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        {
+            no: 1,
+            name: "responses",
+            kind: "message",
+            T: BatchUpdateBlobsResponse_Response,
+            repeated: true
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): BatchUpdateBlobsResponse {
-    return new BatchUpdateBlobsResponse().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): BatchUpdateBlobsResponse {
+        return new BatchUpdateBlobsResponse().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): BatchUpdateBlobsResponse {
-    return new BatchUpdateBlobsResponse().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): BatchUpdateBlobsResponse {
+        return new BatchUpdateBlobsResponse().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): BatchUpdateBlobsResponse {
-    return new BatchUpdateBlobsResponse().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): BatchUpdateBlobsResponse {
+        return new BatchUpdateBlobsResponse().fromJsonString(
+            jsonString,
+            options
+        );
+    }
 
-  static equals(a: BatchUpdateBlobsResponse | PlainMessage<BatchUpdateBlobsResponse> | undefined, b: BatchUpdateBlobsResponse | PlainMessage<BatchUpdateBlobsResponse> | undefined): boolean {
-    return proto3.util.equals(BatchUpdateBlobsResponse, a, b);
-  }
+    static equals(
+        a:
+            | BatchUpdateBlobsResponse
+            | PlainMessage<BatchUpdateBlobsResponse>
+            | undefined,
+        b:
+            | BatchUpdateBlobsResponse
+            | PlainMessage<BatchUpdateBlobsResponse>
+            | undefined
+    ): boolean {
+        return proto3.util.equals(BatchUpdateBlobsResponse, a, b);
+    }
 }
 
 /**
@@ -2829,47 +3704,75 @@ export class BatchUpdateBlobsResponse extends Message<BatchUpdateBlobsResponse> 
  * @generated from message build.bazel.remote.execution.v2.BatchUpdateBlobsResponse.Response
  */
 export class BatchUpdateBlobsResponse_Response extends Message<BatchUpdateBlobsResponse_Response> {
-  /**
-   * The blob digest to which this response corresponds.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.Digest digest = 1;
-   */
-  digest?: Digest;
+    /**
+     * The blob digest to which this response corresponds.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.Digest digest = 1;
+     */
+    digest?: Digest;
 
-  /**
-   * The result of attempting to upload that blob.
-   *
-   * @generated from field: google.rpc.Status status = 2;
-   */
-  status?: Status;
+    /**
+     * The result of attempting to upload that blob.
+     *
+     * @generated from field: google.rpc.Status status = 2;
+     */
+    status?: Status;
 
-  constructor(data?: PartialMessage<BatchUpdateBlobsResponse_Response>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<BatchUpdateBlobsResponse_Response>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.BatchUpdateBlobsResponse.Response";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "digest", kind: "message", T: Digest },
-    { no: 2, name: "status", kind: "message", T: Status },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.BatchUpdateBlobsResponse.Response";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        { no: 1, name: "digest", kind: "message", T: Digest },
+        { no: 2, name: "status", kind: "message", T: Status }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): BatchUpdateBlobsResponse_Response {
-    return new BatchUpdateBlobsResponse_Response().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): BatchUpdateBlobsResponse_Response {
+        return new BatchUpdateBlobsResponse_Response().fromBinary(
+            bytes,
+            options
+        );
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): BatchUpdateBlobsResponse_Response {
-    return new BatchUpdateBlobsResponse_Response().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): BatchUpdateBlobsResponse_Response {
+        return new BatchUpdateBlobsResponse_Response().fromJson(
+            jsonValue,
+            options
+        );
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): BatchUpdateBlobsResponse_Response {
-    return new BatchUpdateBlobsResponse_Response().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): BatchUpdateBlobsResponse_Response {
+        return new BatchUpdateBlobsResponse_Response().fromJsonString(
+            jsonString,
+            options
+        );
+    }
 
-  static equals(a: BatchUpdateBlobsResponse_Response | PlainMessage<BatchUpdateBlobsResponse_Response> | undefined, b: BatchUpdateBlobsResponse_Response | PlainMessage<BatchUpdateBlobsResponse_Response> | undefined): boolean {
-    return proto3.util.equals(BatchUpdateBlobsResponse_Response, a, b);
-  }
+    static equals(
+        a:
+            | BatchUpdateBlobsResponse_Response
+            | PlainMessage<BatchUpdateBlobsResponse_Response>
+            | undefined,
+        b:
+            | BatchUpdateBlobsResponse_Response
+            | PlainMessage<BatchUpdateBlobsResponse_Response>
+            | undefined
+    ): boolean {
+        return proto3.util.equals(BatchUpdateBlobsResponse_Response, a, b);
+    }
 }
 
 /**
@@ -2879,75 +3782,110 @@ export class BatchUpdateBlobsResponse_Response extends Message<BatchUpdateBlobsR
  * @generated from message build.bazel.remote.execution.v2.BatchReadBlobsRequest
  */
 export class BatchReadBlobsRequest extends Message<BatchReadBlobsRequest> {
-  /**
-   * The instance of the execution system to operate against. A server may
-   * support multiple instances of the execution system (with their own workers,
-   * storage, caches, etc.). The server MAY require use of this field to select
-   * between them in an implementation-defined fashion, otherwise it can be
-   * omitted.
-   *
-   * @generated from field: string instance_name = 1;
-   */
-  instanceName = "";
+    /**
+     * The instance of the execution system to operate against. A server may
+     * support multiple instances of the execution system (with their own workers,
+     * storage, caches, etc.). The server MAY require use of this field to select
+     * between them in an implementation-defined fashion, otherwise it can be
+     * omitted.
+     *
+     * @generated from field: string instance_name = 1;
+     */
+    instanceName = "";
 
-  /**
-   * The individual blob digests. All digests MUST use the same digest
-   * function.
-   *
-   * @generated from field: repeated build.bazel.remote.execution.v2.Digest digests = 2;
-   */
-  digests: Digest[] = [];
+    /**
+     * The individual blob digests. All digests MUST use the same digest
+     * function.
+     *
+     * @generated from field: repeated build.bazel.remote.execution.v2.Digest digests = 2;
+     */
+    digests: Digest[] = [];
 
-  /**
-   * A list of acceptable encodings for the returned inlined data, in no
-   * particular order. `IDENTITY` is always allowed even if not specified here.
-   *
-   * @generated from field: repeated build.bazel.remote.execution.v2.Compressor.Value acceptable_compressors = 3;
-   */
-  acceptableCompressors: Compressor_Value[] = [];
+    /**
+     * A list of acceptable encodings for the returned inlined data, in no
+     * particular order. `IDENTITY` is always allowed even if not specified here.
+     *
+     * @generated from field: repeated build.bazel.remote.execution.v2.Compressor.Value acceptable_compressors = 3;
+     */
+    acceptableCompressors: Compressor_Value[] = [];
 
-  /**
-   * The digest function of the blobs being requested.
-   *
-   * If the digest function used is one of MD5, MURMUR3, SHA1, SHA256,
-   * SHA384, SHA512, or VSO, the client MAY leave this field unset. In
-   * that case the server SHOULD infer the digest function using the
-   * length of the blob digest hashes and the digest functions announced
-   * in the server's capabilities.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.DigestFunction.Value digest_function = 4;
-   */
-  digestFunction = DigestFunction_Value.UNKNOWN;
+    /**
+     * The digest function of the blobs being requested.
+     *
+     * If the digest function used is one of MD5, MURMUR3, SHA1, SHA256,
+     * SHA384, SHA512, or VSO, the client MAY leave this field unset. In
+     * that case the server SHOULD infer the digest function using the
+     * length of the blob digest hashes and the digest functions announced
+     * in the server's capabilities.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.DigestFunction.Value digest_function = 4;
+     */
+    digestFunction = DigestFunction_Value.UNKNOWN;
 
-  constructor(data?: PartialMessage<BatchReadBlobsRequest>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<BatchReadBlobsRequest>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.BatchReadBlobsRequest";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "instance_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "digests", kind: "message", T: Digest, repeated: true },
-    { no: 3, name: "acceptable_compressors", kind: "enum", T: proto3.getEnumType(Compressor_Value), repeated: true },
-    { no: 4, name: "digest_function", kind: "enum", T: proto3.getEnumType(DigestFunction_Value) },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.BatchReadBlobsRequest";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        {
+            no: 1,
+            name: "instance_name",
+            kind: "scalar",
+            T: 9 /* ScalarType.STRING */
+        },
+        { no: 2, name: "digests", kind: "message", T: Digest, repeated: true },
+        {
+            no: 3,
+            name: "acceptable_compressors",
+            kind: "enum",
+            T: proto3.getEnumType(Compressor_Value),
+            repeated: true
+        },
+        {
+            no: 4,
+            name: "digest_function",
+            kind: "enum",
+            T: proto3.getEnumType(DigestFunction_Value)
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): BatchReadBlobsRequest {
-    return new BatchReadBlobsRequest().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): BatchReadBlobsRequest {
+        return new BatchReadBlobsRequest().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): BatchReadBlobsRequest {
-    return new BatchReadBlobsRequest().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): BatchReadBlobsRequest {
+        return new BatchReadBlobsRequest().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): BatchReadBlobsRequest {
-    return new BatchReadBlobsRequest().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): BatchReadBlobsRequest {
+        return new BatchReadBlobsRequest().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: BatchReadBlobsRequest | PlainMessage<BatchReadBlobsRequest> | undefined, b: BatchReadBlobsRequest | PlainMessage<BatchReadBlobsRequest> | undefined): boolean {
-    return proto3.util.equals(BatchReadBlobsRequest, a, b);
-  }
+    static equals(
+        a:
+            | BatchReadBlobsRequest
+            | PlainMessage<BatchReadBlobsRequest>
+            | undefined,
+        b:
+            | BatchReadBlobsRequest
+            | PlainMessage<BatchReadBlobsRequest>
+            | undefined
+    ): boolean {
+        return proto3.util.equals(BatchReadBlobsRequest, a, b);
+    }
 }
 
 /**
@@ -2957,39 +3895,64 @@ export class BatchReadBlobsRequest extends Message<BatchReadBlobsRequest> {
  * @generated from message build.bazel.remote.execution.v2.BatchReadBlobsResponse
  */
 export class BatchReadBlobsResponse extends Message<BatchReadBlobsResponse> {
-  /**
-   * The responses to the requests.
-   *
-   * @generated from field: repeated build.bazel.remote.execution.v2.BatchReadBlobsResponse.Response responses = 1;
-   */
-  responses: BatchReadBlobsResponse_Response[] = [];
+    /**
+     * The responses to the requests.
+     *
+     * @generated from field: repeated build.bazel.remote.execution.v2.BatchReadBlobsResponse.Response responses = 1;
+     */
+    responses: BatchReadBlobsResponse_Response[] = [];
 
-  constructor(data?: PartialMessage<BatchReadBlobsResponse>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<BatchReadBlobsResponse>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.BatchReadBlobsResponse";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "responses", kind: "message", T: BatchReadBlobsResponse_Response, repeated: true },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.BatchReadBlobsResponse";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        {
+            no: 1,
+            name: "responses",
+            kind: "message",
+            T: BatchReadBlobsResponse_Response,
+            repeated: true
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): BatchReadBlobsResponse {
-    return new BatchReadBlobsResponse().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): BatchReadBlobsResponse {
+        return new BatchReadBlobsResponse().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): BatchReadBlobsResponse {
-    return new BatchReadBlobsResponse().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): BatchReadBlobsResponse {
+        return new BatchReadBlobsResponse().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): BatchReadBlobsResponse {
-    return new BatchReadBlobsResponse().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): BatchReadBlobsResponse {
+        return new BatchReadBlobsResponse().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: BatchReadBlobsResponse | PlainMessage<BatchReadBlobsResponse> | undefined, b: BatchReadBlobsResponse | PlainMessage<BatchReadBlobsResponse> | undefined): boolean {
-    return proto3.util.equals(BatchReadBlobsResponse, a, b);
-  }
+    static equals(
+        a:
+            | BatchReadBlobsResponse
+            | PlainMessage<BatchReadBlobsResponse>
+            | undefined,
+        b:
+            | BatchReadBlobsResponse
+            | PlainMessage<BatchReadBlobsResponse>
+            | undefined
+    ): boolean {
+        return proto3.util.equals(BatchReadBlobsResponse, a, b);
+    }
 }
 
 /**
@@ -2998,64 +3961,94 @@ export class BatchReadBlobsResponse extends Message<BatchReadBlobsResponse> {
  * @generated from message build.bazel.remote.execution.v2.BatchReadBlobsResponse.Response
  */
 export class BatchReadBlobsResponse_Response extends Message<BatchReadBlobsResponse_Response> {
-  /**
-   * The digest to which this response corresponds.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.Digest digest = 1;
-   */
-  digest?: Digest;
+    /**
+     * The digest to which this response corresponds.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.Digest digest = 1;
+     */
+    digest?: Digest;
 
-  /**
-   * The raw binary data.
-   *
-   * @generated from field: bytes data = 2;
-   */
-  data = new Uint8Array(0);
+    /**
+     * The raw binary data.
+     *
+     * @generated from field: bytes data = 2;
+     */
+    data = new Uint8Array(0);
 
-  /**
-   * The format the data is encoded in. MUST be `IDENTITY`/unspecified,
-   * or one of the acceptable compressors specified in the `BatchReadBlobsRequest`.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.Compressor.Value compressor = 4;
-   */
-  compressor = Compressor_Value.IDENTITY;
+    /**
+     * The format the data is encoded in. MUST be `IDENTITY`/unspecified,
+     * or one of the acceptable compressors specified in the `BatchReadBlobsRequest`.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.Compressor.Value compressor = 4;
+     */
+    compressor = Compressor_Value.IDENTITY;
 
-  /**
-   * The result of attempting to download that blob.
-   *
-   * @generated from field: google.rpc.Status status = 3;
-   */
-  status?: Status;
+    /**
+     * The result of attempting to download that blob.
+     *
+     * @generated from field: google.rpc.Status status = 3;
+     */
+    status?: Status;
 
-  constructor(data?: PartialMessage<BatchReadBlobsResponse_Response>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<BatchReadBlobsResponse_Response>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.BatchReadBlobsResponse.Response";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "digest", kind: "message", T: Digest },
-    { no: 2, name: "data", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-    { no: 4, name: "compressor", kind: "enum", T: proto3.getEnumType(Compressor_Value) },
-    { no: 3, name: "status", kind: "message", T: Status },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.BatchReadBlobsResponse.Response";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        { no: 1, name: "digest", kind: "message", T: Digest },
+        { no: 2, name: "data", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
+        {
+            no: 4,
+            name: "compressor",
+            kind: "enum",
+            T: proto3.getEnumType(Compressor_Value)
+        },
+        { no: 3, name: "status", kind: "message", T: Status }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): BatchReadBlobsResponse_Response {
-    return new BatchReadBlobsResponse_Response().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): BatchReadBlobsResponse_Response {
+        return new BatchReadBlobsResponse_Response().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): BatchReadBlobsResponse_Response {
-    return new BatchReadBlobsResponse_Response().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): BatchReadBlobsResponse_Response {
+        return new BatchReadBlobsResponse_Response().fromJson(
+            jsonValue,
+            options
+        );
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): BatchReadBlobsResponse_Response {
-    return new BatchReadBlobsResponse_Response().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): BatchReadBlobsResponse_Response {
+        return new BatchReadBlobsResponse_Response().fromJsonString(
+            jsonString,
+            options
+        );
+    }
 
-  static equals(a: BatchReadBlobsResponse_Response | PlainMessage<BatchReadBlobsResponse_Response> | undefined, b: BatchReadBlobsResponse_Response | PlainMessage<BatchReadBlobsResponse_Response> | undefined): boolean {
-    return proto3.util.equals(BatchReadBlobsResponse_Response, a, b);
-  }
+    static equals(
+        a:
+            | BatchReadBlobsResponse_Response
+            | PlainMessage<BatchReadBlobsResponse_Response>
+            | undefined,
+        b:
+            | BatchReadBlobsResponse_Response
+            | PlainMessage<BatchReadBlobsResponse_Response>
+            | undefined
+    ): boolean {
+        return proto3.util.equals(BatchReadBlobsResponse_Response, a, b);
+    }
 }
 
 /**
@@ -3065,91 +4058,123 @@ export class BatchReadBlobsResponse_Response extends Message<BatchReadBlobsRespo
  * @generated from message build.bazel.remote.execution.v2.GetTreeRequest
  */
 export class GetTreeRequest extends Message<GetTreeRequest> {
-  /**
-   * The instance of the execution system to operate against. A server may
-   * support multiple instances of the execution system (with their own workers,
-   * storage, caches, etc.). The server MAY require use of this field to select
-   * between them in an implementation-defined fashion, otherwise it can be
-   * omitted.
-   *
-   * @generated from field: string instance_name = 1;
-   */
-  instanceName = "";
+    /**
+     * The instance of the execution system to operate against. A server may
+     * support multiple instances of the execution system (with their own workers,
+     * storage, caches, etc.). The server MAY require use of this field to select
+     * between them in an implementation-defined fashion, otherwise it can be
+     * omitted.
+     *
+     * @generated from field: string instance_name = 1;
+     */
+    instanceName = "";
 
-  /**
-   * The digest of the root, which must be an encoded
-   * [Directory][build.bazel.remote.execution.v2.Directory] message
-   * stored in the
-   * [ContentAddressableStorage][build.bazel.remote.execution.v2.ContentAddressableStorage].
-   *
-   * @generated from field: build.bazel.remote.execution.v2.Digest root_digest = 2;
-   */
-  rootDigest?: Digest;
+    /**
+     * The digest of the root, which must be an encoded
+     * [Directory][build.bazel.remote.execution.v2.Directory] message
+     * stored in the
+     * [ContentAddressableStorage][build.bazel.remote.execution.v2.ContentAddressableStorage].
+     *
+     * @generated from field: build.bazel.remote.execution.v2.Digest root_digest = 2;
+     */
+    rootDigest?: Digest;
 
-  /**
-   * A maximum page size to request. If present, the server will request no more
-   * than this many items. Regardless of whether a page size is specified, the
-   * server may place its own limit on the number of items to be returned and
-   * require the client to retrieve more items using a subsequent request.
-   *
-   * @generated from field: int32 page_size = 3;
-   */
-  pageSize = 0;
+    /**
+     * A maximum page size to request. If present, the server will request no more
+     * than this many items. Regardless of whether a page size is specified, the
+     * server may place its own limit on the number of items to be returned and
+     * require the client to retrieve more items using a subsequent request.
+     *
+     * @generated from field: int32 page_size = 3;
+     */
+    pageSize = 0;
 
-  /**
-   * A page token, which must be a value received in a previous
-   * [GetTreeResponse][build.bazel.remote.execution.v2.GetTreeResponse].
-   * If present, the server will use that token as an offset, returning only
-   * that page and the ones that succeed it.
-   *
-   * @generated from field: string page_token = 4;
-   */
-  pageToken = "";
+    /**
+     * A page token, which must be a value received in a previous
+     * [GetTreeResponse][build.bazel.remote.execution.v2.GetTreeResponse].
+     * If present, the server will use that token as an offset, returning only
+     * that page and the ones that succeed it.
+     *
+     * @generated from field: string page_token = 4;
+     */
+    pageToken = "";
 
-  /**
-   * The digest function that was used to compute the digest of the root
-   * directory.
-   *
-   * If the digest function used is one of MD5, MURMUR3, SHA1, SHA256,
-   * SHA384, SHA512, or VSO, the client MAY leave this field unset. In
-   * that case the server SHOULD infer the digest function using the
-   * length of the root digest hash and the digest functions announced
-   * in the server's capabilities.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.DigestFunction.Value digest_function = 5;
-   */
-  digestFunction = DigestFunction_Value.UNKNOWN;
+    /**
+     * The digest function that was used to compute the digest of the root
+     * directory.
+     *
+     * If the digest function used is one of MD5, MURMUR3, SHA1, SHA256,
+     * SHA384, SHA512, or VSO, the client MAY leave this field unset. In
+     * that case the server SHOULD infer the digest function using the
+     * length of the root digest hash and the digest functions announced
+     * in the server's capabilities.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.DigestFunction.Value digest_function = 5;
+     */
+    digestFunction = DigestFunction_Value.UNKNOWN;
 
-  constructor(data?: PartialMessage<GetTreeRequest>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<GetTreeRequest>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.GetTreeRequest";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "instance_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "root_digest", kind: "message", T: Digest },
-    { no: 3, name: "page_size", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
-    { no: 4, name: "page_token", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 5, name: "digest_function", kind: "enum", T: proto3.getEnumType(DigestFunction_Value) },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName = "build.bazel.remote.execution.v2.GetTreeRequest";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        {
+            no: 1,
+            name: "instance_name",
+            kind: "scalar",
+            T: 9 /* ScalarType.STRING */
+        },
+        { no: 2, name: "root_digest", kind: "message", T: Digest },
+        {
+            no: 3,
+            name: "page_size",
+            kind: "scalar",
+            T: 5 /* ScalarType.INT32 */
+        },
+        {
+            no: 4,
+            name: "page_token",
+            kind: "scalar",
+            T: 9 /* ScalarType.STRING */
+        },
+        {
+            no: 5,
+            name: "digest_function",
+            kind: "enum",
+            T: proto3.getEnumType(DigestFunction_Value)
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetTreeRequest {
-    return new GetTreeRequest().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): GetTreeRequest {
+        return new GetTreeRequest().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetTreeRequest {
-    return new GetTreeRequest().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): GetTreeRequest {
+        return new GetTreeRequest().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetTreeRequest {
-    return new GetTreeRequest().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): GetTreeRequest {
+        return new GetTreeRequest().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: GetTreeRequest | PlainMessage<GetTreeRequest> | undefined, b: GetTreeRequest | PlainMessage<GetTreeRequest> | undefined): boolean {
-    return proto3.util.equals(GetTreeRequest, a, b);
-  }
+    static equals(
+        a: GetTreeRequest | PlainMessage<GetTreeRequest> | undefined,
+        b: GetTreeRequest | PlainMessage<GetTreeRequest> | undefined
+    ): boolean {
+        return proto3.util.equals(GetTreeRequest, a, b);
+    }
 }
 
 /**
@@ -3159,50 +4184,74 @@ export class GetTreeRequest extends Message<GetTreeRequest> {
  * @generated from message build.bazel.remote.execution.v2.GetTreeResponse
  */
 export class GetTreeResponse extends Message<GetTreeResponse> {
-  /**
-   * The directories descended from the requested root.
-   *
-   * @generated from field: repeated build.bazel.remote.execution.v2.Directory directories = 1;
-   */
-  directories: Directory[] = [];
+    /**
+     * The directories descended from the requested root.
+     *
+     * @generated from field: repeated build.bazel.remote.execution.v2.Directory directories = 1;
+     */
+    directories: Directory[] = [];
 
-  /**
-   * If present, signifies that there are more results which the client can
-   * retrieve by passing this as the page_token in a subsequent
-   * [request][build.bazel.remote.execution.v2.GetTreeRequest].
-   * If empty, signifies that this is the last page of results.
-   *
-   * @generated from field: string next_page_token = 2;
-   */
-  nextPageToken = "";
+    /**
+     * If present, signifies that there are more results which the client can
+     * retrieve by passing this as the page_token in a subsequent
+     * [request][build.bazel.remote.execution.v2.GetTreeRequest].
+     * If empty, signifies that this is the last page of results.
+     *
+     * @generated from field: string next_page_token = 2;
+     */
+    nextPageToken = "";
 
-  constructor(data?: PartialMessage<GetTreeResponse>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<GetTreeResponse>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.GetTreeResponse";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "directories", kind: "message", T: Directory, repeated: true },
-    { no: 2, name: "next_page_token", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.GetTreeResponse";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        {
+            no: 1,
+            name: "directories",
+            kind: "message",
+            T: Directory,
+            repeated: true
+        },
+        {
+            no: 2,
+            name: "next_page_token",
+            kind: "scalar",
+            T: 9 /* ScalarType.STRING */
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetTreeResponse {
-    return new GetTreeResponse().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): GetTreeResponse {
+        return new GetTreeResponse().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetTreeResponse {
-    return new GetTreeResponse().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): GetTreeResponse {
+        return new GetTreeResponse().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetTreeResponse {
-    return new GetTreeResponse().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): GetTreeResponse {
+        return new GetTreeResponse().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: GetTreeResponse | PlainMessage<GetTreeResponse> | undefined, b: GetTreeResponse | PlainMessage<GetTreeResponse> | undefined): boolean {
-    return proto3.util.equals(GetTreeResponse, a, b);
-  }
+    static equals(
+        a: GetTreeResponse | PlainMessage<GetTreeResponse> | undefined,
+        b: GetTreeResponse | PlainMessage<GetTreeResponse> | undefined
+    ): boolean {
+        return proto3.util.equals(GetTreeResponse, a, b);
+    }
 }
 
 /**
@@ -3212,43 +4261,67 @@ export class GetTreeResponse extends Message<GetTreeResponse> {
  * @generated from message build.bazel.remote.execution.v2.GetCapabilitiesRequest
  */
 export class GetCapabilitiesRequest extends Message<GetCapabilitiesRequest> {
-  /**
-   * The instance of the execution system to operate against. A server may
-   * support multiple instances of the execution system (with their own workers,
-   * storage, caches, etc.). The server MAY require use of this field to select
-   * between them in an implementation-defined fashion, otherwise it can be
-   * omitted.
-   *
-   * @generated from field: string instance_name = 1;
-   */
-  instanceName = "";
+    /**
+     * The instance of the execution system to operate against. A server may
+     * support multiple instances of the execution system (with their own workers,
+     * storage, caches, etc.). The server MAY require use of this field to select
+     * between them in an implementation-defined fashion, otherwise it can be
+     * omitted.
+     *
+     * @generated from field: string instance_name = 1;
+     */
+    instanceName = "";
 
-  constructor(data?: PartialMessage<GetCapabilitiesRequest>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<GetCapabilitiesRequest>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.GetCapabilitiesRequest";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "instance_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.GetCapabilitiesRequest";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        {
+            no: 1,
+            name: "instance_name",
+            kind: "scalar",
+            T: 9 /* ScalarType.STRING */
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetCapabilitiesRequest {
-    return new GetCapabilitiesRequest().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): GetCapabilitiesRequest {
+        return new GetCapabilitiesRequest().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetCapabilitiesRequest {
-    return new GetCapabilitiesRequest().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): GetCapabilitiesRequest {
+        return new GetCapabilitiesRequest().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetCapabilitiesRequest {
-    return new GetCapabilitiesRequest().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): GetCapabilitiesRequest {
+        return new GetCapabilitiesRequest().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: GetCapabilitiesRequest | PlainMessage<GetCapabilitiesRequest> | undefined, b: GetCapabilitiesRequest | PlainMessage<GetCapabilitiesRequest> | undefined): boolean {
-    return proto3.util.equals(GetCapabilitiesRequest, a, b);
-  }
+    static equals(
+        a:
+            | GetCapabilitiesRequest
+            | PlainMessage<GetCapabilitiesRequest>
+            | undefined,
+        b:
+            | GetCapabilitiesRequest
+            | PlainMessage<GetCapabilitiesRequest>
+            | undefined
+    ): boolean {
+        return proto3.util.equals(GetCapabilitiesRequest, a, b);
+    }
 }
 
 /**
@@ -3258,71 +4331,94 @@ export class GetCapabilitiesRequest extends Message<GetCapabilitiesRequest> {
  * @generated from message build.bazel.remote.execution.v2.ServerCapabilities
  */
 export class ServerCapabilities extends Message<ServerCapabilities> {
-  /**
-   * Capabilities of the remote cache system.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.CacheCapabilities cache_capabilities = 1;
-   */
-  cacheCapabilities?: CacheCapabilities;
+    /**
+     * Capabilities of the remote cache system.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.CacheCapabilities cache_capabilities = 1;
+     */
+    cacheCapabilities?: CacheCapabilities;
 
-  /**
-   * Capabilities of the remote execution system.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.ExecutionCapabilities execution_capabilities = 2;
-   */
-  executionCapabilities?: ExecutionCapabilities;
+    /**
+     * Capabilities of the remote execution system.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.ExecutionCapabilities execution_capabilities = 2;
+     */
+    executionCapabilities?: ExecutionCapabilities;
 
-  /**
-   * Earliest RE API version supported, including deprecated versions.
-   *
-   * @generated from field: build.bazel.semver.SemVer deprecated_api_version = 3;
-   */
-  deprecatedApiVersion?: SemVer;
+    /**
+     * Earliest RE API version supported, including deprecated versions.
+     *
+     * @generated from field: build.bazel.semver.SemVer deprecated_api_version = 3;
+     */
+    deprecatedApiVersion?: SemVer;
 
-  /**
-   * Earliest non-deprecated RE API version supported.
-   *
-   * @generated from field: build.bazel.semver.SemVer low_api_version = 4;
-   */
-  lowApiVersion?: SemVer;
+    /**
+     * Earliest non-deprecated RE API version supported.
+     *
+     * @generated from field: build.bazel.semver.SemVer low_api_version = 4;
+     */
+    lowApiVersion?: SemVer;
 
-  /**
-   * Latest RE API version supported.
-   *
-   * @generated from field: build.bazel.semver.SemVer high_api_version = 5;
-   */
-  highApiVersion?: SemVer;
+    /**
+     * Latest RE API version supported.
+     *
+     * @generated from field: build.bazel.semver.SemVer high_api_version = 5;
+     */
+    highApiVersion?: SemVer;
 
-  constructor(data?: PartialMessage<ServerCapabilities>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<ServerCapabilities>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.ServerCapabilities";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "cache_capabilities", kind: "message", T: CacheCapabilities },
-    { no: 2, name: "execution_capabilities", kind: "message", T: ExecutionCapabilities },
-    { no: 3, name: "deprecated_api_version", kind: "message", T: SemVer },
-    { no: 4, name: "low_api_version", kind: "message", T: SemVer },
-    { no: 5, name: "high_api_version", kind: "message", T: SemVer },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.ServerCapabilities";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        {
+            no: 1,
+            name: "cache_capabilities",
+            kind: "message",
+            T: CacheCapabilities
+        },
+        {
+            no: 2,
+            name: "execution_capabilities",
+            kind: "message",
+            T: ExecutionCapabilities
+        },
+        { no: 3, name: "deprecated_api_version", kind: "message", T: SemVer },
+        { no: 4, name: "low_api_version", kind: "message", T: SemVer },
+        { no: 5, name: "high_api_version", kind: "message", T: SemVer }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ServerCapabilities {
-    return new ServerCapabilities().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): ServerCapabilities {
+        return new ServerCapabilities().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ServerCapabilities {
-    return new ServerCapabilities().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): ServerCapabilities {
+        return new ServerCapabilities().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ServerCapabilities {
-    return new ServerCapabilities().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): ServerCapabilities {
+        return new ServerCapabilities().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: ServerCapabilities | PlainMessage<ServerCapabilities> | undefined, b: ServerCapabilities | PlainMessage<ServerCapabilities> | undefined): boolean {
-    return proto3.util.equals(ServerCapabilities, a, b);
-  }
+    static equals(
+        a: ServerCapabilities | PlainMessage<ServerCapabilities> | undefined,
+        b: ServerCapabilities | PlainMessage<ServerCapabilities> | undefined
+    ): boolean {
+        return proto3.util.equals(ServerCapabilities, a, b);
+    }
 }
 
 /**
@@ -3332,181 +4428,196 @@ export class ServerCapabilities extends Message<ServerCapabilities> {
  * @generated from message build.bazel.remote.execution.v2.DigestFunction
  */
 export class DigestFunction extends Message<DigestFunction> {
-  constructor(data?: PartialMessage<DigestFunction>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<DigestFunction>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.DigestFunction";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName = "build.bazel.remote.execution.v2.DigestFunction";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => []);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DigestFunction {
-    return new DigestFunction().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): DigestFunction {
+        return new DigestFunction().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): DigestFunction {
-    return new DigestFunction().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): DigestFunction {
+        return new DigestFunction().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): DigestFunction {
-    return new DigestFunction().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): DigestFunction {
+        return new DigestFunction().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: DigestFunction | PlainMessage<DigestFunction> | undefined, b: DigestFunction | PlainMessage<DigestFunction> | undefined): boolean {
-    return proto3.util.equals(DigestFunction, a, b);
-  }
+    static equals(
+        a: DigestFunction | PlainMessage<DigestFunction> | undefined,
+        b: DigestFunction | PlainMessage<DigestFunction> | undefined
+    ): boolean {
+        return proto3.util.equals(DigestFunction, a, b);
+    }
 }
 
 /**
  * @generated from enum build.bazel.remote.execution.v2.DigestFunction.Value
  */
 export enum DigestFunction_Value {
-  /**
-   * It is an error for the server to return this value.
-   *
-   * @generated from enum value: UNKNOWN = 0;
-   */
-  UNKNOWN = 0,
+    /**
+     * It is an error for the server to return this value.
+     *
+     * @generated from enum value: UNKNOWN = 0;
+     */
+    UNKNOWN = 0,
 
-  /**
-   * The SHA-256 digest function.
-   *
-   * @generated from enum value: SHA256 = 1;
-   */
-  SHA256 = 1,
+    /**
+     * The SHA-256 digest function.
+     *
+     * @generated from enum value: SHA256 = 1;
+     */
+    SHA256 = 1,
 
-  /**
-   * The SHA-1 digest function.
-   *
-   * @generated from enum value: SHA1 = 2;
-   */
-  SHA1 = 2, // DevSkim: ignore DS126858
+    /**
+     * The SHA-1 digest function.
+     *
+     * @generated from enum value: SHA1 = 2;
+     */
+    SHA1 = 2, // DevSkim: ignore DS126858
 
-  /**
-   * The MD5 digest function.
-   *
-   * @generated from enum value: MD5 = 3;
-   */
-  MD5 = 3, // DevSkim: ignore DS126858
+    /**
+     * The MD5 digest function.
+     *
+     * @generated from enum value: MD5 = 3;
+     */
+    MD5 = 3, // DevSkim: ignore DS126858
 
-  /**
-   * The Microsoft "VSO-Hash" paged SHA256 digest function.
-   * See https://github.com/microsoft/BuildXL/blob/master/Documentation/Specs/PagedHash.md .
-   *
-   * @generated from enum value: VSO = 4;
-   */
-  VSO = 4,
+    /**
+     * The Microsoft "VSO-Hash" paged SHA256 digest function.
+     * See https://github.com/microsoft/BuildXL/blob/master/Documentation/Specs/PagedHash.md .
+     *
+     * @generated from enum value: VSO = 4;
+     */
+    VSO = 4,
 
-  /**
-   * The SHA-384 digest function.
-   *
-   * @generated from enum value: SHA384 = 5;
-   */
-  SHA384 = 5,
+    /**
+     * The SHA-384 digest function.
+     *
+     * @generated from enum value: SHA384 = 5;
+     */
+    SHA384 = 5,
 
-  /**
-   * The SHA-512 digest function.
-   *
-   * @generated from enum value: SHA512 = 6;
-   */
-  SHA512 = 6,
+    /**
+     * The SHA-512 digest function.
+     *
+     * @generated from enum value: SHA512 = 6;
+     */
+    SHA512 = 6,
 
-  /**
-   * Murmur3 128-bit digest function, x64 variant. Note that this is not a
-   * cryptographic hash function and its collision properties are not strongly guaranteed.
-   * See https://github.com/aappleby/smhasher/wiki/MurmurHash3 .
-   *
-   * @generated from enum value: MURMUR3 = 7;
-   */
-  MURMUR3 = 7,
+    /**
+     * Murmur3 128-bit digest function, x64 variant. Note that this is not a
+     * cryptographic hash function and its collision properties are not strongly guaranteed.
+     * See https://github.com/aappleby/smhasher/wiki/MurmurHash3 .
+     *
+     * @generated from enum value: MURMUR3 = 7;
+     */
+    MURMUR3 = 7,
 
-  /**
-   * The SHA-256 digest function, modified to use a Merkle tree for
-   * large objects. This permits implementations to store large blobs
-   * as a decomposed sequence of 2^j sized chunks, where j >= 10,
-   * while being able to validate integrity at the chunk level.
-   *
-   * Furthermore, on systems that do not offer dedicated instructions
-   * for computing SHA-256 hashes (e.g., the Intel SHA and ARMv8
-   * cryptographic extensions), SHA256TREE hashes can be computed more
-   * efficiently than plain SHA-256 hashes by using generic SIMD
-   * extensions, such as Intel AVX2 or ARM NEON.
-   *
-   * SHA256TREE hashes are computed as follows:
-   *
-   * - For blobs that are 1024 bytes or smaller, the hash is computed
-   *   using the regular SHA-256 digest function.
-   *
-   * - For blobs that are more than 1024 bytes in size, the hash is
-   *   computed as follows:
-   *
-   *   1. The blob is partitioned into a left (leading) and right
-   *      (trailing) blob. These blobs have lengths m and n
-   *      respectively, where m = 2^k and 0 < n <= m.
-   *
-   *   2. Hashes of the left and right blob, Hash(left) and
-   *      Hash(right) respectively, are computed by recursively
-   *      applying the SHA256TREE algorithm.
-   *
-   *   3. A single invocation is made to the SHA-256 block cipher with
-   *      the following parameters:
-   *
-   *      ```text
-   *      M = Hash(left) || Hash(right)
-   *      H = {
-   *          0xcbbb9d5d, 0x629a292a, 0x9159015a, 0x152fecd8,
-   *          0x67332667, 0x8eb44a87, 0xdb0c2e0d, 0x47b5481d,
-   *      }
-   *      ```
-   *
-   *      The values of H are the leading fractional parts of the
-   *      square roots of the 9th to the 16th prime number (23 to 53).
-   *      This differs from plain SHA-256, where the first eight prime
-   *      numbers (2 to 19) are used, thereby preventing trivial hash
-   *      collisions between small and large objects.
-   *
-   *   4. The hash of the full blob can then be obtained by
-   *      concatenating the outputs of the block cipher:
-   *
-   *      ```text
-   *      Hash(blob) = a || b || c || d || e || f || g || h
-   *      ```
-   *
-   *      Addition of the original values of H, as normally done
-   *      through the use of the Davies-Meyer structure, is not
-   *      performed. This isn't necessary, as the block cipher is only
-   *      invoked once.
-   *
-   * Test vectors of this digest function can be found in the
-   * accompanying sha256tree_test_vectors.txt file.
-   *
-   * @generated from enum value: SHA256TREE = 8;
-   */
-  SHA256TREE = 8,
+    /**
+     * The SHA-256 digest function, modified to use a Merkle tree for
+     * large objects. This permits implementations to store large blobs
+     * as a decomposed sequence of 2^j sized chunks, where j >= 10,
+     * while being able to validate integrity at the chunk level.
+     *
+     * Furthermore, on systems that do not offer dedicated instructions
+     * for computing SHA-256 hashes (e.g., the Intel SHA and ARMv8
+     * cryptographic extensions), SHA256TREE hashes can be computed more
+     * efficiently than plain SHA-256 hashes by using generic SIMD
+     * extensions, such as Intel AVX2 or ARM NEON.
+     *
+     * SHA256TREE hashes are computed as follows:
+     *
+     * - For blobs that are 1024 bytes or smaller, the hash is computed
+     *   using the regular SHA-256 digest function.
+     *
+     * - For blobs that are more than 1024 bytes in size, the hash is
+     *   computed as follows:
+     *
+     *   1. The blob is partitioned into a left (leading) and right
+     *      (trailing) blob. These blobs have lengths m and n
+     *      respectively, where m = 2^k and 0 < n <= m.
+     *
+     *   2. Hashes of the left and right blob, Hash(left) and
+     *      Hash(right) respectively, are computed by recursively
+     *      applying the SHA256TREE algorithm.
+     *
+     *   3. A single invocation is made to the SHA-256 block cipher with
+     *      the following parameters:
+     *
+     *      ```text
+     *      M = Hash(left) || Hash(right)
+     *      H = {
+     *          0xcbbb9d5d, 0x629a292a, 0x9159015a, 0x152fecd8,
+     *          0x67332667, 0x8eb44a87, 0xdb0c2e0d, 0x47b5481d,
+     *      }
+     *      ```
+     *
+     *      The values of H are the leading fractional parts of the
+     *      square roots of the 9th to the 16th prime number (23 to 53).
+     *      This differs from plain SHA-256, where the first eight prime
+     *      numbers (2 to 19) are used, thereby preventing trivial hash
+     *      collisions between small and large objects.
+     *
+     *   4. The hash of the full blob can then be obtained by
+     *      concatenating the outputs of the block cipher:
+     *
+     *      ```text
+     *      Hash(blob) = a || b || c || d || e || f || g || h
+     *      ```
+     *
+     *      Addition of the original values of H, as normally done
+     *      through the use of the Davies-Meyer structure, is not
+     *      performed. This isn't necessary, as the block cipher is only
+     *      invoked once.
+     *
+     * Test vectors of this digest function can be found in the
+     * accompanying sha256tree_test_vectors.txt file.
+     *
+     * @generated from enum value: SHA256TREE = 8;
+     */
+    SHA256TREE = 8,
 
-  /**
-   * The BLAKE3 hash function.
-   * See https://github.com/BLAKE3-team/BLAKE3.
-   *
-   * @generated from enum value: BLAKE3 = 9;
-   */
-  BLAKE3 = 9,
+    /**
+     * The BLAKE3 hash function.
+     * See https://github.com/BLAKE3-team/BLAKE3.
+     *
+     * @generated from enum value: BLAKE3 = 9;
+     */
+    BLAKE3 = 9
 }
 // Retrieve enum metadata with: proto3.getEnumType(DigestFunction_Value)
-proto3.util.setEnumType(DigestFunction_Value, "build.bazel.remote.execution.v2.DigestFunction.Value", [
-  { no: 0, name: "UNKNOWN" },
-  { no: 1, name: "SHA256" },
-  { no: 2, name: "SHA1" }, // DevSkim: ignore DS126858
-  { no: 3, name: "MD5" }, // DevSkim: ignore DS126858
-  { no: 4, name: "VSO" },
-  { no: 5, name: "SHA384" },
-  { no: 6, name: "SHA512" },
-  { no: 7, name: "MURMUR3" },
-  { no: 8, name: "SHA256TREE" },
-  { no: 9, name: "BLAKE3" },
-]);
+proto3.util.setEnumType(
+    DigestFunction_Value,
+    "build.bazel.remote.execution.v2.DigestFunction.Value",
+    [
+        { no: 0, name: "UNKNOWN" },
+        { no: 1, name: "SHA256" },
+        { no: 2, name: "SHA1" }, // DevSkim: ignore DS126858
+        { no: 3, name: "MD5" }, // DevSkim: ignore DS126858
+        { no: 4, name: "VSO" },
+        { no: 5, name: "SHA384" },
+        { no: 6, name: "SHA512" },
+        { no: 7, name: "MURMUR3" },
+        { no: 8, name: "SHA256TREE" },
+        { no: 9, name: "BLAKE3" }
+    ]
+);
 
 /**
  * Describes the server/instance capabilities for updating the action cache.
@@ -3514,37 +4625,64 @@ proto3.util.setEnumType(DigestFunction_Value, "build.bazel.remote.execution.v2.D
  * @generated from message build.bazel.remote.execution.v2.ActionCacheUpdateCapabilities
  */
 export class ActionCacheUpdateCapabilities extends Message<ActionCacheUpdateCapabilities> {
-  /**
-   * @generated from field: bool update_enabled = 1;
-   */
-  updateEnabled = false;
+    /**
+     * @generated from field: bool update_enabled = 1;
+     */
+    updateEnabled = false;
 
-  constructor(data?: PartialMessage<ActionCacheUpdateCapabilities>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<ActionCacheUpdateCapabilities>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.ActionCacheUpdateCapabilities";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "update_enabled", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.ActionCacheUpdateCapabilities";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        {
+            no: 1,
+            name: "update_enabled",
+            kind: "scalar",
+            T: 8 /* ScalarType.BOOL */
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ActionCacheUpdateCapabilities {
-    return new ActionCacheUpdateCapabilities().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): ActionCacheUpdateCapabilities {
+        return new ActionCacheUpdateCapabilities().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ActionCacheUpdateCapabilities {
-    return new ActionCacheUpdateCapabilities().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): ActionCacheUpdateCapabilities {
+        return new ActionCacheUpdateCapabilities().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ActionCacheUpdateCapabilities {
-    return new ActionCacheUpdateCapabilities().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): ActionCacheUpdateCapabilities {
+        return new ActionCacheUpdateCapabilities().fromJsonString(
+            jsonString,
+            options
+        );
+    }
 
-  static equals(a: ActionCacheUpdateCapabilities | PlainMessage<ActionCacheUpdateCapabilities> | undefined, b: ActionCacheUpdateCapabilities | PlainMessage<ActionCacheUpdateCapabilities> | undefined): boolean {
-    return proto3.util.equals(ActionCacheUpdateCapabilities, a, b);
-  }
+    static equals(
+        a:
+            | ActionCacheUpdateCapabilities
+            | PlainMessage<ActionCacheUpdateCapabilities>
+            | undefined,
+        b:
+            | ActionCacheUpdateCapabilities
+            | PlainMessage<ActionCacheUpdateCapabilities>
+            | undefined
+    ): boolean {
+        return proto3.util.equals(ActionCacheUpdateCapabilities, a, b);
+    }
 }
 
 /**
@@ -3556,37 +4694,59 @@ export class ActionCacheUpdateCapabilities extends Message<ActionCacheUpdateCapa
  * @generated from message build.bazel.remote.execution.v2.PriorityCapabilities
  */
 export class PriorityCapabilities extends Message<PriorityCapabilities> {
-  /**
-   * @generated from field: repeated build.bazel.remote.execution.v2.PriorityCapabilities.PriorityRange priorities = 1;
-   */
-  priorities: PriorityCapabilities_PriorityRange[] = [];
+    /**
+     * @generated from field: repeated build.bazel.remote.execution.v2.PriorityCapabilities.PriorityRange priorities = 1;
+     */
+    priorities: PriorityCapabilities_PriorityRange[] = [];
 
-  constructor(data?: PartialMessage<PriorityCapabilities>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<PriorityCapabilities>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.PriorityCapabilities";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "priorities", kind: "message", T: PriorityCapabilities_PriorityRange, repeated: true },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.PriorityCapabilities";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        {
+            no: 1,
+            name: "priorities",
+            kind: "message",
+            T: PriorityCapabilities_PriorityRange,
+            repeated: true
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): PriorityCapabilities {
-    return new PriorityCapabilities().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): PriorityCapabilities {
+        return new PriorityCapabilities().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): PriorityCapabilities {
-    return new PriorityCapabilities().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): PriorityCapabilities {
+        return new PriorityCapabilities().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): PriorityCapabilities {
-    return new PriorityCapabilities().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): PriorityCapabilities {
+        return new PriorityCapabilities().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: PriorityCapabilities | PlainMessage<PriorityCapabilities> | undefined, b: PriorityCapabilities | PlainMessage<PriorityCapabilities> | undefined): boolean {
-    return proto3.util.equals(PriorityCapabilities, a, b);
-  }
+    static equals(
+        a:
+            | PriorityCapabilities
+            | PlainMessage<PriorityCapabilities>
+            | undefined,
+        b: PriorityCapabilities | PlainMessage<PriorityCapabilities> | undefined
+    ): boolean {
+        return proto3.util.equals(PriorityCapabilities, a, b);
+    }
 }
 
 /**
@@ -3595,49 +4755,87 @@ export class PriorityCapabilities extends Message<PriorityCapabilities> {
  * @generated from message build.bazel.remote.execution.v2.PriorityCapabilities.PriorityRange
  */
 export class PriorityCapabilities_PriorityRange extends Message<PriorityCapabilities_PriorityRange> {
-  /**
-   * The minimum numeric value for this priority range, which represents the
-   * most urgent task or longest retained item.
-   *
-   * @generated from field: int32 min_priority = 1;
-   */
-  minPriority = 0;
+    /**
+     * The minimum numeric value for this priority range, which represents the
+     * most urgent task or longest retained item.
+     *
+     * @generated from field: int32 min_priority = 1;
+     */
+    minPriority = 0;
 
-  /**
-   * The maximum numeric value for this priority range, which represents the
-   * least urgent task or shortest retained item.
-   *
-   * @generated from field: int32 max_priority = 2;
-   */
-  maxPriority = 0;
+    /**
+     * The maximum numeric value for this priority range, which represents the
+     * least urgent task or shortest retained item.
+     *
+     * @generated from field: int32 max_priority = 2;
+     */
+    maxPriority = 0;
 
-  constructor(data?: PartialMessage<PriorityCapabilities_PriorityRange>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<PriorityCapabilities_PriorityRange>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.PriorityCapabilities.PriorityRange";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "min_priority", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
-    { no: 2, name: "max_priority", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.PriorityCapabilities.PriorityRange";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        {
+            no: 1,
+            name: "min_priority",
+            kind: "scalar",
+            T: 5 /* ScalarType.INT32 */
+        },
+        {
+            no: 2,
+            name: "max_priority",
+            kind: "scalar",
+            T: 5 /* ScalarType.INT32 */
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): PriorityCapabilities_PriorityRange {
-    return new PriorityCapabilities_PriorityRange().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): PriorityCapabilities_PriorityRange {
+        return new PriorityCapabilities_PriorityRange().fromBinary(
+            bytes,
+            options
+        );
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): PriorityCapabilities_PriorityRange {
-    return new PriorityCapabilities_PriorityRange().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): PriorityCapabilities_PriorityRange {
+        return new PriorityCapabilities_PriorityRange().fromJson(
+            jsonValue,
+            options
+        );
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): PriorityCapabilities_PriorityRange {
-    return new PriorityCapabilities_PriorityRange().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): PriorityCapabilities_PriorityRange {
+        return new PriorityCapabilities_PriorityRange().fromJsonString(
+            jsonString,
+            options
+        );
+    }
 
-  static equals(a: PriorityCapabilities_PriorityRange | PlainMessage<PriorityCapabilities_PriorityRange> | undefined, b: PriorityCapabilities_PriorityRange | PlainMessage<PriorityCapabilities_PriorityRange> | undefined): boolean {
-    return proto3.util.equals(PriorityCapabilities_PriorityRange, a, b);
-  }
+    static equals(
+        a:
+            | PriorityCapabilities_PriorityRange
+            | PlainMessage<PriorityCapabilities_PriorityRange>
+            | undefined,
+        b:
+            | PriorityCapabilities_PriorityRange
+            | PlainMessage<PriorityCapabilities_PriorityRange>
+            | undefined
+    ): boolean {
+        return proto3.util.equals(PriorityCapabilities_PriorityRange, a, b);
+    }
 }
 
 /**
@@ -3646,68 +4844,93 @@ export class PriorityCapabilities_PriorityRange extends Message<PriorityCapabili
  * @generated from message build.bazel.remote.execution.v2.SymlinkAbsolutePathStrategy
  */
 export class SymlinkAbsolutePathStrategy extends Message<SymlinkAbsolutePathStrategy> {
-  constructor(data?: PartialMessage<SymlinkAbsolutePathStrategy>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<SymlinkAbsolutePathStrategy>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.SymlinkAbsolutePathStrategy";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.SymlinkAbsolutePathStrategy";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => []);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SymlinkAbsolutePathStrategy {
-    return new SymlinkAbsolutePathStrategy().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): SymlinkAbsolutePathStrategy {
+        return new SymlinkAbsolutePathStrategy().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SymlinkAbsolutePathStrategy {
-    return new SymlinkAbsolutePathStrategy().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): SymlinkAbsolutePathStrategy {
+        return new SymlinkAbsolutePathStrategy().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SymlinkAbsolutePathStrategy {
-    return new SymlinkAbsolutePathStrategy().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): SymlinkAbsolutePathStrategy {
+        return new SymlinkAbsolutePathStrategy().fromJsonString(
+            jsonString,
+            options
+        );
+    }
 
-  static equals(a: SymlinkAbsolutePathStrategy | PlainMessage<SymlinkAbsolutePathStrategy> | undefined, b: SymlinkAbsolutePathStrategy | PlainMessage<SymlinkAbsolutePathStrategy> | undefined): boolean {
-    return proto3.util.equals(SymlinkAbsolutePathStrategy, a, b);
-  }
+    static equals(
+        a:
+            | SymlinkAbsolutePathStrategy
+            | PlainMessage<SymlinkAbsolutePathStrategy>
+            | undefined,
+        b:
+            | SymlinkAbsolutePathStrategy
+            | PlainMessage<SymlinkAbsolutePathStrategy>
+            | undefined
+    ): boolean {
+        return proto3.util.equals(SymlinkAbsolutePathStrategy, a, b);
+    }
 }
 
 /**
  * @generated from enum build.bazel.remote.execution.v2.SymlinkAbsolutePathStrategy.Value
  */
 export enum SymlinkAbsolutePathStrategy_Value {
-  /**
-   * Invalid value.
-   *
-   * @generated from enum value: UNKNOWN = 0;
-   */
-  UNKNOWN = 0,
+    /**
+     * Invalid value.
+     *
+     * @generated from enum value: UNKNOWN = 0;
+     */
+    UNKNOWN = 0,
 
-  /**
-   * Server will return an `INVALID_ARGUMENT` on input symlinks with absolute
-   * targets.
-   * If an action tries to create an output symlink with an absolute target, a
-   * `FAILED_PRECONDITION` will be returned.
-   *
-   * @generated from enum value: DISALLOWED = 1;
-   */
-  DISALLOWED = 1,
+    /**
+     * Server will return an `INVALID_ARGUMENT` on input symlinks with absolute
+     * targets.
+     * If an action tries to create an output symlink with an absolute target, a
+     * `FAILED_PRECONDITION` will be returned.
+     *
+     * @generated from enum value: DISALLOWED = 1;
+     */
+    DISALLOWED = 1,
 
-  /**
-   * Server will allow symlink targets to escape the input root tree, possibly
-   * resulting in non-hermetic builds.
-   *
-   * @generated from enum value: ALLOWED = 2;
-   */
-  ALLOWED = 2,
+    /**
+     * Server will allow symlink targets to escape the input root tree, possibly
+     * resulting in non-hermetic builds.
+     *
+     * @generated from enum value: ALLOWED = 2;
+     */
+    ALLOWED = 2
 }
 // Retrieve enum metadata with: proto3.getEnumType(SymlinkAbsolutePathStrategy_Value)
-proto3.util.setEnumType(SymlinkAbsolutePathStrategy_Value, "build.bazel.remote.execution.v2.SymlinkAbsolutePathStrategy.Value", [
-  { no: 0, name: "UNKNOWN" },
-  { no: 1, name: "DISALLOWED" },
-  { no: 2, name: "ALLOWED" },
-]);
+proto3.util.setEnumType(
+    SymlinkAbsolutePathStrategy_Value,
+    "build.bazel.remote.execution.v2.SymlinkAbsolutePathStrategy.Value",
+    [
+        { no: 0, name: "UNKNOWN" },
+        { no: 1, name: "DISALLOWED" },
+        { no: 2, name: "ALLOWED" }
+    ]
+);
 
 /**
  * Compression formats which may be supported.
@@ -3715,78 +4938,93 @@ proto3.util.setEnumType(SymlinkAbsolutePathStrategy_Value, "build.bazel.remote.e
  * @generated from message build.bazel.remote.execution.v2.Compressor
  */
 export class Compressor extends Message<Compressor> {
-  constructor(data?: PartialMessage<Compressor>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<Compressor>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.Compressor";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName = "build.bazel.remote.execution.v2.Compressor";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => []);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Compressor {
-    return new Compressor().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): Compressor {
+        return new Compressor().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Compressor {
-    return new Compressor().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): Compressor {
+        return new Compressor().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Compressor {
-    return new Compressor().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): Compressor {
+        return new Compressor().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: Compressor | PlainMessage<Compressor> | undefined, b: Compressor | PlainMessage<Compressor> | undefined): boolean {
-    return proto3.util.equals(Compressor, a, b);
-  }
+    static equals(
+        a: Compressor | PlainMessage<Compressor> | undefined,
+        b: Compressor | PlainMessage<Compressor> | undefined
+    ): boolean {
+        return proto3.util.equals(Compressor, a, b);
+    }
 }
 
 /**
  * @generated from enum build.bazel.remote.execution.v2.Compressor.Value
  */
 export enum Compressor_Value {
-  /**
-   * No compression. Servers and clients MUST always support this, and do
-   * not need to advertise it.
-   *
-   * @generated from enum value: IDENTITY = 0;
-   */
-  IDENTITY = 0,
+    /**
+     * No compression. Servers and clients MUST always support this, and do
+     * not need to advertise it.
+     *
+     * @generated from enum value: IDENTITY = 0;
+     */
+    IDENTITY = 0,
 
-  /**
-   * Zstandard compression.
-   *
-   * @generated from enum value: ZSTD = 1;
-   */
-  ZSTD = 1,
+    /**
+     * Zstandard compression.
+     *
+     * @generated from enum value: ZSTD = 1;
+     */
+    ZSTD = 1,
 
-  /**
-   * RFC 1951 Deflate. This format is identical to what is used by ZIP
-   * files. Headers such as the one generated by gzip are not
-   * included.
-   *
-   * It is advised to use algorithms such as Zstandard instead, as
-   * those are faster and/or provide a better compression ratio.
-   *
-   * @generated from enum value: DEFLATE = 2;
-   */
-  DEFLATE = 2,
+    /**
+     * RFC 1951 Deflate. This format is identical to what is used by ZIP
+     * files. Headers such as the one generated by gzip are not
+     * included.
+     *
+     * It is advised to use algorithms such as Zstandard instead, as
+     * those are faster and/or provide a better compression ratio.
+     *
+     * @generated from enum value: DEFLATE = 2;
+     */
+    DEFLATE = 2,
 
-  /**
-   * Brotli compression.
-   *
-   * @generated from enum value: BROTLI = 3;
-   */
-  BROTLI = 3,
+    /**
+     * Brotli compression.
+     *
+     * @generated from enum value: BROTLI = 3;
+     */
+    BROTLI = 3
 }
 // Retrieve enum metadata with: proto3.getEnumType(Compressor_Value)
-proto3.util.setEnumType(Compressor_Value, "build.bazel.remote.execution.v2.Compressor.Value", [
-  { no: 0, name: "IDENTITY" },
-  { no: 1, name: "ZSTD" },
-  { no: 2, name: "DEFLATE" },
-  { no: 3, name: "BROTLI" },
-]);
+proto3.util.setEnumType(
+    Compressor_Value,
+    "build.bazel.remote.execution.v2.Compressor.Value",
+    [
+        { no: 0, name: "IDENTITY" },
+        { no: 1, name: "ZSTD" },
+        { no: 2, name: "DEFLATE" },
+        { no: 3, name: "BROTLI" }
+    ]
+);
 
 /**
  * Capabilities of the remote cache system.
@@ -3794,98 +5032,149 @@ proto3.util.setEnumType(Compressor_Value, "build.bazel.remote.execution.v2.Compr
  * @generated from message build.bazel.remote.execution.v2.CacheCapabilities
  */
 export class CacheCapabilities extends Message<CacheCapabilities> {
-  /**
-   * All the digest functions supported by the remote cache.
-   * Remote cache may support multiple digest functions simultaneously.
-   *
-   * @generated from field: repeated build.bazel.remote.execution.v2.DigestFunction.Value digest_functions = 1;
-   */
-  digestFunctions: DigestFunction_Value[] = [];
+    /**
+     * All the digest functions supported by the remote cache.
+     * Remote cache may support multiple digest functions simultaneously.
+     *
+     * @generated from field: repeated build.bazel.remote.execution.v2.DigestFunction.Value digest_functions = 1;
+     */
+    digestFunctions: DigestFunction_Value[] = [];
 
-  /**
-   * Capabilities for updating the action cache.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.ActionCacheUpdateCapabilities action_cache_update_capabilities = 2;
-   */
-  actionCacheUpdateCapabilities?: ActionCacheUpdateCapabilities;
+    /**
+     * Capabilities for updating the action cache.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.ActionCacheUpdateCapabilities action_cache_update_capabilities = 2;
+     */
+    actionCacheUpdateCapabilities?: ActionCacheUpdateCapabilities;
 
-  /**
-   * Supported cache priority range for both CAS and ActionCache.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.PriorityCapabilities cache_priority_capabilities = 3;
-   */
-  cachePriorityCapabilities?: PriorityCapabilities;
+    /**
+     * Supported cache priority range for both CAS and ActionCache.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.PriorityCapabilities cache_priority_capabilities = 3;
+     */
+    cachePriorityCapabilities?: PriorityCapabilities;
 
-  /**
-   * Maximum total size of blobs to be uploaded/downloaded using
-   * batch methods. A value of 0 means no limit is set, although
-   * in practice there will always be a message size limitation
-   * of the protocol in use, e.g. GRPC.
-   *
-   * @generated from field: int64 max_batch_total_size_bytes = 4;
-   */
-  maxBatchTotalSizeBytes = protoInt64.zero;
+    /**
+     * Maximum total size of blobs to be uploaded/downloaded using
+     * batch methods. A value of 0 means no limit is set, although
+     * in practice there will always be a message size limitation
+     * of the protocol in use, e.g. GRPC.
+     *
+     * @generated from field: int64 max_batch_total_size_bytes = 4;
+     */
+    maxBatchTotalSizeBytes = protoInt64.zero;
 
-  /**
-   * Whether absolute symlink targets are supported.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.SymlinkAbsolutePathStrategy.Value symlink_absolute_path_strategy = 5;
-   */
-  symlinkAbsolutePathStrategy = SymlinkAbsolutePathStrategy_Value.UNKNOWN;
+    /**
+     * Whether absolute symlink targets are supported.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.SymlinkAbsolutePathStrategy.Value symlink_absolute_path_strategy = 5;
+     */
+    symlinkAbsolutePathStrategy = SymlinkAbsolutePathStrategy_Value.UNKNOWN;
 
-  /**
-   * Compressors supported by the "compressed-blobs" bytestream resources.
-   * Servers MUST support identity/no-compression, even if it is not listed
-   * here.
-   *
-   * Note that this does not imply which if any compressors are supported by
-   * the server at the gRPC level.
-   *
-   * @generated from field: repeated build.bazel.remote.execution.v2.Compressor.Value supported_compressors = 6;
-   */
-  supportedCompressors: Compressor_Value[] = [];
+    /**
+     * Compressors supported by the "compressed-blobs" bytestream resources.
+     * Servers MUST support identity/no-compression, even if it is not listed
+     * here.
+     *
+     * Note that this does not imply which if any compressors are supported by
+     * the server at the gRPC level.
+     *
+     * @generated from field: repeated build.bazel.remote.execution.v2.Compressor.Value supported_compressors = 6;
+     */
+    supportedCompressors: Compressor_Value[] = [];
 
-  /**
-   * Compressors supported for inlined data in
-   * [BatchUpdateBlobs][build.bazel.remote.execution.v2.ContentAddressableStorage.BatchUpdateBlobs]
-   * requests.
-   *
-   * @generated from field: repeated build.bazel.remote.execution.v2.Compressor.Value supported_batch_update_compressors = 7;
-   */
-  supportedBatchUpdateCompressors: Compressor_Value[] = [];
+    /**
+     * Compressors supported for inlined data in
+     * [BatchUpdateBlobs][build.bazel.remote.execution.v2.ContentAddressableStorage.BatchUpdateBlobs]
+     * requests.
+     *
+     * @generated from field: repeated build.bazel.remote.execution.v2.Compressor.Value supported_batch_update_compressors = 7;
+     */
+    supportedBatchUpdateCompressors: Compressor_Value[] = [];
 
-  constructor(data?: PartialMessage<CacheCapabilities>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<CacheCapabilities>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.CacheCapabilities";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "digest_functions", kind: "enum", T: proto3.getEnumType(DigestFunction_Value), repeated: true },
-    { no: 2, name: "action_cache_update_capabilities", kind: "message", T: ActionCacheUpdateCapabilities },
-    { no: 3, name: "cache_priority_capabilities", kind: "message", T: PriorityCapabilities },
-    { no: 4, name: "max_batch_total_size_bytes", kind: "scalar", T: 3 /* ScalarType.INT64 */ },
-    { no: 5, name: "symlink_absolute_path_strategy", kind: "enum", T: proto3.getEnumType(SymlinkAbsolutePathStrategy_Value) },
-    { no: 6, name: "supported_compressors", kind: "enum", T: proto3.getEnumType(Compressor_Value), repeated: true },
-    { no: 7, name: "supported_batch_update_compressors", kind: "enum", T: proto3.getEnumType(Compressor_Value), repeated: true },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.CacheCapabilities";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        {
+            no: 1,
+            name: "digest_functions",
+            kind: "enum",
+            T: proto3.getEnumType(DigestFunction_Value),
+            repeated: true
+        },
+        {
+            no: 2,
+            name: "action_cache_update_capabilities",
+            kind: "message",
+            T: ActionCacheUpdateCapabilities
+        },
+        {
+            no: 3,
+            name: "cache_priority_capabilities",
+            kind: "message",
+            T: PriorityCapabilities
+        },
+        {
+            no: 4,
+            name: "max_batch_total_size_bytes",
+            kind: "scalar",
+            T: 3 /* ScalarType.INT64 */
+        },
+        {
+            no: 5,
+            name: "symlink_absolute_path_strategy",
+            kind: "enum",
+            T: proto3.getEnumType(SymlinkAbsolutePathStrategy_Value)
+        },
+        {
+            no: 6,
+            name: "supported_compressors",
+            kind: "enum",
+            T: proto3.getEnumType(Compressor_Value),
+            repeated: true
+        },
+        {
+            no: 7,
+            name: "supported_batch_update_compressors",
+            kind: "enum",
+            T: proto3.getEnumType(Compressor_Value),
+            repeated: true
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): CacheCapabilities {
-    return new CacheCapabilities().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): CacheCapabilities {
+        return new CacheCapabilities().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): CacheCapabilities {
-    return new CacheCapabilities().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): CacheCapabilities {
+        return new CacheCapabilities().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): CacheCapabilities {
-    return new CacheCapabilities().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): CacheCapabilities {
+        return new CacheCapabilities().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: CacheCapabilities | PlainMessage<CacheCapabilities> | undefined, b: CacheCapabilities | PlainMessage<CacheCapabilities> | undefined): boolean {
-    return proto3.util.equals(CacheCapabilities, a, b);
-  }
+    static equals(
+        a: CacheCapabilities | PlainMessage<CacheCapabilities> | undefined,
+        b: CacheCapabilities | PlainMessage<CacheCapabilities> | undefined
+    ): boolean {
+        return proto3.util.equals(CacheCapabilities, a, b);
+    }
 }
 
 /**
@@ -3894,85 +5183,131 @@ export class CacheCapabilities extends Message<CacheCapabilities> {
  * @generated from message build.bazel.remote.execution.v2.ExecutionCapabilities
  */
 export class ExecutionCapabilities extends Message<ExecutionCapabilities> {
-  /**
-   * Legacy field for indicating which digest function is supported by the
-   * remote execution system. It MUST be set to a value other than UNKNOWN.
-   * Implementations should consider the repeated digest_functions field
-   * first, falling back to this singular field if digest_functions is unset.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.DigestFunction.Value digest_function = 1;
-   */
-  digestFunction = DigestFunction_Value.UNKNOWN;
+    /**
+     * Legacy field for indicating which digest function is supported by the
+     * remote execution system. It MUST be set to a value other than UNKNOWN.
+     * Implementations should consider the repeated digest_functions field
+     * first, falling back to this singular field if digest_functions is unset.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.DigestFunction.Value digest_function = 1;
+     */
+    digestFunction = DigestFunction_Value.UNKNOWN;
 
-  /**
-   * Whether remote execution is enabled for the particular server/instance.
-   *
-   * @generated from field: bool exec_enabled = 2;
-   */
-  execEnabled = false;
+    /**
+     * Whether remote execution is enabled for the particular server/instance.
+     *
+     * @generated from field: bool exec_enabled = 2;
+     */
+    execEnabled = false;
 
-  /**
-   * Supported execution priority range.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.PriorityCapabilities execution_priority_capabilities = 3;
-   */
-  executionPriorityCapabilities?: PriorityCapabilities;
+    /**
+     * Supported execution priority range.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.PriorityCapabilities execution_priority_capabilities = 3;
+     */
+    executionPriorityCapabilities?: PriorityCapabilities;
 
-  /**
-   * Supported node properties.
-   *
-   * @generated from field: repeated string supported_node_properties = 4;
-   */
-  supportedNodeProperties: string[] = [];
+    /**
+     * Supported node properties.
+     *
+     * @generated from field: repeated string supported_node_properties = 4;
+     */
+    supportedNodeProperties: string[] = [];
 
-  /**
-   * All the digest functions supported by the remote execution system.
-   * If this field is set, it MUST also contain digest_function.
-   *
-   * Even if the remote execution system announces support for multiple
-   * digest functions, individual execution requests may only reference
-   * CAS objects using a single digest function. For example, it is not
-   * permitted to execute actions having both MD5 and SHA-256 hashed
-   * files in their input root.
-   *
-   * The CAS objects referenced by action results generated by the
-   * remote execution system MUST use the same digest function as the
-   * one used to construct the action.
-   *
-   * @generated from field: repeated build.bazel.remote.execution.v2.DigestFunction.Value digest_functions = 5;
-   */
-  digestFunctions: DigestFunction_Value[] = [];
+    /**
+     * All the digest functions supported by the remote execution system.
+     * If this field is set, it MUST also contain digest_function.
+     *
+     * Even if the remote execution system announces support for multiple
+     * digest functions, individual execution requests may only reference
+     * CAS objects using a single digest function. For example, it is not
+     * permitted to execute actions having both MD5 and SHA-256 hashed
+     * files in their input root.
+     *
+     * The CAS objects referenced by action results generated by the
+     * remote execution system MUST use the same digest function as the
+     * one used to construct the action.
+     *
+     * @generated from field: repeated build.bazel.remote.execution.v2.DigestFunction.Value digest_functions = 5;
+     */
+    digestFunctions: DigestFunction_Value[] = [];
 
-  constructor(data?: PartialMessage<ExecutionCapabilities>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<ExecutionCapabilities>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.ExecutionCapabilities";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "digest_function", kind: "enum", T: proto3.getEnumType(DigestFunction_Value) },
-    { no: 2, name: "exec_enabled", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 3, name: "execution_priority_capabilities", kind: "message", T: PriorityCapabilities },
-    { no: 4, name: "supported_node_properties", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
-    { no: 5, name: "digest_functions", kind: "enum", T: proto3.getEnumType(DigestFunction_Value), repeated: true },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.ExecutionCapabilities";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        {
+            no: 1,
+            name: "digest_function",
+            kind: "enum",
+            T: proto3.getEnumType(DigestFunction_Value)
+        },
+        {
+            no: 2,
+            name: "exec_enabled",
+            kind: "scalar",
+            T: 8 /* ScalarType.BOOL */
+        },
+        {
+            no: 3,
+            name: "execution_priority_capabilities",
+            kind: "message",
+            T: PriorityCapabilities
+        },
+        {
+            no: 4,
+            name: "supported_node_properties",
+            kind: "scalar",
+            T: 9 /* ScalarType.STRING */,
+            repeated: true
+        },
+        {
+            no: 5,
+            name: "digest_functions",
+            kind: "enum",
+            T: proto3.getEnumType(DigestFunction_Value),
+            repeated: true
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ExecutionCapabilities {
-    return new ExecutionCapabilities().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): ExecutionCapabilities {
+        return new ExecutionCapabilities().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ExecutionCapabilities {
-    return new ExecutionCapabilities().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): ExecutionCapabilities {
+        return new ExecutionCapabilities().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ExecutionCapabilities {
-    return new ExecutionCapabilities().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): ExecutionCapabilities {
+        return new ExecutionCapabilities().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: ExecutionCapabilities | PlainMessage<ExecutionCapabilities> | undefined, b: ExecutionCapabilities | PlainMessage<ExecutionCapabilities> | undefined): boolean {
-    return proto3.util.equals(ExecutionCapabilities, a, b);
-  }
+    static equals(
+        a:
+            | ExecutionCapabilities
+            | PlainMessage<ExecutionCapabilities>
+            | undefined,
+        b:
+            | ExecutionCapabilities
+            | PlainMessage<ExecutionCapabilities>
+            | undefined
+    ): boolean {
+        return proto3.util.equals(ExecutionCapabilities, a, b);
+    }
 }
 
 /**
@@ -3981,47 +5316,69 @@ export class ExecutionCapabilities extends Message<ExecutionCapabilities> {
  * @generated from message build.bazel.remote.execution.v2.ToolDetails
  */
 export class ToolDetails extends Message<ToolDetails> {
-  /**
-   * Name of the tool, e.g. bazel.
-   *
-   * @generated from field: string tool_name = 1;
-   */
-  toolName = "";
+    /**
+     * Name of the tool, e.g. bazel.
+     *
+     * @generated from field: string tool_name = 1;
+     */
+    toolName = "";
 
-  /**
-   * Version of the tool used for the request, e.g. 5.0.3.
-   *
-   * @generated from field: string tool_version = 2;
-   */
-  toolVersion = "";
+    /**
+     * Version of the tool used for the request, e.g. 5.0.3.
+     *
+     * @generated from field: string tool_version = 2;
+     */
+    toolVersion = "";
 
-  constructor(data?: PartialMessage<ToolDetails>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<ToolDetails>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.ToolDetails";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "tool_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "tool_version", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName = "build.bazel.remote.execution.v2.ToolDetails";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        {
+            no: 1,
+            name: "tool_name",
+            kind: "scalar",
+            T: 9 /* ScalarType.STRING */
+        },
+        {
+            no: 2,
+            name: "tool_version",
+            kind: "scalar",
+            T: 9 /* ScalarType.STRING */
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ToolDetails {
-    return new ToolDetails().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): ToolDetails {
+        return new ToolDetails().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ToolDetails {
-    return new ToolDetails().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): ToolDetails {
+        return new ToolDetails().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ToolDetails {
-    return new ToolDetails().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): ToolDetails {
+        return new ToolDetails().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: ToolDetails | PlainMessage<ToolDetails> | undefined, b: ToolDetails | PlainMessage<ToolDetails> | undefined): boolean {
-    return proto3.util.equals(ToolDetails, a, b);
-  }
+    static equals(
+        a: ToolDetails | PlainMessage<ToolDetails> | undefined,
+        b: ToolDetails | PlainMessage<ToolDetails> | undefined
+    ): boolean {
+        return proto3.util.equals(ToolDetails, a, b);
+    }
 }
 
 /**
@@ -4042,95 +5399,137 @@ export class ToolDetails extends Message<ToolDetails> {
  * @generated from message build.bazel.remote.execution.v2.RequestMetadata
  */
 export class RequestMetadata extends Message<RequestMetadata> {
-  /**
-   * The details for the tool invoking the requests.
-   *
-   * @generated from field: build.bazel.remote.execution.v2.ToolDetails tool_details = 1;
-   */
-  toolDetails?: ToolDetails;
+    /**
+     * The details for the tool invoking the requests.
+     *
+     * @generated from field: build.bazel.remote.execution.v2.ToolDetails tool_details = 1;
+     */
+    toolDetails?: ToolDetails;
 
-  /**
-   * An identifier that ties multiple requests to the same action.
-   * For example, multiple requests to the CAS, Action Cache, and Execution
-   * API are used in order to compile foo.cc.
-   *
-   * @generated from field: string action_id = 2;
-   */
-  actionId = "";
+    /**
+     * An identifier that ties multiple requests to the same action.
+     * For example, multiple requests to the CAS, Action Cache, and Execution
+     * API are used in order to compile foo.cc.
+     *
+     * @generated from field: string action_id = 2;
+     */
+    actionId = "";
 
-  /**
-   * An identifier that ties multiple actions together to a final result.
-   * For example, multiple actions are required to build and run foo_test.
-   *
-   * @generated from field: string tool_invocation_id = 3;
-   */
-  toolInvocationId = "";
+    /**
+     * An identifier that ties multiple actions together to a final result.
+     * For example, multiple actions are required to build and run foo_test.
+     *
+     * @generated from field: string tool_invocation_id = 3;
+     */
+    toolInvocationId = "";
 
-  /**
-   * An identifier to tie multiple tool invocations together. For example,
-   * runs of foo_test, bar_test and baz_test on a post-submit of a given patch.
-   *
-   * @generated from field: string correlated_invocations_id = 4;
-   */
-  correlatedInvocationsId = "";
+    /**
+     * An identifier to tie multiple tool invocations together. For example,
+     * runs of foo_test, bar_test and baz_test on a post-submit of a given patch.
+     *
+     * @generated from field: string correlated_invocations_id = 4;
+     */
+    correlatedInvocationsId = "";
 
-  /**
-   * A brief description of the kind of action, for example, CppCompile or GoLink.
-   * There is no standard agreed set of values for this, and they are expected to vary between different client tools.
-   *
-   * @generated from field: string action_mnemonic = 5;
-   */
-  actionMnemonic = "";
+    /**
+     * A brief description of the kind of action, for example, CppCompile or GoLink.
+     * There is no standard agreed set of values for this, and they are expected to vary between different client tools.
+     *
+     * @generated from field: string action_mnemonic = 5;
+     */
+    actionMnemonic = "";
 
-  /**
-   * An identifier for the target which produced this action.
-   * No guarantees are made around how many actions may relate to a single target.
-   *
-   * @generated from field: string target_id = 6;
-   */
-  targetId = "";
+    /**
+     * An identifier for the target which produced this action.
+     * No guarantees are made around how many actions may relate to a single target.
+     *
+     * @generated from field: string target_id = 6;
+     */
+    targetId = "";
 
-  /**
-   * An identifier for the configuration in which the target was built,
-   * e.g. for differentiating building host tools or different target platforms.
-   * There is no expectation that this value will have any particular structure,
-   * or equality across invocations, though some client tools may offer these guarantees.
-   *
-   * @generated from field: string configuration_id = 7;
-   */
-  configurationId = "";
+    /**
+     * An identifier for the configuration in which the target was built,
+     * e.g. for differentiating building host tools or different target platforms.
+     * There is no expectation that this value will have any particular structure,
+     * or equality across invocations, though some client tools may offer these guarantees.
+     *
+     * @generated from field: string configuration_id = 7;
+     */
+    configurationId = "";
 
-  constructor(data?: PartialMessage<RequestMetadata>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
+    constructor(data?: PartialMessage<RequestMetadata>) {
+        super();
+        proto3.util.initPartial(data, this);
+    }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "build.bazel.remote.execution.v2.RequestMetadata";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "tool_details", kind: "message", T: ToolDetails },
-    { no: 2, name: "action_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 3, name: "tool_invocation_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 4, name: "correlated_invocations_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 5, name: "action_mnemonic", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 6, name: "target_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 7, name: "configuration_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-  ]);
+    static readonly runtime: typeof proto3 = proto3;
+    static readonly typeName =
+        "build.bazel.remote.execution.v2.RequestMetadata";
+    static readonly fields: FieldList = proto3.util.newFieldList(() => [
+        { no: 1, name: "tool_details", kind: "message", T: ToolDetails },
+        {
+            no: 2,
+            name: "action_id",
+            kind: "scalar",
+            T: 9 /* ScalarType.STRING */
+        },
+        {
+            no: 3,
+            name: "tool_invocation_id",
+            kind: "scalar",
+            T: 9 /* ScalarType.STRING */
+        },
+        {
+            no: 4,
+            name: "correlated_invocations_id",
+            kind: "scalar",
+            T: 9 /* ScalarType.STRING */
+        },
+        {
+            no: 5,
+            name: "action_mnemonic",
+            kind: "scalar",
+            T: 9 /* ScalarType.STRING */
+        },
+        {
+            no: 6,
+            name: "target_id",
+            kind: "scalar",
+            T: 9 /* ScalarType.STRING */
+        },
+        {
+            no: 7,
+            name: "configuration_id",
+            kind: "scalar",
+            T: 9 /* ScalarType.STRING */
+        }
+    ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): RequestMetadata {
-    return new RequestMetadata().fromBinary(bytes, options);
-  }
+    static fromBinary(
+        bytes: Uint8Array,
+        options?: Partial<BinaryReadOptions>
+    ): RequestMetadata {
+        return new RequestMetadata().fromBinary(bytes, options);
+    }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): RequestMetadata {
-    return new RequestMetadata().fromJson(jsonValue, options);
-  }
+    static fromJson(
+        jsonValue: JsonValue,
+        options?: Partial<JsonReadOptions>
+    ): RequestMetadata {
+        return new RequestMetadata().fromJson(jsonValue, options);
+    }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): RequestMetadata {
-    return new RequestMetadata().fromJsonString(jsonString, options);
-  }
+    static fromJsonString(
+        jsonString: string,
+        options?: Partial<JsonReadOptions>
+    ): RequestMetadata {
+        return new RequestMetadata().fromJsonString(jsonString, options);
+    }
 
-  static equals(a: RequestMetadata | PlainMessage<RequestMetadata> | undefined, b: RequestMetadata | PlainMessage<RequestMetadata> | undefined): boolean {
-    return proto3.util.equals(RequestMetadata, a, b);
-  }
+    static equals(
+        a: RequestMetadata | PlainMessage<RequestMetadata> | undefined,
+        b: RequestMetadata | PlainMessage<RequestMetadata> | undefined
+    ): boolean {
+        return proto3.util.equals(RequestMetadata, a, b);
+    }
 }
-

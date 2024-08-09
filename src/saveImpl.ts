@@ -1,6 +1,8 @@
 import * as cache from "@actions/cache";
 import * as core from "@actions/core";
 
+import * as casCache from "./cas/casCache";
+import { isNativeLinkEnabled } from "./cas/grpcClient";
 import { Events, Inputs, State } from "./constants";
 import {
     IStateProvider,
@@ -62,12 +64,22 @@ export async function saveImpl(
             Inputs.EnableCrossOsArchive
         );
 
-        cacheId = await cache.saveCache(
-            cachePaths,
-            primaryKey,
-            { uploadChunkSize: utils.getInputAsInt(Inputs.UploadChunkSize) },
-            enableCrossOsArchive
-        );
+        if (isNativeLinkEnabled()) {
+            cacheId = await casCache.saveCache({
+                key: primaryKey,
+                enableCrossOsArchive,
+                paths: cachePaths
+            });
+        } else {
+            cacheId = await cache.saveCache(
+                cachePaths,
+                primaryKey,
+                {
+                    uploadChunkSize: utils.getInputAsInt(Inputs.UploadChunkSize)
+                },
+                enableCrossOsArchive
+            );
+        }
 
         if (cacheId != -1) {
             core.info(`Cache saved with key: ${primaryKey}`);

@@ -1,6 +1,8 @@
 import * as cache from "@actions/cache";
 import * as core from "@actions/core";
 
+import * as casCache from "./cas/casCache";
+import { isNativeLinkEnabled } from "./cas/grpcClient";
 import { Events, Inputs, Outputs, State } from "./constants";
 import {
     IStateProvider,
@@ -42,13 +44,25 @@ export async function restoreImpl(
         const failOnCacheMiss = utils.getInputAsBool(Inputs.FailOnCacheMiss);
         const lookupOnly = utils.getInputAsBool(Inputs.LookupOnly);
 
-        const cacheKey = await cache.restoreCache(
-            cachePaths,
-            primaryKey,
-            restoreKeys,
-            { lookupOnly: lookupOnly },
-            enableCrossOsArchive
-        );
+        let cacheKey: string | undefined;
+
+        if (isNativeLinkEnabled()) {
+            cacheKey = await casCache.restoreCache(
+                cachePaths,
+                primaryKey,
+                restoreKeys,
+                { lookupOnly: lookupOnly },
+                enableCrossOsArchive
+            );
+        } else {
+            cacheKey = await cache.restoreCache(
+                cachePaths,
+                primaryKey,
+                restoreKeys,
+                { lookupOnly: lookupOnly },
+                enableCrossOsArchive
+            );
+        }
 
         if (!cacheKey) {
             core.setOutput(Outputs.CacheHit, false.toString());

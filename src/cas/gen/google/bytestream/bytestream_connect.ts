@@ -17,8 +17,9 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { QueryWriteStatusRequest, QueryWriteStatusResponse, ReadRequest, ReadResponse, WriteRequest, WriteResponse } from "./bytestream_pb.js";
+import { QueryWriteStatusRequest, QueryWriteStatusResponse, ReadRequest, ReadResponse, WriteRequest, WriteResponse } from "./bytestream_pb";
 import { MethodKind } from "@bufbuild/protobuf";
+
 
 /**
  * #### Introduction
