@@ -47,7 +47,6 @@ const addHeaders: Interceptor = next => {
             // TODO: removed this when the content-type: application/grpc+proto support is deployed
             req.header.delete("content-type");
             req.header.append("content-type", "application/grpc");
-            console.log({ req });
             const res = await next(req);
             return res;
         } catch (err) {
