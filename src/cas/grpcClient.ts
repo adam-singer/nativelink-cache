@@ -314,9 +314,7 @@ export async function getCacheEntry({
     } catch (err) {
         let errMsg = `Failed to retrieve action result for primaryKeyHash: ${primaryKeyHash}`;
         if (err instanceof ConnectError) {
-            if (err.code == Code.NotFound) {
-                core.info(`primaryKeyHash: ${primaryKeyHash} not found`);
-            } else {
+            if (err.code != Code.NotFound) {
                 errMsg = `${errMsg} code error: ${Code[err.code]}, reason: ${
                     err.rawMessage
                 }`;
