@@ -239,7 +239,7 @@ class FileAsyncIterable implements AsyncIterable<WriteRequest> {
 
 // GitHub Implementations
 
-const versionSalt = "1.0";
+const versionSalt = process.env["VERSION_SALT"] || "1.0";
 function getCacheVersion({
     paths,
     compressionMethod,
