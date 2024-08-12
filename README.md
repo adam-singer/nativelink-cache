@@ -42,4 +42,4 @@ If you don't set these variables the action will fall back to the default GitHub
 * `VERSION_SALT (Optional)`: this allows disowning an entire set of cache key poisoned by buggy software or tool failures
 
 ## Inputs Variables
-* `UploadChunkSize`: the size of the data inside the message when uploading the stream of data in KB, this value cannot exceed 4MB, the validation value is 4 * 1024 * 1024 - 1024 which is the maximum size for a single gRPC request, minus a small delta, you can find more info here https://github.com/grpc/grpc-java/issues/1676#issuecomment-229809402
+* `UploadChunkSize`: the size of the data inside the message when uploading the stream of data in KB the default value is 64KB https://github.com/grpc/grpc.github.io/issues/371#issue-174066362, this value cannot exceed 4MB, the validation value is 4 * 1024 * 1024 - 1024 which is the maximum size for a single gRPC request, minus a small delta, you can find more info here https://github.com/grpc/grpc-java/issues/1676#issuecomment-229809402
