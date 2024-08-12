@@ -239,7 +239,7 @@ class FileAsyncIterable implements AsyncIterable<WriteRequest> {
                     remaining / (1024 * 1024)
                 )} MB to upload of the total size of: ${Math.round(
                     this.fileByteLength / (1024 * 1024)
-                )}`
+                )} MB`
             );
 
             offset += chunk_size;
