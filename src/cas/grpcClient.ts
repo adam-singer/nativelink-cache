@@ -26,7 +26,11 @@ import {
 } from "./gen/google/bytestream/bytestream_pb";
 
 // Maximum size for a single gRPC request, minus a small delta:
+// https://github.com/grpc/grpc-java/issues/1676#issuecomment-229809402
 export const MAX_GRPC_REQUEST_SIZE = 4 * 1024 * 1024 - 1024;
+// recommended message size
+// https://github.com/grpc/grpc.github.io/issues/371#issue-174066362
+export const MESSAGE_SIZE = 64 * 1024;
 
 const remoteCacheUrl = process.env["NATIVELINK_REMOTE_CACHE_URL"];
 const apiKey = process.env["NATIVELINK_API_KEY"];
@@ -72,6 +76,7 @@ export async function saveCache(params: {
     compressionMethod: CompressionMethod;
     enableCrossOsArchive: boolean;
     archiveFileSize: number;
+    uploadChunkSize: number | undefined;
 }): Promise<void> {
     const {
         key,
@@ -79,7 +84,8 @@ export async function saveCache(params: {
         archivePath,
         compressionMethod,
         enableCrossOsArchive,
-        archiveFileSize
+        archiveFileSize,
+        uploadChunkSize
     } = params;
     core.debug(`params: ${params}`);
 
@@ -111,7 +117,8 @@ export async function saveCache(params: {
     const file = new FileAsyncIterable({
         filePath: archivePath,
         fileHash,
-        fileByteLength: archiveFileSize
+        fileByteLength: archiveFileSize,
+        uploadChunkSize: uploadChunkSize
     });
 
     let writeResult: WriteResponse;
@@ -180,12 +187,14 @@ class FileAsyncIterable implements AsyncIterable<WriteRequest> {
     private readonly filePath: string;
     private readonly fileByteLength: number;
     private readonly fileHash: string;
+    private readonly chunkSize: number;
     readonly digest: Digest;
 
     constructor(data: {
         filePath: string;
         fileByteLength: number;
         fileHash: string;
+        uploadChunkSize: number | undefined;
     }) {
         this.filePath = data.filePath;
         this.fileByteLength = data.fileByteLength;
@@ -194,6 +203,7 @@ class FileAsyncIterable implements AsyncIterable<WriteRequest> {
             hash: this.fileHash,
             sizeBytes: BigInt(this.fileByteLength)
         });
+        this.chunkSize = data.uploadChunkSize || MESSAGE_SIZE;
     }
 
     async *[Symbol.asyncIterator]() {
@@ -206,14 +216,14 @@ class FileAsyncIterable implements AsyncIterable<WriteRequest> {
 
         core.debug(`resource name to upload file: ${resourceName}`);
         const readableStream = createReadStream(this.filePath, {
-            highWaterMark: MAX_GRPC_REQUEST_SIZE
+            highWaterMark: this.chunkSize
         });
 
         let offset = 0;
         let remaining = this.fileByteLength - offset;
 
         for await (const chunk of readableStream) {
-            const chunk_size = Math.min(remaining, MAX_GRPC_REQUEST_SIZE);
+            const chunk_size = Math.min(remaining, this.chunkSize);
             remaining -= chunk_size;
 
             const request = new WriteRequest({

@@ -174,11 +174,13 @@ export async function restoreCache(
 export async function saveCache({
     paths,
     key,
-    enableCrossOsArchive = false
+    enableCrossOsArchive = false,
+    uploadChunkSize
 }: {
     paths: string[];
     key: string;
     enableCrossOsArchive: boolean;
+    uploadChunkSize: number | undefined;
 }): Promise<number> {
     checkPaths(paths);
     checkKey(key);
@@ -226,7 +228,8 @@ export async function saveCache({
             archiveFileSize,
             archivePath,
             compressionMethod,
-            enableCrossOsArchive
+            enableCrossOsArchive,
+            uploadChunkSize
         });
 
         // this value is set to preserve the API compatibility with the base action
