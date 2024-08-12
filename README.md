@@ -35,5 +35,6 @@ Please refer to [actions/cache](https://github.com/actions/cache) for usage.
 ## Secrets variables
 * `NATIVELINK_API_KEY`: Your API Key. You can find it in Settings -> API Keys & Certs -> ID.
 * `NATIVELINK_REMOTE_CACHE_URL`: url of the remote cache. You can find it in Settings -> General -> Remote Cache, remove the grpcs with https, e.g: grpcs://url.build-faster.nativelink.net -> https://url.build-faster.nativelink.net
+* `VERSION_SALT (Optional)`:  this allows disowning an entire set of cache key poisoned by buggy software or tool failures
 
 If you don't set these variables the action will fall back to the default GitHub actions@v4
