@@ -81,6 +81,8 @@ export async function saveCache(params: {
         enableCrossOsArchive,
         archiveFileSize
     } = params;
+    core.debug(`params: ${params}`);
+
     if (!remoteCacheUrl) {
         throw new Error(
             "Environment variable NATIVELINK_REMOTE_CACHE_URL parameter is missing"
@@ -132,6 +134,10 @@ export async function saveCache(params: {
         );
     }
 
+    core.debug(
+        `File saved with hash: ${fileHash}, fileByteLength: ${archiveFileSize}`
+    );
+
     const keyHash = getCacheVersion({
         paths,
         compressionMethod,
@@ -157,6 +163,7 @@ export async function saveCache(params: {
 
     try {
         await actionCacheClient.updateActionResult(updateActionResultRequest);
+        core.debug(`saved action with hash: ${keyHash}`);
     } catch (err) {
         let errMsg = "Failed to upload action result";
         if (err instanceof ConnectError) {
@@ -297,6 +304,9 @@ export async function getCacheEntry({
     });
 
     try {
+        core.debug(
+            `looking for primary cache key: ${primaryKey} and hash: ${primaryKeyHash}`
+        );
         const primaryActionResult = await actionCacheClient.getActionResult({
             actionDigest: {
                 hash: primaryKeyHash
@@ -327,6 +337,9 @@ export async function getCacheEntry({
     if (!restoreKeys || restoreKeys.length == 0) {
         return undefined;
     }
+
+    core.debug("primary key no found looking for restore keys");
+    core.debug(`restoreKeys: ${restoreKeys}`);
 
     const proms = await Promise.all(
         getActionResultProms({
