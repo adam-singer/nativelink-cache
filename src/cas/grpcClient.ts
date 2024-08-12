@@ -247,8 +247,6 @@ function getCacheVersion({
     // don't pass changes upstream
     const components = paths.slice();
 
-    components.sort();
-
     // Add compression method to cache version to restore
     // compressed cache as per compression method
     if (compressionMethod) {
