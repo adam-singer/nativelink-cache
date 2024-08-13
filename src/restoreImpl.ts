@@ -1,7 +1,7 @@
 import * as cache from "@actions/cache";
 import * as core from "@actions/core";
 
-import * as casCache from "./cas/casCache";
+import { CasCacheService } from "./cas/casCache";
 import { isNativeLinkEnabled } from "./cas/grpcClient";
 import { Events, Inputs, Outputs, State } from "./constants";
 import {
@@ -47,6 +47,7 @@ export async function restoreImpl(
         let cacheKey: string | undefined;
 
         if (isNativeLinkEnabled()) {
+            const casCache = new CasCacheService();
             cacheKey = await casCache.restoreCache(
                 cachePaths,
                 primaryKey,

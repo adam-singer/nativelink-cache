@@ -4,7 +4,8 @@ import {
     Code,
     ConnectError,
     createPromiseClient,
-    Interceptor
+    Interceptor,
+    Transport
 } from "@connectrpc/connect";
 import { createGrpcTransport } from "@connectrpc/connect-node";
 import { createHash } from "crypto";
@@ -39,6 +40,14 @@ export const isNativeLinkEnabled = () => {
     return remoteCacheUrl !== undefined && apiKey !== undefined;
 };
 
+export interface ArtifactCacheEntry {
+    cacheKey?: string;
+    scope?: string;
+    cacheVersion?: string;
+    creationTime?: string;
+    archiveLocation?: string;
+}
+
 const addHeaders: Interceptor = next => {
     if (!apiKey) {
         throw new Error(
@@ -60,126 +69,293 @@ const addHeaders: Interceptor = next => {
     };
 };
 
-const transport = createGrpcTransport({
-    baseUrl: "https://cas-chinchaun.build-faster.nativelink.net",
-    httpVersion: "2",
-    interceptors: [addHeaders]
-});
+export class GrpcClient {
+    private readonly transport: Transport;
+    private readonly byteStreamClient;
+    private readonly actionCacheClient;
 
-const byteStreamClient = createPromiseClient(ByteStream, transport);
-const actionCacheClient = createPromiseClient(ActionCache, transport);
-
-export async function saveCache(params: {
-    key: string;
-    paths: string[];
-    archivePath: string;
-    compressionMethod: CompressionMethod;
-    enableCrossOsArchive: boolean;
-    archiveFileSize: number;
-    uploadChunkSize: number | undefined;
-}): Promise<void> {
-    const {
-        key,
-        paths,
-        archivePath,
-        compressionMethod,
-        enableCrossOsArchive,
-        archiveFileSize,
-        uploadChunkSize
-    } = params;
-    core.debug(`params: ${params}`);
-
-    if (!remoteCacheUrl) {
-        throw new Error(
-            "Environment variable NATIVELINK_REMOTE_CACHE_URL parameter is missing"
-        );
-    }
-
-    if (!apiKey) {
-        throw new Error(
-            "Environment variable NATIVELINK_API_KEY parameter is missing"
-        );
-    }
-
-    // Cache
-    core.info(
-        `Cache Size: ~${Math.round(
-            archiveFileSize / (1024 * 1024)
-        )} MB (${archiveFileSize} B)`
-    );
-
-    const fileHash = getCacheVersion({
-        paths,
-        compressionMethod,
-        enableCrossOsArchive
-    });
-
-    const file = new FileAsyncIterable({
-        filePath: archivePath,
-        fileHash,
-        fileByteLength: archiveFileSize,
-        uploadChunkSize: uploadChunkSize
-    });
-
-    let writeResult: WriteResponse;
-    try {
-        writeResult = await byteStreamClient.write(file);
-    } catch (err) {
-        let errMsg = "Failed to upload file";
-        if (err instanceof ConnectError) {
-            errMsg = `${errMsg} code error: ${Code[err.code]}, reason: ${
-                err.rawMessage
-            }`;
+    constructor() {
+        if (!remoteCacheUrl) {
+            throw new Error(
+                "Environment variable NATIVELINK_API_KEY parameter is missing"
+            );
         }
-        core.error(errMsg);
-        throw err;
-    }
-
-    if (writeResult.committedSize < archiveFileSize) {
-        throw new Error(
-            "The upload process failed to send the entire file content"
+        this.transport = createGrpcTransport({
+            baseUrl: remoteCacheUrl,
+            httpVersion: "2",
+            interceptors: [addHeaders]
+        });
+        this.byteStreamClient = createPromiseClient(ByteStream, this.transport);
+        this.actionCacheClient = createPromiseClient(
+            ActionCache,
+            this.transport
         );
     }
+    async saveCache(params: {
+        key: string;
+        paths: string[];
+        archivePath: string;
+        compressionMethod: CompressionMethod;
+        enableCrossOsArchive: boolean;
+        archiveFileSize: number;
+        uploadChunkSize: number | undefined;
+    }): Promise<void> {
+        const {
+            key,
+            paths,
+            archivePath,
+            compressionMethod,
+            enableCrossOsArchive,
+            archiveFileSize,
+            uploadChunkSize
+        } = params;
+        core.debug(`params: ${params}`);
 
-    core.debug(
-        `File saved with hash: ${fileHash}, fileByteLength: ${archiveFileSize}`
-    );
+        if (!remoteCacheUrl) {
+            throw new Error(
+                "Environment variable NATIVELINK_REMOTE_CACHE_URL parameter is missing"
+            );
+        }
 
-    const keyHash = getCacheVersion({
-        paths,
-        compressionMethod,
-        enableCrossOsArchive,
-        key
-    });
+        if (!apiKey) {
+            throw new Error(
+                "Environment variable NATIVELINK_API_KEY parameter is missing"
+            );
+        }
 
-    const actionResult = new ActionResult({
-        outputFiles: [
-            {
-                path: archivePath,
-                digest: file.digest
+        // Cache
+        core.info(
+            `Cache Size: ~${Math.round(
+                archiveFileSize / (1024 * 1024)
+            )} MB (${archiveFileSize} B)`
+        );
+
+        const fileHash = getCacheVersion({
+            paths,
+            compressionMethod,
+            enableCrossOsArchive
+        });
+
+        const file = new FileAsyncIterable({
+            filePath: archivePath,
+            fileHash,
+            fileByteLength: archiveFileSize,
+            uploadChunkSize
+        });
+
+        let writeResult: WriteResponse;
+        try {
+            writeResult = await this.byteStreamClient.write(file);
+        } catch (err) {
+            let errMsg = "Failed to upload file";
+            if (err instanceof ConnectError) {
+                errMsg = `${errMsg} code error: ${Code[err.code]}, reason: ${
+                    err.rawMessage
+                }`;
             }
-        ]
-    });
-
-    const updateActionResultRequest = new UpdateActionResultRequest({
-        actionResult: actionResult,
-        actionDigest: {
-            hash: keyHash
+            core.error(errMsg);
+            throw err;
         }
-    });
 
-    try {
-        await actionCacheClient.updateActionResult(updateActionResultRequest);
-        core.debug(`saved action with hash: ${keyHash}`);
-    } catch (err) {
-        let errMsg = "Failed to upload action result";
-        if (err instanceof ConnectError) {
-            errMsg = `${errMsg} code error: ${Code[err.code]}, reason: ${
-                err.rawMessage
-            }`;
+        if (writeResult.committedSize < archiveFileSize) {
+            throw new Error(
+                "The upload process failed to send the entire file content"
+            );
         }
-        core.error(errMsg);
-        throw err;
+
+        core.debug(
+            `File saved with hash: ${fileHash}, fileByteLength: ${archiveFileSize}`
+        );
+
+        const keyHash = getCacheVersion({
+            paths,
+            compressionMethod,
+            enableCrossOsArchive,
+            key
+        });
+
+        const actionResult = new ActionResult({
+            outputFiles: [
+                {
+                    path: archivePath,
+                    digest: file.digest
+                }
+            ]
+        });
+
+        const updateActionResultRequest = new UpdateActionResultRequest({
+            actionResult: actionResult,
+            actionDigest: {
+                hash: keyHash
+            }
+        });
+
+        try {
+            await this.actionCacheClient.updateActionResult(
+                updateActionResultRequest
+            );
+            core.debug(`saved action with hash: ${keyHash}`);
+        } catch (err) {
+            let errMsg = "Failed to upload action result";
+            if (err instanceof ConnectError) {
+                errMsg = `${errMsg} code error: ${Code[err.code]}, reason: ${
+                    err.rawMessage
+                }`;
+            }
+            core.error(errMsg);
+            throw err;
+        }
+    }
+
+    async getCacheEntry({
+        paths,
+        primaryKey,
+        restoreKeys,
+        compressionMethod,
+        enableCrossOsArchive = false
+    }: {
+        paths: string[];
+        primaryKey: string;
+        restoreKeys?: string[];
+        compressionMethod: CompressionMethod;
+        enableCrossOsArchive: boolean;
+    }): Promise<Digest | undefined> {
+        const primaryKeyHash = getCacheVersion({
+            paths,
+            enableCrossOsArchive,
+            compressionMethod,
+            key: primaryKey
+        });
+
+        try {
+            core.debug(
+                `looking for primary cache key: ${primaryKey} and hash: ${primaryKeyHash}`
+            );
+            const primaryActionResult =
+                await this.actionCacheClient.getActionResult({
+                    actionDigest: {
+                        hash: primaryKeyHash
+                    }
+                });
+            if (primaryActionResult.outputFiles.length == 0) {
+                throw new Error(
+                    `Action result with primaryKeyHash: ${primaryKeyHash} doesn't contain any file`
+                );
+            }
+
+            return primaryActionResult.outputFiles[0].digest;
+        } catch (err) {
+            let errMsg = `Failed to retrieve action result for primaryKeyHash: ${primaryKeyHash}`;
+            if (err instanceof ConnectError) {
+                if (err.code != Code.NotFound) {
+                    errMsg = `${errMsg} code error: ${
+                        Code[err.code]
+                    }, reason: ${err.rawMessage}`;
+                    core.error(errMsg);
+                }
+            } else {
+                core.error(errMsg);
+                throw err;
+            }
+        }
+
+        if (!restoreKeys || restoreKeys.length == 0) {
+            return undefined;
+        }
+
+        core.debug("primary key no found looking for restore keys");
+        core.debug(`restoreKeys: ${restoreKeys}`);
+
+        const proms = await Promise.all(
+            this.getActionResultAsProms({
+                paths,
+                restoreKeys,
+                compressionMethod,
+                enableCrossOsArchive
+            })
+        );
+
+        let hasError = false;
+        let errMsg = "";
+        for (const p of proms) {
+            if (p instanceof ActionResult && p.outputFiles.length > 0) {
+                return p.outputFiles[0].digest;
+            } else if (p instanceof ConnectError) {
+                if (p.code != Code.NotFound) {
+                    hasError = true;
+                    errMsg += `error code: ${Code[p.code]}, message: ${
+                        p.rawMessage
+                    }`;
+                }
+            } else {
+                hasError = true;
+                errMsg += (p as Error).message;
+            }
+        }
+
+        if (hasError) {
+            throw new Error(errMsg);
+        }
+
+        return;
+    }
+
+    getActionResultAsProms({
+        paths,
+        restoreKeys,
+        compressionMethod,
+        enableCrossOsArchive = false
+    }: {
+        paths: string[];
+        restoreKeys: string[];
+        compressionMethod: CompressionMethod;
+        enableCrossOsArchive: boolean;
+    }) {
+        const proms: Promise<ActionResult | ConnectError | Error>[] = [];
+
+        for (const key of restoreKeys) {
+            const keyHash = getCacheVersion({
+                paths,
+                enableCrossOsArchive,
+                compressionMethod,
+                key: key
+            });
+            proms.push(
+                this.actionCacheClient
+                    .getActionResult({
+                        actionDigest: {
+                            hash: keyHash
+                        }
+                    })
+                    .catch((err: ConnectError | Error) => err)
+            );
+        }
+        return proms;
+    }
+
+    async downloadCache({
+        blobDigest,
+        archivePath
+    }: {
+        blobDigest: Digest;
+        archivePath: string;
+    }) {
+        try {
+            const res = this.byteStreamClient.read({
+                resourceName: `blobs/${blobDigest.hash}/${blobDigest.sizeBytes}`
+            });
+
+            await writeToFile(res, archivePath);
+        } catch (err) {
+            let errMsg = "Failed to download blob";
+            if (err instanceof ConnectError) {
+                errMsg = `${errMsg} code error: ${Code[err.code]}, reason: ${
+                    err.rawMessage
+                }`;
+            }
+            core.error(errMsg);
+            throw err;
+        }
     }
 }
 
@@ -283,164 +459,6 @@ function getCacheVersion({
     components.push(versionSalt);
 
     return createHash("sha256").update(components.join("|")).digest("hex");
-}
-
-export interface ArtifactCacheEntry {
-    cacheKey?: string;
-    scope?: string;
-    cacheVersion?: string;
-    creationTime?: string;
-    archiveLocation?: string;
-}
-
-export async function getCacheEntry({
-    paths,
-    primaryKey,
-    restoreKeys,
-    compressionMethod,
-    enableCrossOsArchive = false
-}: {
-    paths: string[];
-    primaryKey: string;
-    restoreKeys?: string[];
-    compressionMethod: CompressionMethod;
-    enableCrossOsArchive: boolean;
-}): Promise<Digest | undefined> {
-    const primaryKeyHash = getCacheVersion({
-        paths,
-        enableCrossOsArchive,
-        compressionMethod,
-        key: primaryKey
-    });
-
-    try {
-        core.debug(
-            `looking for primary cache key: ${primaryKey} and hash: ${primaryKeyHash}`
-        );
-        const primaryActionResult = await actionCacheClient.getActionResult({
-            actionDigest: {
-                hash: primaryKeyHash
-            }
-        });
-        if (primaryActionResult.outputFiles.length == 0) {
-            throw new Error(
-                `Action result with primaryKeyHash: ${primaryKeyHash} doesn't contain any file`
-            );
-        }
-
-        return primaryActionResult.outputFiles[0].digest;
-    } catch (err) {
-        let errMsg = `Failed to retrieve action result for primaryKeyHash: ${primaryKeyHash}`;
-        if (err instanceof ConnectError) {
-            if (err.code != Code.NotFound) {
-                errMsg = `${errMsg} code error: ${Code[err.code]}, reason: ${
-                    err.rawMessage
-                }`;
-                core.error(errMsg);
-            }
-        } else {
-            core.error(errMsg);
-            throw err;
-        }
-    }
-
-    if (!restoreKeys || restoreKeys.length == 0) {
-        return undefined;
-    }
-
-    core.debug("primary key no found looking for restore keys");
-    core.debug(`restoreKeys: ${restoreKeys}`);
-
-    const proms = await Promise.all(
-        getActionResultProms({
-            paths,
-            restoreKeys,
-            compressionMethod,
-            enableCrossOsArchive
-        })
-    );
-
-    let hasError = false;
-    let errMsg = "";
-    for (const p of proms) {
-        if (p instanceof ActionResult && p.outputFiles.length > 0) {
-            return p.outputFiles[0].digest;
-        } else if (p instanceof ConnectError) {
-            if (p.code != Code.NotFound) {
-                hasError = true;
-                errMsg += `error code: ${Code[p.code]}, message: ${
-                    p.rawMessage
-                }`;
-            }
-        } else {
-            hasError = true;
-            errMsg += (p as Error).message;
-        }
-    }
-
-    if (hasError) {
-        throw new Error(errMsg);
-    }
-
-    return;
-}
-
-function getActionResultProms({
-    paths,
-    restoreKeys,
-    compressionMethod,
-    enableCrossOsArchive = false
-}: {
-    paths: string[];
-    restoreKeys: string[];
-    compressionMethod: CompressionMethod;
-    enableCrossOsArchive: boolean;
-}) {
-    const proms: Promise<ActionResult | ConnectError | Error>[] = [];
-
-    for (const key of restoreKeys) {
-        const keyHash = getCacheVersion({
-            paths,
-            enableCrossOsArchive,
-            compressionMethod,
-            key: key
-        });
-        proms.push(
-            actionCacheClient
-                .getActionResult({
-                    actionDigest: {
-                        hash: keyHash
-                    }
-                })
-                .catch(err => err)
-        );
-    }
-    return proms;
-}
-
-export async function downloadCache({
-    blobDigest,
-    archivePath
-}: {
-    blobDigest: Digest;
-    archivePath: string;
-}) {
-    try {
-        const res = byteStreamClient.read({
-            resourceName: `blobs/${blobDigest.hash}/${blobDigest.sizeBytes}`
-        });
-
-        await writeToFile(res, archivePath);
-    } catch (err) {
-        let errMsg = "Failed to download blob";
-        if (err instanceof ConnectError) {
-            errMsg = `${errMsg} code error: ${Code[err.code]}, reason: ${
-                err.rawMessage
-            }`;
-        }
-        core.error(errMsg);
-        throw err;
-    }
 }
 
 async function writeToFile(

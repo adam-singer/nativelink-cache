@@ -1,7 +1,7 @@
 import * as cache from "@actions/cache";
 import * as core from "@actions/core";
 
-import * as casCache from "./cas/casCache";
+import { CasCacheService } from "./cas/casCache";
 import { isNativeLinkEnabled, MAX_GRPC_REQUEST_SIZE } from "./cas/grpcClient";
 import { Events, Inputs, State } from "./constants";
 import {
@@ -65,20 +65,12 @@ export async function saveImpl(
         );
 
         if (isNativeLinkEnabled()) {
-            const uploadChunkSize = utils.getInputAsInt(Inputs.UploadChunkSize);
-            if (
-                uploadChunkSize &&
-                uploadChunkSize * 1024 > MAX_GRPC_REQUEST_SIZE
-            ) {
-                throw new Error(
-                    `UploadChunkSize input cannot exceed the value of: ${MAX_GRPC_REQUEST_SIZE} MB`
-                );
-            }
+            const casCache = new CasCacheService();
             cacheId = await casCache.saveCache({
                 key: primaryKey,
                 enableCrossOsArchive,
                 paths: cachePaths,
-                uploadChunkSize
+                uploadChunkSize: utils.getInputAsInt(Inputs.UploadChunkSize)
             });
         } else {
             cacheId = await cache.saveCache(
