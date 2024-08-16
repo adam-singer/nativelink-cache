@@ -399,7 +399,7 @@ class FileAsyncIterable implements AsyncIterable<WriteRequest> {
         let remaining = this.fileByteLength - offset;
 
         for await (const chunk of readableStream) {
-            const chunk_size = Math.min(remaining, this.chunkSize);
+            const chunk_size = Math.min(remaining, chunk);
             remaining -= chunk_size;
 
             const request = new WriteRequest({
