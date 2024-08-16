@@ -2,7 +2,7 @@ import * as cache from "@actions/cache";
 import * as core from "@actions/core";
 
 import { CasCacheService } from "./cas/casCache";
-import { isNativeLinkEnabled, MAX_GRPC_REQUEST_SIZE } from "./cas/grpcClient";
+import { isNativeLinkEnabled } from "./cas/grpcClient";
 import { Events, Inputs, State } from "./constants";
 import {
     IStateProvider,
